@@ -1,213 +1,28 @@
 @import "tailwindcss";
 
-/* ==========================================================================
-   SOULMAP — DEFINITIVE COLOR SYSTEM
-   Single source of truth. No blue. Warm linen + #1C1917 + terracotta + psychic purple.
-   ========================================================================== */
-
 :root {
-  /* BACKGROUNDS — warm linen family */
-  --page-bg: #eeebe0;              /* Page background — everything sits on this */
-  --card-surface: #e8e2d0;         /* Card / panel surface */
-  --interactive-surface: #ffffff;  /* ONLY inputs, response boxes — white is earned */
-
-  /* STRUCTURE — editorial spine */
-  --primary: #1c1917;              /* Primary text — warm near-black */
-  --secondary: #6b6459;            /* Labels, captions, metadata */
-  --tertiary: #a89e92;             /* Placeholders, footnotes */
-  --border: #1c1917;               /* All borders — 1px, sharp */
-  --border-subtle: rgba(28, 25, 23, 0.2);  /* Dividers only */
-
-  /* BRAND — use sparingly, max 3 per screen */
-  --psychic-purple: #9b30d9;       /* Wordmark, avatar, active nav, Soul Type badges */
-
-  /* FIVE ELEMENTS */
-  --terracotta: #c4622d;           /* Fire — buttons, active states, Oracle left-border */
-  --ochre: #c49a2d;                /* Earth — premium, highlight moments */
-  --sage: #6b8c6e;                 /* Wood — calm, secondary UI */
-  --slate: #4a5e72;                /* Water — data, chart readouts */
-  --stone: #8c8478;                /* Metal — inactive, secondary labels */
-
-  /* Aliases for compatibility */
-  --foreground: #1c1917;
-  --foreground-muted: #6b6459;
-  --text-on-light: #1c1917;
-  --text-on-light-muted: #6b6459;
-  --text-on-dark: #eeebe0;         /* On dark fills (e.g. table header, hero band) */
-  --dark-section: #1c1917;         /* Same as primary — for full-bleed dark areas */
-  --hero-band-bg: #353330;         /* Softer dark for persona band — misty, matches illustration */
-  --persona-accent: #b8c9d9;       /* From illustration: moon / water / veil — for soul archetype text */
-  --parchment: #eeebe0;
-  --white: #ffffff;
-  --warm-ivory: #e8e2d0;           /* Alias for card-surface */
-
-  /* BaZi element mapping */
-  --element-wood: #6b8c6e;
-  --element-fire: #c4622d;
-  --element-earth: #c49a2d;
-  --element-metal: #8c8478;
-  --element-water: #4a5e72;
-
-  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --duration: 200ms;
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 @theme inline {
-  --color-page-bg: var(--page-bg);
-  --color-card-surface: var(--card-surface);
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
-  --color-tertiary: var(--tertiary);
-  --color-psychic-purple: var(--psychic-purple);
-  --color-terracotta: var(--terracotta);
-  --color-ochre: var(--ochre);
-  --color-sage: var(--sage);
-  --color-slate: var(--slate);
-  --color-stone: var(--stone);
-  --color-border: var(--border);
-  --color-border-subtle: var(--border-subtle);
-  /* Fonts loaded via link in layout (avoids next/font build issues on Vercel) */
-  --font-playfair: "Playfair Display", ui-serif, Georgia, serif;
-  --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-dm-mono: "DM Mono", ui-monospace, monospace;
-  --font-sans: var(--font-dm-sans);
-  --font-serif: var(--font-playfair);
-  --font-mono: var(--font-dm-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-geist-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: ui-monospace, monospace;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
 }
 
 body {
-  background: var(--page-bg);
-  color: var(--primary);
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Type scale (rem) — use with utility classes */
-.font-display {
-  font-family: var(--font-playfair), serif;
-}
-
-.font-mono {
-  font-family: var(--font-dm-mono), monospace;
-}
-
-/* Editorial typography */
-.hero-text {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--primary);
-  font-family: var(--font-playfair), serif;
-}
-
-/* Hero on dark band — magazine-cover persona name */
-.hero-text-on-dark {
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--text-on-dark);
-  font-family: var(--font-playfair), serif;
-  line-height: 1.15;
-}
-
-/* Small label above persona name on dark band — uses persona/photo accent */
-.hero-band-label {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--persona-accent);
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
-}
-
-.section-header {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-  font-weight: 400;
-  font-style: italic;
-  font-family: var(--font-playfair), serif;
-}
-
-.body-editorial {
-  font-size: 1.0625rem;
-  line-height: 1.8;
-  max-width: 68ch;
-}
-
-/* Section alternation */
-.section-parchment { background: var(--page-bg); }
-.section-ivory { background: var(--card-surface); }
-.section-slate { background: var(--slate); color: var(--page-bg); }
-
-/* Cards: 1px border, square geometry, no shadow */
-.card {
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--card-surface);
-}
-
-.card-ivory {
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--card-surface);
-}
-
-/* Buttons — primary fill #1C1917 → hover #C4622D; secondary transparent → hover fill #1C1917 text #EEEBE0 */
-.btn-primary {
-  background: var(--primary);
-  color: var(--page-bg);
-  border: 1px solid var(--border);
-  border-radius: 0;
-  padding: 0.75rem 1.5rem;
-  font-size: 0.875rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  transition: background var(--duration) var(--ease-out),
-              color var(--duration) var(--ease-out),
-              border-color var(--duration) var(--ease-out);
-}
-
-.btn-primary:hover {
-  background: var(--terracotta);
-  color: var(--page-bg);
-  border-color: var(--terracotta);
-}
-
-.btn-secondary {
-  background: transparent;
-  color: var(--primary);
-  border: 1px solid var(--border);
-  border-radius: 0;
-  padding: 0.75rem 1.5rem;
-  font-size: 0.875rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  transition: background var(--duration) var(--ease-out),
-              color var(--duration) var(--ease-out);
-}
-
-.btn-secondary:hover {
-  background: var(--primary);
-  color: var(--page-bg);
-}
-
-/* Dividers */
-.divider {
-  height: 1px;
-  background: var(--border-subtle);
-}
-
-/* Element chips — square, 1px border; default transparent border #1C1917, hover fill #1C1917 text #EEEBE0 */
-.chip-wood { background: color-mix(in srgb, var(--sage) 12%, transparent); border: 1px solid var(--sage); color: var(--primary); }
-.chip-fire { background: color-mix(in srgb, var(--terracotta) 12%, transparent); border: 1px solid var(--terracotta); color: var(--primary); }
-.chip-earth { background: color-mix(in srgb, var(--ochre) 12%, transparent); border: 1px solid var(--ochre); color: var(--primary); }
-.chip-metal { background: color-mix(in srgb, var(--stone) 12%, transparent); border: 1px solid var(--stone); color: var(--primary); }
-.chip-water { background: color-mix(in srgb, var(--slate) 12%, transparent); border: 1px solid var(--slate); color: var(--primary); }
-
-/* Focus ring — 1px #9B30D9 offset 2px */
-.focus-ring:focus-visible {
-  outline: 1px solid var(--psychic-purple);
-  outline-offset: 2px;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
 }
