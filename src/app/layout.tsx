@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, DM_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -8,24 +7,6 @@ export const viewport: Viewport = {
   maximumScale: 5,
   viewportFit: "cover",
 };
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-});
-
-const dmMono = DM_Mono({
-  variable: "--font-dm-mono",
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-});
 
 export const metadata: Metadata = {
   title: "SoulMap — Your Cosmic Personality Blueprint",
@@ -39,9 +20,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${playfair.variable} ${dmSans.variable} ${dmMono.variable} antialiased`}
-      >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="antialiased">
         {children}
       </body>
     </html>

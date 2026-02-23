@@ -66,9 +66,13 @@
   --color-stone: var(--stone);
   --color-border: var(--border);
   --color-border-subtle: var(--border-subtle);
-  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
-  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
+  /* Fonts loaded via link in layout (avoids next/font build issues on Vercel) */
+  --font-playfair: "Playfair Display", ui-serif, Georgia, serif;
+  --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-dm-mono: "DM Mono", ui-monospace, monospace;
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-playfair);
+  --font-mono: var(--font-dm-mono);
 }
 
 body {

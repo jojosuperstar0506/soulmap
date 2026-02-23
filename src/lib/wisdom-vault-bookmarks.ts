@@ -88,5 +88,3 @@ export function getSacredTextBookmarkIds(): string[] {
 export function getOracleBookmarks(): OracleBookmark[] {
   return loadWisdomVaultBookmarks().oracleBookmarks;
 }
-
-export type { WisdomVaultBookmarks };
