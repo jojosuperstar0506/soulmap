@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-25 (Phase 0 + 0.5 complete)
+> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B complete)
 
 ---
 
@@ -10,7 +10,7 @@
 - Add new tasks under the relevant phase/section as they emerge
 - Keep the "Current focus" line at the top up to date
 
-**Current focus:** Phase 1-B — AI Backend (Vercel Serverless)
+**Current focus:** Phase 2 — Engagement Layer
 
 ---
 
@@ -96,18 +96,22 @@
 
 ## Phase 1-B — AI Backend (Vercel Serverless)
 
-- [ ] `npm install @anthropic-ai/sdk`
-- [ ] Create `.env.local` with `ANTHROPIC_API_KEY=...` (gitignored)
-- [ ] Create `src/app/api/narrative/route.ts` (POST handler)
-  - Accept: `{ dayMaster, pillarsStr, elementBalance, occupation, relationship, currentConcern }`
+- [x] `npm install @anthropic-ai/sdk`
+- [x] Create `.env.local` with `ANTHROPIC_API_KEY=...` (gitignored)
+- [x] Create `src/app/api/narrative/route.ts` (POST handler)
+  - Accept: `{ dayMaster, pillarsStr, elementBalance, dayMasterStrength, favorableElements, soulType, occupation, relationship, currentConcern, dayMasterStemIdx }`
   - Use system prompt from `src/content/soul-system-prompt.md`
-  - Call `claude-sonnet-4-6` via Anthropic SDK
+  - Call `claude-sonnet-4-5` via Anthropic SDK
   - Return: `{ coreEssence, classicalQuote, classicalSource, work, love, growth }`
-- [ ] Add `fetchNarrativeFromAPI()` to app.js
-- [ ] Call it after chart calculation in `runGeneration()`
-- [ ] Cache API response to localStorage (`soulmap_narrative`) for session re-use
-- [ ] Restore cached narrative in `restoreSession()`
-- [ ] Verify "AI reading coming soon" bar disappears when API responds
+- [x] Add `fetchNarrativeFromAPI()` to app.js
+- [x] Add `updateNarrativeSection()` to app.js
+- [x] Call it after chart calculation in `buildChart()` (async, non-blocking)
+- [x] Cache API response in profile object (narrativeFromAPI field) — persists across reloads
+- [x] Restore cached narrative in `activateProfile()` — instant on subsequent loads
+- [x] "AI reading coming soon" bar disappears when API responds
+- [x] Move `index.html`, `app.js`, `styles.css` to `public/` for Vercel serving
+- [x] Update `src/app/page.tsx` to redirect `/` → `/index.html`
+- [x] Fix `getNayin()` bug — use `getPillarCycleIdx()` instead of wrong formula
 - [ ] Add `ANTHROPIC_API_KEY` to Vercel environment variables
 - [ ] Deploy and verify end-to-end on Vercel
 
