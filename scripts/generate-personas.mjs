@@ -96,35 +96,77 @@ const PERSONAS = [
   },
 ];
 
-// ── Gemini Imagen 3 API call ──────────────────────────────────────────────────
-async function generateImage(persona) {
-  const fullPrompt = STYLE_BRIEF + persona.prompt;
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${GEMINI_API_KEY}`;
-
-  const body = {
-    instances: [{ prompt: fullPrompt }],
-    parameters: {
-      sampleCount: 1,
-      aspectRatio: '3:4',
-      outputMimeType: 'image/png',
-    },
-  };
-
+// ── Imagen 4 API call (primary) ──────────────────────────────────────────────
+async function generateViaImagen4(fullPrompt) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${GEMINI_API_KEY}`;
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+      instances: [{ prompt: fullPrompt }],
+      parameters: { sampleCount: 1, aspectRatio: '3:4', outputMimeType: 'image/png' },
+    }),
   });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`API error ${res.status}: ${text}`);
-  }
-
+  if (!res.ok) throw new Error(`Imagen4 ${res.status}: ${(await res.text()).slice(0,200)}`);
   const data = await res.json();
   const b64 = data?.predictions?.[0]?.bytesBase64Encoded;
-  if (!b64) throw new Error(`No image in response: ${JSON.stringify(data)}`);
+  if (!b64) throw new Error(`No image in Imagen4 response`);
   return Buffer.from(b64, 'base64');
+}
+
+// ── Gemini 2.5 Flash Image (fallback) ────────────────────────────────────────
+async function generateViaFlash25(fullPrompt) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_API_KEY}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: fullPrompt }] }],
+      generationConfig: { responseModalities: ['TEXT', 'IMAGE'] },
+    }),
+  });
+  if (!res.ok) throw new Error(`Flash2.5 ${res.status}: ${(await res.text()).slice(0,200)}`);
+  const data = await res.json();
+  const part = data?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+  if (!part) throw new Error(`No image in Flash2.5 response`);
+  return Buffer.from(part.inlineData.data, 'base64');
+}
+
+// ── Gemini 2.0 Flash Exp Image (second fallback) ──────────────────────────────
+async function generateViaFlash20Exp(fullPrompt) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${GEMINI_API_KEY}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: fullPrompt }] }],
+      generationConfig: { responseModalities: ['TEXT', 'IMAGE'] },
+    }),
+  });
+  if (!res.ok) throw new Error(`Flash2.0exp ${res.status}: ${(await res.text()).slice(0,200)}`);
+  const data = await res.json();
+  const part = data?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+  if (!part) throw new Error(`No image in Flash2.0exp response`);
+  return Buffer.from(part.inlineData.data, 'base64');
+}
+
+async function generateImage(persona) {
+  const fullPrompt = STYLE_BRIEF + persona.prompt;
+  const attempts = [
+    ['Imagen4',     () => generateViaImagen4(fullPrompt)],
+    ['Flash2.5',    () => generateViaFlash25(fullPrompt)],
+    ['Flash2.0exp', () => generateViaFlash20Exp(fullPrompt)],
+  ];
+  let lastErr;
+  for (const [label, fn] of attempts) {
+    try {
+      return await fn();
+    } catch (err) {
+      process.stdout.write(`[${label}: ${err.message.slice(0,50)}…] `);
+      lastErr = err;
+    }
+  }
+  throw lastErr;
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────

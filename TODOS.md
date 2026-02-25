@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B + Oracle AI complete; Phase 2 engagement layer in progress)
+> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B + Oracle AI + 10 soul portraits complete; Phase 2 engagement layer in progress)
 
 ---
 
@@ -49,8 +49,18 @@
   - [x] Add `getShenSha(chart)` to app.js
   - [x] Rewrite `renderFourPillars()` — row-based CSS grid (10 rows × 5 cols)
   - [x] Add `.bazi-grid` CSS to styles.css
-  - [ ] Cross-validate output against a reference BaZi tool for a known date
-- [x] Persona card portrait — 10 base stem portraits generated with Neo-Risograph style via Gemini Imagen (nanobanana) and wired into Blueprint UI (`scripts/generate-personas.mjs`, `public/personas/`)
+  - [ ] Cross-validate output against a reference BaZi tool for a known date ← **5 bugs fixed (2026-02-25); needs human spot-check**
+    - Solar term engine (Meeus ch.25) replaces hardcoded month/year heuristics
+    - 子月/丑月 month stem formula fixed
+    - 子 branch element corrected wood→water
+    - 大运 starting age uses actual 节气 dates instead of proxy
+- [x] Persona card portrait — 10 base stem portraits generated with Neo-Risograph style via Gemini Imagen and wired into Blueprint UI (`scripts/generate-personas.mjs`, `public/personas/`) ← **completed 2026-02-25**
+  - Authored `scripts/generate-personas.mjs` (3-model cascade: Imagen4 → Flash2.5 → Flash2.0exp)
+  - Added `slug` field to all 10 `SOUL_TYPES` entries in `app.js`
+  - Replaced emoji `<span>` with `<img id="blueprint-detail-visual">` in `index.html`
+  - Added `.soul-portrait-frame / .soul-portrait-img / .soul-portrait-text` CSS to `styles.css`
+  - Removed "AI generation coming soon" badge from Blueprint UI
+  - Symlink `personas → public/personas` created at project root for `npx serve .` local dev
 - [ ] Share image generation (1080×1350 PNG) — Phase 2
 - [ ] "This Year for You" section (流年 analysis) — Phase 2
 - [ ] "Favorable Elements" practical guide (colors, directions, times) — Phase 2
@@ -217,7 +227,7 @@
 
 | Risk | Status |
 |------|--------|
-| BaZi calculation errors — cross-validate against reference tools | ⚠️ Not yet validated |
+| BaZi calculation errors — cross-validate against reference tools | ⚠️ Engine rebuilt (2026-02-25); human spot-check needed |
 | Cultural sensitivity in sacred texts | ⚠️ Review needed before Phase 2 |
 | AI hallucination in Oracle | Mitigated by structured chart context in system prompt |
 | "Just another astrology app" perception | Addressed in copy — lead with uniqueness |

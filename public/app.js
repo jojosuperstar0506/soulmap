@@ -428,6 +428,103 @@
     return d + Math.floor((153 * mm + 2) / 5) + 365 * yy + Math.floor(yy / 4) - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
   }
 
+  // ─── Solar Term Engine ───────────────────────────────────────────
+  // Accurate BaZi month boundaries and 大运 starting age.
+  // Algorithm: Meeus, Astronomical Algorithms ch. 25 (accuracy ~0.01° / ~1 min for 1900–2100).
+
+  /** Sun's apparent ecliptic longitude (degrees) for a given JDE. */
+  function sunLongitude(jde) {
+    const T    = (jde - 2451545.0) / 36525;
+    const L0   = ((280.46646 + 36000.76983 * T + 0.0003032 * T * T) % 360 + 360) % 360;
+    const M    = ((357.52911 + 35999.05029 * T - 0.0001537 * T * T) % 360 + 360) % 360;
+    const Mrad = M * Math.PI / 180;
+    const C    = (1.914602 - 0.004817 * T - 0.000014 * T * T) * Math.sin(Mrad)
+               + (0.019993 - 0.000101 * T) * Math.sin(2 * Mrad)
+               + 0.000289 * Math.sin(3 * Mrad);
+    const omega = 125.04 - 1934.136 * T;
+    const lon   = L0 + C - 0.00569 - 0.00478 * Math.sin(omega * Math.PI / 180);
+    return ((lon % 360) + 360) % 360;
+  }
+
+  const _stCache = {};
+  /**
+   * JDE when the Sun reaches targetLong°.
+   * approxY/M/D is the approximate calendar date used as Newton-Raphson seed.
+   */
+  function solarTermJDE(approxY, approxM, approxD, targetLong) {
+    const key = `${approxY}|${targetLong}`;
+    if (_stCache[key] !== undefined) return _stCache[key];
+    let jde = jdn(approxY, approxM, approxD) - 0.5; // JDN noon → JDE midnight seed
+    const K = 365.242189623 / 360;
+    for (let i = 0; i < 50; i++) {
+      let diff = targetLong - sunLongitude(jde);
+      while (diff >  180) diff -= 360;
+      while (diff < -180) diff += 360;
+      if (Math.abs(diff) < 1e-6) break;
+      jde += diff * K;
+    }
+    return (_stCache[key] = jde);
+  }
+
+  // 12 BaZi month "节" terms: [solar longitude, branch index, approx month, approx day]
+  // "approx month" is relative to the BaZi year; 小寒 (month=1) falls in Jan of baziYear+1.
+  const BAZI_MONTH_TERMS = [
+    [315, 2,  2,  4], // 立春 → 寅
+    [345, 3,  3,  6], // 惊蛰 → 卯
+    [ 15, 4,  4,  5], // 清明 → 辰
+    [ 45, 5,  5,  6], // 立夏 → 巳
+    [ 75, 6,  6,  6], // 芒种 → 午
+    [105, 7,  7,  7], // 小暑 → 未
+    [135, 8,  8,  7], // 立秋 → 申
+    [165, 9,  9,  8], // 白露 → 酉
+    [195,10, 10,  8], // 寒露 → 戌
+    [225,11, 11,  7], // 立冬 → 亥
+    [255, 0, 12,  7], // 大雪 → 子
+    [285, 1,  1,  6], // 小寒 → 丑 (January of baziYear+1)
+  ];
+
+  /** JDN (Beijing time UTC+8) for each of the 12 month terms in BaZi year `by`. */
+  function getBaZiTermJDNs(by) {
+    return BAZI_MONTH_TERMS.map(([lon, branch, aM, aD]) => ({
+      jdn:    Math.floor(solarTermJDE(aM === 1 ? by + 1 : by, aM, aD, lon) + 8/24 + 0.5),
+      branch,
+    })).sort((a, b) => a.jdn - b.jdn);
+  }
+
+  /**
+   * Given a birth date, return { monthBranch, baziYear }.
+   * baziYear = calendar year if on/after 立春 of that year, else calendar year − 1.
+   */
+  function getBaZiMonth(y, m, d) {
+    const birthJDN  = jdn(y, m, d);
+    const liChunJDN = Math.floor(solarTermJDE(y, 2, 4, 315) + 8/24 + 0.5);
+    const baziYear  = birthJDN < liChunJDN ? y - 1 : y;
+    const terms     = getBaZiTermJDNs(baziYear);
+    let monthBranch = terms[0].branch; // default: 寅月 (first month of BaZi year)
+    for (const t of terms) {
+      if (birthJDN >= t.jdn) monthBranch = t.branch;
+    }
+    return { monthBranch, baziYear };
+  }
+
+  /**
+   * JDN of the nearest "节" solar term strictly before (backward) or after (forward) birthdate.
+   * Used for accurate 大运 starting age.
+   */
+  function nearestSolarTermJDN(y, m, d, forward) {
+    const birthJDN = jdn(y, m, d);
+    const allJDNs  = [];
+    for (let yr = y - 1; yr <= y + 1; yr++) {
+      for (const [lon, , aM, aD] of BAZI_MONTH_TERMS) {
+        allJDNs.push(Math.floor(solarTermJDE(aM === 1 ? yr + 1 : yr, aM, aD, lon) + 8/24 + 0.5));
+      }
+    }
+    allJDNs.sort((a, b) => a - b);
+    return forward
+      ? (allJDNs.find(t => t > birthJDN) ?? birthJDN + 30)
+      : ([...allJDNs].reverse().find(t => t < birthJDN) ?? birthJDN - 30);
+  }
+
   // ─── BaZi Calculation ────────────────────────────────────────────
   function calculateBaZi(birthDateStr, shichenIndex) {
     const [y, m, d] = birthDateStr.split('-').map(Number);
@@ -440,23 +537,29 @@
     const ziStem     = [0, 2, 4, 6, 8][dayStem % 5];
     const hourStem   = (ziStem + hourBranch) % 10;
 
-    const beforeLiChun  = m < 2 || (m === 2 && d < 5);
-    const yearForPillar = beforeLiChun ? y - 1 : y;
-    let yearPillarIndex = (yearForPillar - 1984) % 60;
+    // ── Year & Month pillars — solar term boundaries ─────────────────
+    // getBaZiMonth uses actual 节气 dates via the solar term engine above.
+    // This replaces the old hardcoded "before Feb 5" heuristic and the
+    // calendar-month approximation for monthBranch.
+    const { monthBranch, baziYear } = getBaZiMonth(y, m, d);
+    let yearPillarIndex = (baziYear - 1984) % 60;
     if (yearPillarIndex < 0) yearPillarIndex += 60;
     const yearStem   = yearPillarIndex % 10;
     const yearBranch = yearPillarIndex % 12;
 
-    const monthBranch = m === 1 ? 1 : (m + 1) % 12;
-    const yinYueStem  = [2, 4, 6, 8, 0][yearStem % 5];
-    const monthStem   = (yinYueStem + monthBranch - 2 + 20) % 10;
+    const yinYueStem = [2, 4, 6, 8, 0][yearStem % 5];
+    // Fix: use (monthBranch - 2 + 12) % 12 so 子月(branch 0) and 丑月(branch 1) resolve correctly.
+    const monthStem  = (yinYueStem + (monthBranch - 2 + 12) % 12) % 10;
 
     const elementCounts = { wood:0, fire:0, earth:0, metal:0, water:0 };
     [yearStem, monthStem, dayStem, hourStem].forEach(s => {
       elementCounts[['wood','fire','earth','metal','water'][STEM_ELEMENT[s]]]++;
     });
+    // Branch element mapping: 子(0)=water, 丑=earth, 寅=wood, 卯=wood, 辰=earth,
+    // 巳=fire, 午=fire, 未=earth, 申=metal, 酉=metal, 戌=earth, 亥=water.
+    // Fix: was [0,...] (wood) for 子; corrected to [4,...] (water).
     [yearBranch, monthBranch, dayBranch, hourBranch].forEach(b => {
-      elementCounts[['wood','fire','earth','metal','water'][[0,2,0,0,2,1,1,2,3,3,2,4][b]]]++;
+      elementCounts[['wood','fire','earth','metal','water'][[4,2,0,0,2,1,1,2,3,3,2,4][b]]]++;
     });
 
     const total   = Object.values(elementCounts).reduce((a, b) => a + b, 0);
@@ -518,11 +621,9 @@
 
   // ─── 大运 Major Luck Periods ─────────────────────────────────────
   /**
-   * Simplified calculation:
    * - Yang year stem + Male  OR  Yin year stem + Female → Forward through months
    * - Yin year stem + Male   OR  Yang year stem + Female → Backward
-   * - Starting age approximated from birth day / 3 (simplified; full solar-term
-   *   lookup is a future improvement noted in code).
+   * - Starting age = days to nearest actual "节" solar term ÷ 3 (rounded).
    */
   function calculateDaYun(chart, birthDateStr, gender) {
     const [y, m, d] = birthDateStr.split('-').map(Number);
@@ -531,21 +632,11 @@
     const isMale    = gender === 'male';
     const forward   = (isYangYear && isMale) || (!isYangYear && !isMale);
 
-    // Simplified starting age: days to nearest solar-term proxy ÷ 3
-    // Proxy: 15th of next (forward) or previous (backward) month
-    let termDate;
-    if (forward) {
-      const nm = m === 12 ? 1 : m + 1;
-      const ny = m === 12 ? y + 1 : y;
-      termDate = new Date(ny, nm - 1, 15);
-    } else {
-      const pm = m === 1 ? 12 : m - 1;
-      const py = m === 1 ? y - 1 : y;
-      termDate = new Date(py, pm - 1, 15);
-    }
-    const birthDate = new Date(y, m - 1, d);
-    const daysDiff  = Math.abs(termDate - birthDate) / (1000 * 60 * 60 * 24);
-    const startAge  = Math.max(1, Math.round(daysDiff / 3));
+    // Accurate starting age: days to nearest actual "节" solar term ÷ 3.
+    // nearestSolarTermJDN uses the solar term engine (not a proxy date).
+    const termJDN  = nearestSolarTermJDN(y, m, d, forward);
+    const daysDiff = Math.abs(termJDN - jdn(y, m, d));
+    const startAge = Math.max(1, Math.round(daysDiff / 3));
 
     const currentYear = new Date().getFullYear();
     const currentAge  = currentYear - y;
