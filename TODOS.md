@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B complete; Phase 2 soul portraits in progress)
+> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B + Oracle AI complete; Phase 2 engagement layer in progress)
 
 ---
 
@@ -10,7 +10,7 @@
 - Add new tasks under the relevant phase/section as they emerge
 - Keep the "Current focus" line at the top up to date
 
-**Current focus:** Phase 2 — Engagement Layer
+**Current focus:** Phase 2 — Engagement Layer (Oracle live, Library + Spark + Still Point remaining)
 
 ---
 
@@ -101,7 +101,7 @@
 - [x] Create `src/app/api/narrative/route.ts` (POST handler)
   - Accept: `{ dayMaster, pillarsStr, elementBalance, dayMasterStrength, favorableElements, soulType, occupation, relationship, currentConcern, dayMasterStemIdx }`
   - Use system prompt from `src/content/soul-system-prompt.md`
-  - Call `claude-sonnet-4-5` via Anthropic SDK
+  - Call `claude-sonnet-4-6` via Anthropic SDK (upgraded from 4-5)
   - Return: `{ coreEssence, classicalQuote, classicalSource, work, love, growth }`
 - [x] Add `fetchNarrativeFromAPI()` to app.js
 - [x] Add `updateNarrativeSection()` to app.js
@@ -112,8 +112,12 @@
 - [x] Move `index.html`, `app.js`, `styles.css` to `public/` for Vercel serving
 - [x] Update `src/app/page.tsx` to redirect `/` → `/index.html`
 - [x] Fix `getNayin()` bug — use `getPillarCycleIdx()` instead of wrong formula
-- [ ] Add `ANTHROPIC_API_KEY` to Vercel environment variables
-- [ ] Deploy and verify end-to-end on Vercel
+- [x] **Fix: API broken on Vercel — 3 root causes resolved (2026-02-25)**
+  - `outputFileTracingIncludes` moved from `experimental: {}` to top-level in `next.config.ts` (was silently ignored, so system prompt file was missing in serverless bundle)
+  - Added `outputFileTracingRoot: path.join(__dirname)` — stray `package-lock.json` in `~/` caused Next.js to use home dir as workspace root, breaking `.env.local` discovery
+  - `new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })` — explicit key pass required; `new Anthropic()` did not auto-read env var in Next.js 16 production mode
+- [ ] Add `ANTHROPIC_API_KEY` to Vercel environment variables ← **still needed for live deploy**
+- [ ] Deploy and verify end-to-end on Vercel ← **pending above**
 
 ---
 
@@ -149,9 +153,17 @@
 
 ### Life Oracle (AI Chat)
 - [x] Placeholder chat UI + static demo responses
-- [ ] Wire to Claude API (POST /api/oracle/chat)
-- [ ] System prompt injection: full chart data + life context
-- [ ] Conversation history persistence (localStorage for MVP, Supabase later)
+- [x] **Wire to Claude API — `POST /api/oracle` live (2026-02-25)**
+  - `src/app/api/oracle/route.ts`: accepts `{ question, chartContext, conversationHistory }`
+  - Full BaZi chart context injected into system prompt (day master, pillars, element balance, favorable elements, soul type, life context)
+  - `claude-sonnet-4-6`, 800 max_tokens, conversational 2–4 paragraph responses
+  - Classical text references drawn naturally from the same 7 classical sources as narrative
+- [x] System prompt injection: full chart data + life context ← done via `buildOracleChartContext()`
+- [x] In-session conversation history (last 10 turns passed per request) — context for follow-ups
+- [x] Typing indicator (bouncing dots) while waiting for response
+- [x] Send button disabled during request; re-enabled after
+- [x] Graceful error fallback ("The Oracle is unavailable right now.")
+- [ ] Conversation history persistence across page reloads (localStorage)
 - [ ] Context summarization for long conversations (stay within token window)
 - [ ] Rate limiting: 10 free messages/day (Phase 2)
 - [ ] Pre-built deep-dive prompt templates (Career, Relationships, Timing, etc.)
