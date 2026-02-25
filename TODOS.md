@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-25 (Phase 0 complete)
+> Last updated: 2026-02-25 (Phase 0 + 0.5 complete)
 
 ---
 
@@ -72,6 +72,25 @@
 - [x] Dark mode design system (Neo-Risograph Eastern Mythology)
 - [ ] Light mode option — Phase 2
 - [ ] WCAG 2.1 AA accessibility audit — Phase 2
+
+---
+
+## Phase 0.5 — Multi-Profile / File Management
+
+- [x] Add `name` field to onboarding form
+- [x] New localStorage model: `soulmap_profiles` array + `soulmap_active_profile`
+- [x] `migrateOldSession()` — one-time migration of `soulmap_session` → named profile "My Chart"
+- [x] `loadProfiles()` / `saveProfiles()` helpers
+- [x] `activateProfile(profileObj)` — replaces `restoreSession()`
+- [x] `saveCurrentProfile()` — replaces `saveSession()`
+- [x] Replace all `saveSession()` / `restoreSession()` call sites
+- [x] Profile button in app header upper-right (shows active profile name)
+- [x] Profile switcher bottom sheet (list + add + delete)
+- [x] "+ Add new profile" → goes to blank onboarding form
+- [x] Switch between profiles → instant re-render
+- [x] Delete profile (disabled when only 1 exists)
+- [x] CSS: header flex layout, profile-btn pill, bottom sheet styles
+- [ ] Verify: create 2 profiles, switch between them, each shows correct chart
 
 ---
 

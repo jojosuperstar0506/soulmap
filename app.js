@@ -309,43 +309,115 @@
   ];
 
   // ─── State ────────────────────────────────────────────────────────
-  const SOULMAP_SESSION_KEY = 'soulmap_session';
+  const SOULMAP_SESSION_KEY    = 'soulmap_session';      // legacy — migration only
+  const PROFILES_KEY           = 'soulmap_profiles';
+  const ACTIVE_PROFILE_KEY     = 'soulmap_active_profile';
+
   let state = {
     birthDate: '', shichen: 0, gender: 'male',
     occupation: '', relationship: '', currentConcern: '',
     chart: null, soulTypeIndex: 0, streak: 0,
-    narrativeFromAPI: null
+    narrativeFromAPI: null,
+    profileId: null,     // ID of the active profile
+    profileName: ''      // display name of the active profile
   };
 
   function setState(partial) { state = { ...state, ...partial }; }
 
-  function saveSession() {
+  // ─── Profile storage helpers ──────────────────────────────────────
+  function loadProfiles() {
     try {
-      if (!state.birthDate) return;
-      localStorage.setItem(SOULMAP_SESSION_KEY, JSON.stringify({
-        birthDate: state.birthDate, shichen: state.shichen, gender: state.gender,
-        occupation: state.occupation || '', relationship: state.relationship || '',
-        currentConcern: state.currentConcern || ''
-      }));
+      const raw = localStorage.getItem(PROFILES_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (_) { return []; }
+  }
+
+  function saveProfiles(arr) {
+    try { localStorage.setItem(PROFILES_KEY, JSON.stringify(arr)); } catch (_) {}
+  }
+
+  function getActiveProfileId() {
+    try { return localStorage.getItem(ACTIVE_PROFILE_KEY) || null; } catch (_) { return null; }
+  }
+
+  function setActiveProfileId(id) {
+    try { localStorage.setItem(ACTIVE_PROFILE_KEY, id); } catch (_) {}
+  }
+
+  /** Upsert the active profile into the profiles array */
+  function saveCurrentProfile() {
+    if (!state.birthDate || !state.profileId) return;
+    const profiles = loadProfiles();
+    const idx = profiles.findIndex(p => p.id === state.profileId);
+    const profileData = {
+      id:             state.profileId,
+      name:           state.profileName || 'My Chart',
+      birthDate:      state.birthDate,
+      shichen:        state.shichen,
+      gender:         state.gender,
+      occupation:     state.occupation || '',
+      relationship:   state.relationship || '',
+      currentConcern: state.currentConcern || '',
+      createdAt:      idx >= 0 ? profiles[idx].createdAt : Date.now()
+    };
+    if (idx >= 0) { profiles[idx] = profileData; } else { profiles.push(profileData); }
+    saveProfiles(profiles);
+    setActiveProfileId(state.profileId);
+  }
+
+  /** Load a profile object into state and re-render the app */
+  function activateProfile(p) {
+    const chart = calculateBaZi(p.birthDate, p.shichen);
+    chart.daYun = calculateDaYun(chart, p.birthDate, p.gender || 'male');
+    setState({
+      birthDate:      p.birthDate,
+      shichen:        p.shichen,
+      gender:         p.gender || 'male',
+      occupation:     p.occupation || '',
+      relationship:   p.relationship || '',
+      currentConcern: p.currentConcern || '',
+      chart,
+      soulTypeIndex:  chart.dayMaster,
+      profileId:      p.id,
+      profileName:    p.name || 'My Chart',
+      narrativeFromAPI: null
+    });
+    setActiveProfileId(p.id);
+    // Update header labels
+    const nameEl = document.getElementById('profile-btn-name');
+    if (nameEl) nameEl.textContent = p.name || 'My Chart';
+    const typeEl = document.getElementById('app-user-type');
+    if (typeEl) typeEl.textContent = SOUL_TYPES[chart.dayMaster].name;
+  }
+
+  /** One-time migration: convert old soulmap_session → first named profile */
+  function migrateOldSession() {
+    try {
+      if (localStorage.getItem(PROFILES_KEY)) return; // already migrated
+      const raw = localStorage.getItem(SOULMAP_SESSION_KEY);
+      if (!raw) return;
+      const p = JSON.parse(raw);
+      if (!p.birthDate) return;
+      const profile = {
+        id:             String(Date.now()) + '_migrated',
+        name:           'My Chart',
+        birthDate:      p.birthDate,
+        shichen:        p.shichen || 0,
+        gender:         p.gender || 'male',
+        occupation:     p.occupation || '',
+        relationship:   p.relationship || '',
+        currentConcern: p.currentConcern || '',
+        createdAt:      Date.now()
+      };
+      saveProfiles([profile]);
+      setActiveProfileId(profile.id);
+      localStorage.removeItem(SOULMAP_SESSION_KEY);
     } catch (_) {}
   }
 
-  function restoreSession() {
-    try {
-      const raw = localStorage.getItem(SOULMAP_SESSION_KEY);
-      if (!raw) return false;
-      const p = JSON.parse(raw);
-      if (!p.birthDate) return false;
-      const chart = calculateBaZi(p.birthDate, p.shichen);
-      chart.daYun = calculateDaYun(chart, p.birthDate, p.gender || 'male');
-      setState({
-        birthDate: p.birthDate, shichen: p.shichen, gender: p.gender || 'male',
-        occupation: p.occupation || '', relationship: p.relationship || '',
-        currentConcern: p.currentConcern || '', chart, soulTypeIndex: chart.dayMaster
-      });
-      return true;
-    } catch (_) { return false; }
-  }
+  // Keep saveSession/restoreSession as no-ops for any lingering call sites
+  function saveSession()    { saveCurrentProfile(); }
+  function restoreSession() { return false; /* replaced by init() profile logic */ }
 
   // ─── Julian Day Number (for day pillar) ──────────────────────────
   function jdn(y, m, d) {
@@ -516,11 +588,22 @@
 
   // ─── Merged Onboarding ───────────────────────────────────────────
   function initOnboard() {
-    document.getElementById('btn-back-landing').addEventListener('click', () => showView('view-landing'));
+    document.getElementById('btn-back-landing').addEventListener('click', () => {
+      // If we have profiles already (came from the app), go back to app; else landing
+      if (loadProfiles().length > 0 && state.chart) {
+        showView('view-app');
+      } else {
+        showView('view-landing');
+      }
+    });
     document.getElementById('form-onboard').addEventListener('submit', function (e) {
       e.preventDefault();
       const fd = new FormData(this);
+      // If no profileId in state (adding new), mint a fresh ID now
+      const profileId = state.profileId || (String(Date.now()) + '_' + Math.floor(Math.random() * 1e6));
       setState({
+        profileId,
+        profileName:    (fd.get('profileName') || '').trim() || 'My Chart',
         birthDate:      fd.get('birthDate'),
         shichen:        fd.get('shichen'),
         gender:         fd.get('gender'),
@@ -539,7 +622,10 @@
     const chart = calculateBaZi(state.birthDate, state.shichen);
     chart.daYun = calculateDaYun(chart, state.birthDate, state.gender);
     setState({ chart, soulTypeIndex: chart.dayMaster });
-    saveSession();
+    saveCurrentProfile();
+    // Update both header labels
+    const nameEl = document.getElementById('profile-btn-name');
+    if (nameEl) nameEl.textContent = state.profileName || 'My Chart';
     document.getElementById('app-user-type').textContent = SOUL_TYPES[state.soulTypeIndex].name;
     renderAppBlueprint();
     showView('view-app');
@@ -1198,6 +1284,127 @@
     if (btn) btn.addEventListener('click', () => { if (state.chart) renderAppBlueprint(); });
   }
 
+  // ─── Profile Switcher ─────────────────────────────────────────────
+  function renderProfileList() {
+    const list     = document.getElementById('profile-list');
+    if (!list) return;
+    const profiles = loadProfiles();
+    const single   = profiles.length <= 1;
+
+    list.innerHTML = profiles.map(p => {
+      const isActive = p.id === state.profileId;
+      // Compute soul type name from chart, or fall back to Day Master only
+      let soulSubtitle = '';
+      try {
+        const c = calculateBaZi(p.birthDate, p.shichen);
+        soulSubtitle = SOUL_TYPES[c.dayMaster].sub;
+      } catch (_) {}
+
+      return `<li class="profile-list-item${isActive ? ' profile-list-item-active' : ''}" data-id="${p.id}">
+        <div class="profile-list-info">
+          ${isActive ? '<span class="profile-active-dot" aria-label="Active"></span>' : '<span class="profile-active-dot profile-active-dot-empty"></span>'}
+          <div>
+            <strong class="profile-list-name">${p.name}</strong>
+            <span class="profile-list-sub">${soulSubtitle}</span>
+          </div>
+        </div>
+        <button class="profile-delete-btn btn btn-ghost btn-sm${single ? ' profile-delete-disabled' : ''}"
+          data-delete="${p.id}" ${single ? 'disabled aria-disabled="true"' : ''}
+          aria-label="Delete ${p.name}">✕</button>
+      </li>`;
+    }).join('');
+
+    // Switch on click of a profile row
+    list.querySelectorAll('.profile-list-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (e.target.closest('[data-delete]')) return; // handled below
+        const id = this.getAttribute('data-id');
+        const profiles = loadProfiles();
+        const profile  = profiles.find(p => p.id === id);
+        if (!profile) return;
+        closeProfileSheet();
+        activateProfile(profile);
+        renderAppBlueprint();
+        showView('view-app');
+        switchTab('blueprint');
+      });
+    });
+
+    // Delete button
+    list.querySelectorAll('[data-delete]').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (this.disabled) return;
+        const id       = this.getAttribute('data-delete');
+        let profiles   = loadProfiles();
+        const wasActive = id === state.profileId;
+        profiles       = profiles.filter(p => p.id !== id);
+        saveProfiles(profiles);
+        if (wasActive && profiles.length > 0) {
+          activateProfile(profiles[0]);
+          renderAppBlueprint();
+        }
+        renderProfileList();
+      });
+    });
+  }
+
+  function openProfileSheet() {
+    const sheet = document.getElementById('profile-sheet');
+    if (!sheet) return;
+    renderProfileList();
+    sheet.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProfileSheet() {
+    const sheet = document.getElementById('profile-sheet');
+    if (!sheet) return;
+    sheet.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  function initProfileSwitcher() {
+    const openBtn  = document.getElementById('btn-profile-switcher');
+    const closeBtn = document.getElementById('btn-close-sheet');
+    const backdrop = document.getElementById('profile-sheet-backdrop');
+    const addBtn   = document.getElementById('btn-add-profile');
+
+    if (openBtn)  openBtn.addEventListener('click', openProfileSheet);
+    if (closeBtn) closeBtn.addEventListener('click', closeProfileSheet);
+    if (backdrop) backdrop.addEventListener('click', closeProfileSheet);
+
+    if (addBtn) {
+      addBtn.addEventListener('click', () => {
+        closeProfileSheet();
+        // Clear form for a fresh profile
+        const form = document.getElementById('form-onboard');
+        if (form) form.reset();
+        // Signal to onboarding that this is a new profile (not editing existing)
+        setState({ profileId: null, profileName: '' });
+        showView('view-onboard');
+      });
+    }
+  }
+
+  // Pre-fill onboarding form if editing an existing profile
+  function prefillOnboardForm() {
+    if (!state.profileId || !state.birthDate) return;
+    const form = document.getElementById('form-onboard');
+    if (!form) return;
+    const set = (name, val) => {
+      const el = form.elements[name];
+      if (el && val != null) el.value = val;
+    };
+    set('profileName', state.profileName);
+    set('birthDate',   state.birthDate);
+    set('shichen',     state.shichen);
+    set('gender',      state.gender);
+    set('occupation',  state.occupation);
+    set('relationship',state.relationship);
+    set('currentConcern', state.currentConcern);
+  }
+
   // ─── Init ────────────────────────────────────────────────────────
   function init() {
     initLanding();
@@ -1208,13 +1415,21 @@
     initSpark();
     initStillPoint();
     initRefreshNarrative();
+    initProfileSwitcher();
 
-    if (restoreSession()) {
-      document.getElementById('app-user-type').textContent = SOUL_TYPES[state.soulTypeIndex].name;
+    // Migrate any legacy single-session → first named profile
+    migrateOldSession();
+
+    const profiles  = loadProfiles();
+    if (profiles.length > 0) {
+      const activeId  = getActiveProfileId();
+      const profile   = profiles.find(p => p.id === activeId) || profiles[0];
+      activateProfile(profile);
       renderAppBlueprint();
       showView('view-app');
       switchTab('blueprint');
     }
+    // else: stay on view-landing (default)
   }
 
   if (document.readyState === 'loading') {

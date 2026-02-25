@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="stylesheet" href="styles.css?v=10" />
 </head>
 <body>
 
@@ -38,6 +38,10 @@
     <form id="form-onboard" class="onboard-form">
 
       <!-- ─ Required ─ -->
+      <label>
+        <span>Name <small>Whose chart is this?</small></span>
+        <input type="text" name="profileName" placeholder="e.g. Max, Mom, Sarah…" required autocomplete="off" />
+      </label>
       <label>
         <span>Date of birth</span>
         <input type="date" name="birthDate" required />
@@ -128,8 +132,12 @@
   <section id="view-app" class="view">
     <header class="app-header">
       <h1 class="app-logo">SoulMap</h1>
-      <p class="app-subtitle" id="app-user-type">—</p>
+      <button id="btn-profile-switcher" class="profile-btn" type="button" aria-label="Switch profile">
+        <span id="profile-btn-name">—</span>
+        <span class="profile-btn-arrow" aria-hidden="true">⌄</span>
+      </button>
     </header>
+    <p class="app-subtitle" id="app-user-type">—</p>
 
     <main class="app-main">
 
@@ -334,8 +342,25 @@
     </nav>
   </section><!-- /view-app -->
 
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- PROFILE SWITCHER SHEET                                         -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div id="profile-sheet" class="profile-sheet" hidden aria-modal="true" role="dialog">
+    <div class="profile-sheet-backdrop" id="profile-sheet-backdrop"></div>
+    <div class="profile-sheet-panel">
+      <div class="profile-sheet-header">
+        <span class="profile-sheet-title">Switch Profile</span>
+        <button id="btn-close-sheet" class="btn btn-ghost btn-sm" type="button" aria-label="Close">✕</button>
+      </div>
+      <ul class="profile-list" id="profile-list" role="list"></ul>
+      <button id="btn-add-profile" class="btn btn-primary profile-add-btn" type="button">
+        + Add new profile
+      </button>
+    </div>
+  </div>
+
   <script src="content/wisdom-vault.js?v=4"></script>
   <script src="content/classical-bazi-excerpts.js?v=1"></script>
-  <script src="app.js?v=9"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>
