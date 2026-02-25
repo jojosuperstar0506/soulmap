@@ -1,0 +1,376 @@
+{
+  "description": "Notable quotes from Eastern and Western ancient texts. Used by the Sacred Library and by the Oracle to cite authorities when generating answers.",
+  "quotes": [
+    {
+      "id": "ttc-1",
+      "tradition": "daoism",
+      "source": "Tao Te Ching",
+      "author": "Lao Tzu",
+      "text": "The highest good is like water. Water benefits the ten thousand things but does not compete. It dwells in places people dislike, thus it is close to the Way."
+    },
+    {
+      "id": "ttc-2",
+      "tradition": "daoism",
+      "source": "Tao Te Ching",
+      "author": "Lao Tzu",
+      "text": "Knowing others is intelligence; knowing yourself is true wisdom. Mastering others is strength; mastering yourself is true power."
+    },
+    {
+      "id": "ttc-3",
+      "tradition": "daoism",
+      "source": "Tao Te Ching",
+      "author": "Lao Tzu",
+      "text": "A journey of a thousand miles begins with a single step."
+    },
+    {
+      "id": "ttc-4",
+      "tradition": "daoism",
+      "source": "Tao Te Ching",
+      "author": "Lao Tzu",
+      "text": "When I let go of what I am, I become what I might be."
+    },
+    {
+      "id": "ttc-5",
+      "tradition": "daoism",
+      "source": "Tao Te Ching",
+      "author": "Lao Tzu",
+      "text": "Nature does not hurry, yet everything is accomplished."
+    },
+    {
+      "id": "zz-1",
+      "tradition": "daoism",
+      "source": "Zhuangzi",
+      "author": "Zhuangzi",
+      "text": "When the mind is still, the whole world can be at peace. Clarity of mind allows the reflection of the natural order."
+    },
+    {
+      "id": "zz-2",
+      "tradition": "daoism",
+      "source": "Zhuangzi",
+      "author": "Zhuangzi",
+      "text": "Happiness is the absence of the striving for happiness."
+    },
+    {
+      "id": "zz-3",
+      "tradition": "daoism",
+      "source": "Zhuangzi",
+      "author": "Zhuangzi",
+      "text": "Flow with whatever may happen and let your mind be free. Stay centered by accepting whatever you are doing. This is the ultimate."
+    },
+    {
+      "id": "zz-4",
+      "tradition": "daoism",
+      "source": "Zhuangzi",
+      "author": "Zhuangzi",
+      "text": "The wise man knows that it is better to sit by the river than to cross it when the time is not right."
+    },
+    {
+      "id": "conf-1",
+      "tradition": "confucianism",
+      "source": "The Analects",
+      "author": "Confucius",
+      "text": "When we see men of worth, we should think of equaling them; when we see men of a contrary character, we should turn inwards and examine ourselves."
+    },
+    {
+      "id": "conf-2",
+      "tradition": "confucianism",
+      "source": "The Analects",
+      "author": "Confucius",
+      "text": "It does not matter how slowly you go so long as you do not stop."
+    },
+    {
+      "id": "conf-3",
+      "tradition": "confucianism",
+      "source": "The Analects",
+      "author": "Confucius",
+      "text": "Wherever you go, go with all your heart."
+    },
+    {
+      "id": "conf-4",
+      "tradition": "confucianism",
+      "source": "The Analects",
+      "author": "Confucius",
+      "text": "The noble-minded are calm and steady; the small-minded are always fretful and anxious."
+    },
+    {
+      "id": "conf-5",
+      "tradition": "confucianism",
+      "source": "The Analects",
+      "author": "Confucius",
+      "text": "Real knowledge is to know the extent of one's ignorance."
+    },
+    {
+      "id": "dh-1",
+      "tradition": "buddhism",
+      "source": "Dhammapada",
+      "author": "Buddha",
+      "text": "All experience is preceded by mind, led by mind, made by mind. Speak or act with a peaceful mind, and happiness follows."
+    },
+    {
+      "id": "dh-2",
+      "tradition": "buddhism",
+      "source": "Dhammapada",
+      "author": "Buddha",
+      "text": "We are what we think. All that we are arises with our thoughts. With our thoughts we make the world."
+    },
+    {
+      "id": "dh-3",
+      "tradition": "buddhism",
+      "source": "Dhammapada",
+      "author": "Buddha",
+      "text": "The mind is everything. What you think you become."
+    },
+    {
+      "id": "dh-4",
+      "tradition": "buddhism",
+      "source": "Dhammapada",
+      "author": "Buddha",
+      "text": "Holding on to anger is like grasping a hot coal with the intent of throwing it at someone else; you are the one who gets burned."
+    },
+    {
+      "id": "dh-5",
+      "tradition": "buddhism",
+      "source": "Dhammapada",
+      "author": "Buddha",
+      "text": "Peace comes from within. Do not seek it without."
+    },
+    {
+      "id": "hs-1",
+      "tradition": "buddhism",
+      "source": "Heart Sutra",
+      "author": "Heart Sutra",
+      "text": "Form is emptiness, emptiness is form. Beyond suffering and cause of suffering, beyond wisdom and attainment."
+    },
+    {
+      "id": "ic-1",
+      "tradition": "chinese",
+      "source": "I Ching",
+      "author": "I Ching",
+      "text": "The superior person remains composed and at peace; in change they find their opportunity."
+    },
+    {
+      "id": "ic-2",
+      "tradition": "chinese",
+      "source": "I Ching",
+      "author": "I Ching",
+      "text": "Perseverance furthers. When the time is right, advance; when it is not, wait in correctness."
+    },
+    {
+      "id": "med-1",
+      "tradition": "stoicism",
+      "source": "Meditations",
+      "author": "Marcus Aurelius",
+      "text": "You have power over your mind — not outside events. Realize this, and you will find strength."
+    },
+    {
+      "id": "med-2",
+      "tradition": "stoicism",
+      "source": "Meditations",
+      "author": "Marcus Aurelius",
+      "text": "The happiness of your life depends upon the quality of your thoughts."
+    },
+    {
+      "id": "med-3",
+      "tradition": "stoicism",
+      "source": "Meditations",
+      "author": "Marcus Aurelius",
+      "text": "Waste no more time arguing about what a good man should be. Be one."
+    },
+    {
+      "id": "med-4",
+      "tradition": "stoicism",
+      "source": "Meditations",
+      "author": "Marcus Aurelius",
+      "text": "When you arise in the morning, think of what a precious privilege it is to be alive — to breathe, to think, to enjoy, to love."
+    },
+    {
+      "id": "med-5",
+      "tradition": "stoicism",
+      "source": "Meditations",
+      "author": "Marcus Aurelius",
+      "text": "Accept the things to which fate binds you, and love the people with whom fate brings you together, and do so with all your heart."
+    },
+    {
+      "id": "sen-1",
+      "tradition": "stoicism",
+      "source": "Letters to Lucilius",
+      "author": "Seneca",
+      "text": "We suffer more often in imagination than in reality. The present moment is all we truly have."
+    },
+    {
+      "id": "sen-2",
+      "tradition": "stoicism",
+      "source": "Letters to Lucilius",
+      "author": "Seneca",
+      "text": "It is not that we have a short time to live, but that we waste a lot of it. Life is long enough if you know how to use it."
+    },
+    {
+      "id": "sen-3",
+      "tradition": "stoicism",
+      "source": "Letters to Lucilius",
+      "author": "Seneca",
+      "text": "Luck is what happens when preparation meets opportunity."
+    },
+    {
+      "id": "sen-4",
+      "tradition": "stoicism",
+      "source": "Letters to Lucilius",
+      "author": "Seneca",
+      "text": "We are more often frightened than hurt; and we suffer more from imagination than from reality."
+    },
+    {
+      "id": "sen-5",
+      "tradition": "stoicism",
+      "source": "On the Shortness of Life",
+      "author": "Seneca",
+      "text": "As is a tale, so is life: not how long it is, but how good it is, is what matters."
+    },
+    {
+      "id": "ep-1",
+      "tradition": "stoicism",
+      "source": "Enchiridion",
+      "author": "Epictetus",
+      "text": "It is not things that disturb people, but their judgments about things."
+    },
+    {
+      "id": "ep-2",
+      "tradition": "stoicism",
+      "source": "Enchiridion",
+      "author": "Epictetus",
+      "text": "Make the best use of what is in your power, and take the rest as it happens."
+    },
+    {
+      "id": "ep-3",
+      "tradition": "stoicism",
+      "source": "Discourses",
+      "author": "Epictetus",
+      "text": "First say to yourself what you would be; and then do what you have to do."
+    },
+    {
+      "id": "ep-4",
+      "tradition": "stoicism",
+      "source": "Enchiridion",
+      "author": "Epictetus",
+      "text": "We cannot choose our external circumstances, but we can always choose how we respond to them."
+    },
+    {
+      "id": "ep-5",
+      "tradition": "stoicism",
+      "source": "Discourses",
+      "author": "Epictetus",
+      "text": "Only the educated are free."
+    },
+    {
+      "id": "her-1",
+      "tradition": "greek",
+      "source": "Fragments",
+      "author": "Heraclitus",
+      "text": "No man ever steps in the same river twice, for it's not the same river and he's not the same man."
+    },
+    {
+      "id": "her-2",
+      "tradition": "greek",
+      "source": "Fragments",
+      "author": "Heraclitus",
+      "text": "The only constant in life is change."
+    },
+    {
+      "id": "her-3",
+      "tradition": "greek",
+      "source": "Fragments",
+      "author": "Heraclitus",
+      "text": "Character is destiny."
+    },
+    {
+      "id": "plat-1",
+      "tradition": "greek",
+      "source": "The Republic",
+      "author": "Plato",
+      "text": "The first and greatest victory is to conquer yourself."
+    },
+    {
+      "id": "plat-2",
+      "tradition": "greek",
+      "source": "Apology",
+      "author": "Plato",
+      "text": "The unexamined life is not worth living."
+    },
+    {
+      "id": "plat-3",
+      "tradition": "greek",
+      "source": "Phaedrus",
+      "author": "Plato",
+      "text": "The soul takes nothing with her to the next world but her education and culture; and these, we are told, are of the greatest service or the greatest harm to the dead person."
+    },
+    {
+      "id": "aris-1",
+      "tradition": "greek",
+      "source": "Nicomachean Ethics",
+      "author": "Aristotle",
+      "text": "Excellence is never an accident. It is always the result of high intention, sincere effort, and intelligent execution."
+    },
+    {
+      "id": "aris-2",
+      "tradition": "greek",
+      "source": "Nicomachean Ethics",
+      "author": "Aristotle",
+      "text": "We are what we repeatedly do. Excellence, then, is not an act but a habit."
+    },
+    {
+      "id": "aris-3",
+      "tradition": "greek",
+      "source": "Politics",
+      "author": "Aristotle",
+      "text": "Knowing yourself is the beginning of all wisdom."
+    },
+    {
+      "id": "rumi-1",
+      "tradition": "sufi",
+      "source": "Masnavi",
+      "author": "Rumi",
+      "text": "The wound is the place where the light enters you."
+    },
+    {
+      "id": "rumi-2",
+      "tradition": "sufi",
+      "source": "Masnavi",
+      "author": "Rumi",
+      "text": "What you seek is seeking you."
+    },
+    {
+      "id": "rumi-3",
+      "tradition": "sufi",
+      "source": "Masnavi",
+      "author": "Rumi",
+      "text": "Let yourself be silently drawn by the strange pull of what you really love. It will not lead you astray."
+    },
+    {
+      "id": "rumi-4",
+      "tradition": "sufi",
+      "source": "Masnavi",
+      "author": "Rumi",
+      "text": "Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself."
+    },
+    {
+      "id": "bhag-1",
+      "tradition": "vedic",
+      "source": "Bhagavad Gita",
+      "author": "Bhagavad Gita",
+      "text": "You have the right to work, but never to the fruit of work. Let not the fruits of action be your motive, nor let your attachment be to inaction."
+    },
+    {
+      "id": "bhag-2",
+      "tradition": "vedic",
+      "source": "Bhagavad Gita",
+      "author": "Bhagavad Gita",
+      "text": "The soul is neither born, nor does it ever die; nor having once been, does it ever cease to be. It is unborn, eternal, ever-existing, and primeval."
+    },
+    {
+      "id": "bhag-3",
+      "tradition": "vedic",
+      "source": "Bhagavad Gita",
+      "author": "Bhagavad Gita",
+      "text": "When the mind is restless and distracted, bring it back to the Self and master it."
+    }
+  ]
+}

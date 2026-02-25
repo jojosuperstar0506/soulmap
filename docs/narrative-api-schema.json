@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Blueprint narrative response (Part B)",
+  "description": "Schema for the narrative API. Return only these fields. Do not return theme, challenge, or strength.",
+  "type": "object",
+  "required": ["coreEssence", "classicalQuote", "work", "love", "growth"],
+  "additionalProperties": false,
+  "properties": {
+    "coreEssence": {
+      "type": "string",
+      "description": "One paragraph: who they are (day master / soul type), essence, season, and that the chart is supported by work, love, and growth."
+    },
+    "classicalQuote": {
+      "type": "string",
+      "description": "One short excerpt or paraphrase from classical 八字 texts (English)."
+    },
+    "classicalSource": {
+      "type": "string",
+      "description": "Optional attribution, e.g. \"《滴天髓》 (Ditian Sui)\"."
+    },
+    "work": {
+      "type": "string",
+      "description": "1–2 sentences on work/career."
+    },
+    "love": {
+      "type": "string",
+      "description": "1–2 sentences on relationships."
+    },
+    "growth": {
+      "type": "string",
+      "description": "1–2 sentences on personal growth."
+    }
+  }
+}
