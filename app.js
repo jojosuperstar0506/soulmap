@@ -1200,38 +1200,110 @@
     });
   }
 
-  // ─── Oracle (placeholder) ─────────────────────────────────────────
+  // ─── Oracle ───────────────────────────────────────────────────────
+  function buildOracleChartContext() {
+    if (!state.chart) return null;
+    const c = state.chart;
+    const stemIdx = c.dayMaster;
+    return {
+      dayMaster:         STEMS[stemIdx] + ' (' + (STEM_NAMES_EN[stemIdx] || '') + ')',
+      pillarsStr:        c.pillarsStr || '',
+      elementBalance:    formatElementBalance(c),
+      dayMasterStrength: c.dayMasterStrength || 'Moderate',
+      favorableElements: (c.favorableElements || []).map(
+        e => e ? e[0].toUpperCase() + e.slice(1) : ''
+      ).filter(Boolean),
+      soulType:          (SOUL_TYPES[stemIdx] || {}).name || '',
+      occupation:        state.occupation    || '',
+      relationship:      state.relationship  || '',
+      currentConcern:    state.currentConcern || '',
+    };
+  }
+
+  async function fetchOracleAnswer(question, conversationHistory) {
+    const res = await fetch('/api/oracle', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        question,
+        chartContext:        buildOracleChartContext(),
+        conversationHistory: conversationHistory || [],
+      }),
+    });
+    const json = await res.json();
+    if (!res.ok || json.error) throw new Error(json.error || 'Oracle API error');
+    return json.answer;
+  }
+
   function initOracle() {
     const form        = document.getElementById('oracle-form');
     const input       = document.getElementById('oracle-input');
     const messages    = document.getElementById('oracle-messages');
     const placeholder = document.getElementById('oracle-placeholder');
+    const sendBtn     = form ? form.querySelector('button[type="submit"]') : null;
+
+    // Conversation history for multi-turn context (role/content pairs)
+    const conversationHistory = [];
 
     document.querySelectorAll('.oracle-suggestion').forEach(btn => {
       btn.addEventListener('click', () => { input.value = btn.getAttribute('data-q'); input.focus(); });
     });
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const q = input.value.trim();
       if (!q) return;
+
       if (placeholder) placeholder.style.display = 'none';
+
+      // Show user message
       const userMsg = document.createElement('div');
-      userMsg.className = 'msg user'; userMsg.textContent = q;
+      userMsg.className = 'msg user';
+      userMsg.textContent = q;
       messages.appendChild(userMsg);
       input.value = '';
 
-      const reply    = document.createElement('div');
-      reply.className = 'msg assistant';
-      const chartNote = 'In the full app, the Life Oracle (powered by Claude) would answer using your BaZi chart. Your chart: ' + (state.chart ? state.chart.pillarsStr : '—') + '.  ';
-      const vault = getWisdomVault();
-      const cite  = vault[Math.floor(Math.random() * vault.length)];
-      const citeLine = 'As ' + cite.author + ' wrote in ' + cite.source + ': \u201C' + cite.text + '\u201D';
-      reply.textContent = chartNote + 'This is a static demo. A word from the Wisdom Vault: ' + citeLine;
-      messages.appendChild(reply);
+      // Disable send while waiting
+      if (sendBtn) sendBtn.disabled = true;
+
+      // Typing indicator
+      const typing = document.createElement('div');
+      typing.className = 'msg assistant typing';
+      typing.innerHTML = '<span></span><span></span><span></span>';
+      messages.appendChild(typing);
       messages.scrollTop = messages.scrollHeight;
-      const parsed = parseCitationFromMessage(reply.textContent);
-      if (parsed) addCitationToVault(parsed);
+
+      try {
+        const answer = await fetchOracleAnswer(q, conversationHistory);
+
+        // Remove typing indicator, show real reply
+        typing.remove();
+        const reply = document.createElement('div');
+        reply.className = 'msg assistant';
+        reply.textContent = answer;
+        messages.appendChild(reply);
+        messages.scrollTop = messages.scrollHeight;
+
+        // Save to conversation history for follow-up context
+        conversationHistory.push({ role: 'user',      content: q      });
+        conversationHistory.push({ role: 'assistant', content: answer });
+
+        // Parse any classical citations into the Wisdom Vault
+        const parsed = parseCitationFromMessage(answer);
+        if (parsed) addCitationToVault(parsed);
+
+      } catch (err) {
+        typing.remove();
+        const errMsg = document.createElement('div');
+        errMsg.className = 'msg assistant error';
+        errMsg.textContent = 'The Oracle is unavailable right now. Please try again in a moment.';
+        messages.appendChild(errMsg);
+        messages.scrollTop = messages.scrollHeight;
+        console.warn('[SoulMap] Oracle API failed:', err);
+      } finally {
+        if (sendBtn) sendBtn.disabled = false;
+        input.focus();
+      }
     });
   }
 
