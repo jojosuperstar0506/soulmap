@@ -9,9 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=9" />
 </head>
 <body>
+
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- LANDING / SPLASH -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -19,28 +20,30 @@
     <div class="landing-bg"></div>
     <div class="landing-content">
       <h1 class="logo">SoulMap</h1>
-      <p class="tagline">MBTI meets ancient wisdom — your cosmic personality blueprint</p>
-      <p class="sub">Bridge Chinese metaphysics (BaZi) with global sacred texts. Understand your patterns, navigate decisions, cultivate awareness.</p>
+      <p class="tagline">古代智慧 · Ancient Wisdom Meets Modern Navigation</p>
+      <p class="sub">Your destiny, decoded. BaZi (四柱八字) reveals the cosmic fingerprint you were born with — and how to live it fully.</p>
       <button type="button" class="btn btn-primary btn-landing" id="btn-start">Discover Your Blueprint</button>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- ONBOARDING: Step 1 — Birth Information -->
+  <!-- ONBOARDING — Single unified page -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
-  <section id="view-onboard-birth" class="view">
+  <section id="view-onboard" class="view">
     <header class="onboard-header">
-      <span class="step-num">Step 1 of 2</span>
-      <h2>Birth Information</h2>
-      <p>Your BaZi chart is built from the exact moment you arrived.</p>
+      <span class="step-num">Your Information</span>
+      <h2>Tell us about you</h2>
+      <p>Required fields unlock your BaZi chart. Optional fields deepen your reading.</p>
     </header>
-    <form id="form-birth" class="onboard-form">
+    <form id="form-onboard" class="onboard-form">
+
+      <!-- ─ Required ─ -->
       <label>
         <span>Date of birth</span>
         <input type="date" name="birthDate" required />
       </label>
       <label>
-        <span>Time of birth <small>Don’t know? Choose the closest 2-hour window.</small></span>
+        <span>Time of birth <small>Don't know? Choose the closest 2-hour window.</small></span>
         <select name="shichen" required>
           <option value="">Select 时辰 (2-hour period)</option>
           <option value="0">子时 Zǐ 23:00–01:00</option>
@@ -65,23 +68,12 @@
           <option value="female">Female</option>
         </select>
       </label>
-      <div class="form-actions">
-        <button type="button" class="btn btn-ghost" id="btn-back-landing">Back</button>
-        <button type="submit" class="btn btn-primary">Continue</button>
-      </div>
-    </form>
-  </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- ONBOARDING: Step 2 — Life Context -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <section id="view-onboard-life" class="view">
-    <header class="onboard-header">
-      <span class="step-num">Step 2 of 2</span>
-      <h2>Life Context</h2>
-      <p>Optional — helps tailor your Blueprint and Oracle.</p>
-    </header>
-    <form id="form-life" class="onboard-form">
+      <!-- ─ Optional ─ -->
+      <div class="onboard-optional-divider">
+        <span>Optional — deepens your reading</span>
+      </div>
+
       <label>
         <span>What do you do?</span>
         <select name="occupation">
@@ -102,17 +94,18 @@
           <option value="dating">Dating</option>
           <option value="relationship">In a Relationship</option>
           <option value="married">Married</option>
-          <option value="complicated">It’s Complicated</option>
+          <option value="complicated">It's Complicated</option>
           <option value="prefer-not">Prefer Not to Say</option>
         </select>
       </label>
       <label>
-        <span>What’s on your mind right now?</span>
-        <textarea name="currentConcern" rows="3" placeholder="e.g. career change, a big decision, stress..."></textarea>
+        <span>What's on your mind right now?</span>
+        <textarea name="currentConcern" rows="3" placeholder="e.g. career change, a big decision, stress…"></textarea>
       </label>
+
       <div class="form-actions">
-        <button type="button" class="btn btn-ghost" id="btn-back-birth">Back</button>
-        <button type="submit" class="btn btn-primary" id="btn-generate">Generate My Blueprint</button>
+        <button type="button" class="btn btn-ghost" id="btn-back-landing">Back</button>
+        <button type="submit" class="btn btn-primary">Generate My Blueprint →</button>
       </div>
     </form>
   </section>
@@ -124,39 +117,8 @@
     <div class="generating-content">
       <div class="particles" id="particles" aria-hidden="true"></div>
       <p class="generating-line" id="gen-line-1">Calculating your Four Pillars…</p>
-      <p class="generating-line" id="gen-line-2">Analyzing your Five Elements balance…</p>
+      <p class="generating-line" id="gen-line-2">Reading your cosmic fingerprint…</p>
       <p class="generating-line" id="gen-line-3">Assembling your Soul Blueprint…</p>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- SOUL BLUEPRINT REVEAL -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <section id="view-blueprint-reveal" class="view">
-    <div class="blueprint-reveal-card" id="blueprint-card">
-      <div class="blueprint-visual" id="blueprint-visual"></div>
-      <h2 class="blueprint-type-name" id="blueprint-type-name">—</h2>
-      <p class="blueprint-type-sub" id="blueprint-type-sub">—</p>
-      <blockquote class="blueprint-tagline" id="blueprint-tagline">—</blockquote>
-      <div class="blueprint-meta three-cols">
-        <div class="blueprint-meta-item">
-          <span class="blueprint-meta-label">Destiny structure</span>
-          <span id="blueprint-destiny-structure">—</span>
-        </div>
-        <div class="blueprint-meta-item">
-          <span class="blueprint-meta-label">Favorable elements</span>
-          <span id="blueprint-favorable-elements">—</span>
-        </div>
-        <div class="blueprint-meta-item">
-          <span class="blueprint-meta-label">Zodiac</span>
-          <span id="blueprint-zodiac">—</span>
-        </div>
-      </div>
-      <div class="elements-bars" id="elements-bars"></div>
-      <div class="blueprint-actions">
-        <button type="button" class="btn btn-primary" id="btn-enter-app">Enter SoulMap</button>
-        <button type="button" class="btn btn-ghost" id="btn-share-blueprint">Share Blueprint</button>
-      </div>
     </div>
   </section>
 
@@ -170,54 +132,119 @@
     </header>
 
     <main class="app-main">
-      <!-- Tab 1: Blueprint (home) -->
+
+      <!-- ─────────────────────────────────────────────────────────── -->
+      <!-- TAB 1: Blueprint -->
+      <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-blueprint" class="tab-pane tab-active">
-        <div class="blueprint-detail-card" id="blueprint-detail-card">
-          <div class="blueprint-detail-visual" id="blueprint-detail-visual"></div>
-          <h2 id="detail-type-name">—</h2>
-          <p id="detail-type-sub">—</p>
-          <blockquote id="detail-tagline">—</blockquote>
-          <div class="blueprint-meta three-cols">
-            <div class="blueprint-meta-item">
-              <span class="blueprint-meta-label">Destiny structure</span>
-              <span id="detail-destiny-structure">—</span>
+
+        <!-- Soul Type Portrait Placeholder -->
+        <div class="soul-portrait-section">
+          <div class="soul-portrait-frame" id="soul-portrait-frame">
+            <span id="blueprint-detail-visual" class="soul-portrait-emoji" aria-hidden="true"></span>
+            <div class="soul-portrait-text">
+              <h2 id="detail-type-name" class="soul-portrait-name">—</h2>
+              <p id="detail-type-sub" class="soul-portrait-sub">—</p>
             </div>
-            <div class="blueprint-meta-item">
-              <span class="blueprint-meta-label">Favorable elements</span>
-              <span id="detail-favorable-elements">—</span>
-            </div>
-            <div class="blueprint-meta-item">
-              <span class="blueprint-meta-label">Zodiac</span>
-              <span id="detail-zodiac">—</span>
-            </div>
+            <div class="soul-portrait-badge">Portrait · AI generation coming soon</div>
           </div>
-          <div class="elements-bars" id="detail-elements-bars"></div>
+          <blockquote id="detail-tagline" class="blueprint-tagline">—</blockquote>
+        </div>
+
+        <!-- Four Pillars / 四柱 -->
+        <div class="divider-labeled">
+          <span class="divider-label-text">四柱 · Four Pillars</span>
+        </div>
+        <div id="bazi-pillars-section" class="bazi-table">
+          <!-- Populated by renderFourPillars() -->
+        </div>
+
+        <!-- Meta Row -->
+        <div class="blueprint-meta three-cols" style="margin-top:1rem">
+          <div class="blueprint-meta-item">
+            <span class="blueprint-meta-label">Day Master</span>
+            <span id="detail-destiny-structure">—</span>
+          </div>
+          <div class="blueprint-meta-item">
+            <span class="blueprint-meta-label">Favorable</span>
+            <span id="detail-favorable-elements">—</span>
+          </div>
+          <div class="blueprint-meta-item">
+            <span class="blueprint-meta-label">Zodiac</span>
+            <span id="detail-zodiac">—</span>
+          </div>
+        </div>
+
+        <!-- Five Elements Balance -->
+        <div class="elements-bars" id="detail-elements-bars"></div>
+
+        <!-- Narrative -->
+        <div class="divider-labeled">
+          <span class="divider-label-text">Your Narrative</span>
         </div>
         <div class="detail-sections">
           <section class="your-narrative">
-            <h2 class="narrative-main-title">Your narrative</h2>
+            <div class="narrative-header">
+              <h2 class="narrative-main-title">Your reading</h2>
+              <span class="badge-current">AI · CLAUDE</span>
+            </div>
+            <!-- Placeholder shown until API narrative is available -->
+            <div class="narrative-placeholder" id="narrative-placeholder">
+              <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+              <p class="narrative-placeholder-text">AI reading coming soon · Showing static blueprint below</p>
+            </div>
+
             <p id="detail-core-essence" class="narrative-core-essence">—</p>
+
             <h3 class="narrative-section-label">From the classics</h3>
             <blockquote class="narrative-classical" id="blockquote-classical" cite="">
               <p id="detail-classical-text">—</p>
               <footer id="detail-classical-source">—</footer>
             </blockquote>
+
             <h3 class="narrative-section-label">What this means for you</h3>
             <div class="narrative-work-love-growth">
-              <p><strong>Work:</strong> <span id="detail-work">—</span></p>
-              <p><strong>Love:</strong> <span id="detail-love">—</span></p>
-              <p><strong>Growth:</strong> <span id="detail-growth">—</span></p>
+              <p><strong>Work</strong> <span id="detail-work">—</span></p>
+              <p><strong>Love</strong> <span id="detail-love">—</span></p>
+              <p><strong>Growth</strong> <span id="detail-growth">—</span></p>
             </div>
           </section>
+
           <section class="narrative-concern" id="section-concern" hidden>
-            <h3>What’s on your mind</h3>
+            <h3>What's on your mind</h3>
             <p id="detail-concern">—</p>
           </section>
-          <p class="narrative-refresh-hint">Updated the narrative or prompt? <button type="button" class="btn btn-ghost btn-sm" id="btn-refresh-narrative">Refresh narrative</button> <span class="narrative-dev-note">After changing copy, hard refresh (Cmd+Shift+R) to see updates.</span> <span class="narrative-version-tag" id="narrative-version-tag" title="Static MVP v6 — From the classics + Work/Love/Growth">v6</span></p>
-        </div>
-      </div>
 
-      <!-- Tab 2: Life Oracle (AI Chat) -->
+          <p class="narrative-refresh-hint">
+            <button type="button" class="btn btn-ghost btn-sm" id="btn-refresh-narrative">Refresh</button>
+            <span class="narrative-version-tag" id="narrative-version-tag" title="Static MVP">v7</span>
+          </p>
+        </div>
+
+        <!-- Life Seasons / 大运 -->
+        <div class="divider-labeled">
+          <span class="divider-label-text">大运 · Life Seasons</span>
+        </div>
+        <div class="dayun-section" id="dayun-section">
+          <div class="dayun-strip" id="dayun-strip">
+            <!-- Populated by renderDaYun() -->
+          </div>
+          <div class="dayun-scroll-track"><div class="dayun-scroll-thumb" id="dayun-scroll-thumb"></div></div>
+        </div>
+
+        <!-- Energy Aspects Charts -->
+        <div class="divider-labeled">
+          <span class="divider-label-text">Energy per Season</span>
+        </div>
+        <div class="energy-charts-section" id="energy-charts-section">
+          <!-- Populated by renderEnergyCharts() -->
+        </div>
+
+      </div><!-- /tab-blueprint -->
+
+      <!-- ─────────────────────────────────────────────────────────── -->
+      <!-- TAB 2: Life Oracle -->
+      <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-oracle" class="tab-pane">
         <div class="oracle-suggestions">
           <p>Suggested questions:</p>
@@ -229,7 +256,7 @@
         <div class="oracle-chat" id="oracle-chat">
           <div class="oracle-placeholder" id="oracle-placeholder">
             <p>Life Oracle combines your BaZi chart with classical wisdom. Ask anything about career, timing, relationships, or growth.</p>
-            <p><em>In the full app, an AI agent (e.g. Claude) would answer with your chart context. This is a static demo.</em></p>
+            <p><em>In the full app, an AI agent (Claude) would answer with your chart context. This is a static demo.</em></p>
           </div>
           <div class="oracle-messages" id="oracle-messages"></div>
         </div>
@@ -239,7 +266,9 @@
         </form>
       </div>
 
-      <!-- Tab 3: Sacred Library -->
+      <!-- ─────────────────────────────────────────────────────────── -->
+      <!-- TAB 3: Sacred Library -->
+      <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-library" class="tab-pane">
         <div class="library-nav">
           <button type="button" class="library-tab active" data-tradition="all">For You</button>
@@ -251,16 +280,18 @@
           <button type="button" class="library-tab" data-tradition="greek">Greek</button>
           <button type="button" class="library-tab" data-tradition="sufi">Sufi</button>
           <button type="button" class="library-tab" data-tradition="vedic">Vedic</button>
-          <button type="button" class="library-tab" data-tradition="uncategorized">Uncategorized</button>
+          <button type="button" class="library-tab" data-tradition="uncategorized">Other</button>
         </div>
         <div class="library-list" id="library-list"></div>
       </div>
 
-      <!-- Tab 4: Daily Spark -->
+      <!-- ─────────────────────────────────────────────────────────── -->
+      <!-- TAB 4: Daily Spark -->
+      <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-spark" class="tab-pane">
-        <div class="spark-streak" id="spark-streak">🔥 <span id="spark-streak-num">0</span> days of awareness</div>
+        <div class="spark-streak" id="spark-streak">✦ <span id="spark-streak-num">0</span> days of awareness</div>
         <div class="spark-card">
-          <h3>Today’s Spark</h3>
+          <h3>Today's Spark</h3>
           <p class="spark-date" id="spark-date">—</p>
           <div class="spark-text" id="spark-text"></div>
           <div class="spark-prompt" id="spark-prompt"></div>
@@ -269,12 +300,15 @@
         </div>
       </div>
 
-      <!-- Tab 5: Still Point (Meditation) -->
+      <!-- ─────────────────────────────────────────────────────────── -->
+      <!-- TAB 5: Still Point -->
+      <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-stillpoint" class="tab-pane">
         <p class="stillpoint-intro">Guided meditations matched to your elemental balance. Choose by element or by need.</p>
         <div class="meditation-list" id="meditation-list"></div>
       </div>
-    </main>
+
+    </main><!-- /app-main -->
 
     <nav class="app-tabs" aria-label="Main">
       <button type="button" class="tab-btn active" data-tab="blueprint" aria-current="page">
@@ -295,13 +329,13 @@
       </button>
       <button type="button" class="tab-btn" data-tab="stillpoint">
         <span class="tab-icon">◎</span>
-        <span>Still Point</span>
+        <span>Still</span>
       </button>
     </nav>
-  </section>
+  </section><!-- /view-app -->
 
   <script src="content/wisdom-vault.js?v=4"></script>
   <script src="content/classical-bazi-excerpts.js?v=1"></script>
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>

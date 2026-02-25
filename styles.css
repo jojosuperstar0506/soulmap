@@ -1398,3 +1398,329 @@ blockquote {
   margin: 0;
   line-height: 1.5;
 }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* LIFE SEASONS (大运) SECTION                                     */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.dayun-section {
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.dayun-strip {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0.25rem 0 0.75rem;
+}
+
+.dayun-strip::-webkit-scrollbar { display: none; }
+
+.dayun-card {
+  flex-shrink: 0;
+  width: 155px;
+  background: var(--color-ground);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  position: relative;
+  --card-accent: var(--color-vermillion);
+  transition: border-color 0.2s ease;
+}
+
+/* Colored top accent line */
+.dayun-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-accent);
+}
+
+/* Active (current) card gets accent border */
+.dayun-card-active {
+  border-color: var(--card-accent);
+}
+
+/* ─── Row system inside each card ─── */
+.dayun-row {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dayun-row:last-child {
+  border-bottom: none;
+}
+
+.dayun-row-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
+  margin-bottom: 0.3rem;
+}
+
+/* ─── Age & year row ─── */
+.dayun-age {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-white-bone);
+  letter-spacing: 0.02em;
+}
+
+.dayun-years {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.675rem;
+  color: var(--color-ash);
+  margin-top: 0.15rem;
+}
+
+/* ─── Stem / Branch characters ─── */
+.dayun-chars {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.dayun-stem {
+  font-family: var(--font-chinese);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--card-accent);
+}
+
+.dayun-branch {
+  font-family: var(--font-chinese);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--color-ash);
+}
+
+/* ─── Season description ─── */
+.dayun-desc {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  line-height: 1.55;
+  color: var(--color-ash);
+  font-style: italic;
+  display: block;
+}
+
+/* ─── Scroll indicator ─── */
+.dayun-scroll-track {
+  height: 2px;
+  background: var(--color-border);
+  margin-top: 0.25rem;
+  position: relative;
+}
+
+.dayun-scroll-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--color-ghost);
+  min-width: 40px;
+  transition: background 0.2s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* FOUR PILLARS GRID (四柱)                                        */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.bazi-grid {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+  font-family: var(--font-body);
+  margin-bottom: 1rem;
+}
+
+/* Each row is a horizontal strip */
+.bazi-row {
+  display: grid;
+  grid-template-columns: 2.6rem repeat(4, 1fr);
+  border-bottom: 1px solid var(--color-border);
+  min-height: 2.4rem;
+}
+
+.bazi-row:last-child,
+.bazi-row-last {
+  border-bottom: none;
+}
+
+/* Header row */
+.bazi-row-header {
+  background: var(--color-surface-raised);
+  min-height: 2rem;
+}
+
+/* Row label (leftmost column) */
+.bazi-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-chinese);
+  font-size: 0.6rem;
+  color: var(--color-ghost);
+  background: var(--color-surface-raised);
+  border-right: 1px solid var(--color-border);
+  padding: 0.2rem 0;
+  writing-mode: horizontal-tb;
+}
+
+/* Column header cells */
+.bazi-col-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.2rem;
+  font-family: var(--font-chinese);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-ash);
+  border-right: 1px solid var(--color-border);
+  gap: 0.1rem;
+}
+
+.bazi-col-head:last-child { border-right: none; }
+
+.bazi-col-en {
+  font-family: var(--font-body);
+  font-size: 0.45rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
+}
+
+/* Day pillar column header highlight */
+.bazi-day-head {
+  color: var(--color-white-bone);
+  background: rgba(232,55,42,0.07);
+}
+
+/* Standard data cell */
+.bazi-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.15rem;
+  text-align: center;
+  border-right: 1px solid var(--color-border);
+  min-height: 2.4rem;
+  gap: 0.15rem;
+}
+
+/* Wrapper divs produced by the renderer also need right border + day highlight */
+.bazi-row > div:not(.bazi-label) {
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  align-items: stretch;
+}
+
+.bazi-row > div:last-child { border-right: none; }
+
+/* Day pillar cells */
+.bazi-day {
+  background: rgba(232,55,42,0.05);
+}
+
+/* Large Chinese character (天干/地支) */
+.bazi-char {
+  font-family: var(--font-chinese);
+  font-size: 1.45rem;
+  line-height: 1;
+  font-weight: 400;
+}
+
+/* Element tag badge (small letter) */
+.bazi-elem-tag {
+  font-size: 0.45rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.05rem 0.2rem;
+  border-radius: 1px;
+  opacity: 0.75;
+}
+
+.bazi-elem-wood  { color: var(--color-cobalt);     background: rgba(43,76,224,0.12); }
+.bazi-elem-fire  { color: var(--color-vermillion); background: rgba(232,55,42,0.12); }
+.bazi-elem-earth { color: var(--color-amber);      background: rgba(255,107,26,0.12); }
+.bazi-elem-metal { color: var(--color-ash);        background: rgba(136,136,136,0.15); }
+.bazi-elem-water { color: var(--color-cyan);       background: rgba(0,197,205,0.12); }
+
+/* Ten God cell */
+.bazi-cell-tengod {
+  font-family: var(--font-chinese);
+  font-size: 0.7rem;
+  color: var(--color-ash);
+  font-weight: 500;
+}
+
+/* Hidden stems cell */
+.bazi-cell-hidden {
+  gap: 0.1rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0.25rem 0.1rem;
+}
+
+.bazi-cell-hidden span {
+  font-family: var(--font-chinese);
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+/* Small text cells (stage names, etc.) */
+.bazi-cell-small {
+  font-family: var(--font-chinese);
+  font-size: 0.65rem;
+  color: var(--color-ash);
+  line-height: 1.4;
+  padding: 0.25rem 0.1rem;
+  text-align: center;
+}
+
+/* Spirit Killers cell */
+.bazi-cell-sha {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.2rem;
+  padding: 0.35rem 0.15rem;
+  min-height: 2.8rem;
+}
+
+.bazi-sha-tag {
+  font-family: var(--font-chinese);
+  font-size: 0.6rem;
+  color: var(--color-amber);
+  background: rgba(255,107,26,0.1);
+  padding: 0.08rem 0.25rem;
+  border-radius: 1px;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+/* Alternate row shading for readability */
+.bazi-row:nth-child(odd):not(.bazi-row-header) {
+  background: rgba(255,255,255,0.015);
+}
