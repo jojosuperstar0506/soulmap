@@ -684,6 +684,56 @@ blockquote {
   margin: 0 0 1.25rem;
 }
 
+/* ─── Soul Portrait Frame ─── */
+.soul-portrait-section {
+  margin-bottom: 1.5rem;
+}
+
+.soul-portrait-frame {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 1rem;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--color-void);
+  border: 1px solid var(--color-border);
+}
+
+.soul-portrait-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.soul-portrait-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 1rem 0.875rem;
+  background: linear-gradient(transparent, rgba(8, 8, 8, 0.92) 40%);
+}
+
+.soul-portrait-name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-white-bone);
+  margin: 0 0 0.2rem;
+  letter-spacing: 0.01em;
+}
+
+.soul-portrait-sub {
+  font-family: var(--font-chinese);
+  font-size: 0.75rem;
+  color: var(--color-ash);
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
 .blueprint-tagline {
   font-family: var(--font-display);
   font-style: italic;
@@ -1357,6 +1407,34 @@ blockquote {
   border-left: 2px solid var(--color-cobalt);
   margin-right: 1rem;
   color: var(--color-white-bone);
+}
+
+.oracle-messages .msg.assistant.error {
+  border-left-color: var(--color-vermillion);
+  color: var(--color-ash);
+  font-style: italic;
+}
+
+/* Typing indicator */
+.oracle-messages .msg.typing {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.9rem 1rem;
+}
+.oracle-messages .msg.typing span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--color-cobalt);
+  border-radius: 50%;
+  animation: oracle-dot-bounce 1.2s infinite ease-in-out;
+}
+.oracle-messages .msg.typing span:nth-child(2) { animation-delay: 0.2s; }
+.oracle-messages .msg.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes oracle-dot-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%            { transform: scale(1);   opacity: 1;   }
 }
 
 .oracle-input-form {

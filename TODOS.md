@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B complete)
+> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B complete; Phase 2 soul portraits in progress)
 
 ---
 
@@ -50,7 +50,7 @@
   - [x] Rewrite `renderFourPillars()` — row-based CSS grid (10 rows × 5 cols)
   - [x] Add `.bazi-grid` CSS to styles.css
   - [ ] Cross-validate output against a reference BaZi tool for a known date
-- [ ] Persona card portrait (AI image generation) — Phase 2
+- [x] Persona card portrait — 10 base stem portraits generated with Neo-Risograph style via Gemini Imagen (nanobanana) and wired into Blueprint UI (`scripts/generate-personas.mjs`, `public/personas/`)
 - [ ] Share image generation (1080×1350 PNG) — Phase 2
 - [ ] "This Year for You" section (流年 analysis) — Phase 2
 - [ ] "Favorable Elements" practical guide (colors, directions, times) — Phase 2
@@ -157,6 +157,7 @@
 - [ ] Pre-built deep-dive prompt templates (Career, Relationships, Timing, etc.)
 
 ### Blueprint Enhancements
+- [ ] **Phase 2 TODO: Generate all 60 pillar portraits** — apply the Branch Modification System (子丑寅卯辰巳午未申酉戌亥) to each of the 10 base stem portraits via nanobanana. Example: 甲子 = jia base + "flowing water element, midnight blue tones, rat silhouette motif". Extend `scripts/generate-personas.mjs` with branch combos; save as `persona-jia-zi.png` etc.
 - [ ] Luck Pillar timeline visualization (interactive, not just cards)
 - [ ] "This Year for You" 流年 analysis section
 - [ ] Dominant Ten God personality modifier displayed on persona card

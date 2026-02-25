@@ -243,16 +243,16 @@
   ];
 
   const SOUL_TYPES = [
-    { name:'The Pioneer',   sub:'甲木 · Jiǎ Wood',  element:'wood',  emoji:'🌳', tagline:'Tall tree — growth, ambition, upward drive. You build and lead with clarity.' },
-    { name:'The Weaver',    sub:'乙木 · Yǐ Wood',   element:'wood',  emoji:'🪴', tagline:'Vine and flower — flexible, graceful, adaptive. You connect and nurture.' },
-    { name:'The Radiant',   sub:'丙火 · Bǐng Fire',  element:'fire',  emoji:'☀️', tagline:'Sun — warmth, visibility, leadership. You light the way for others.' },
-    { name:'The Luminary',  sub:'丁火 · Dīng Fire',  element:'fire',  emoji:'🕯️', tagline:'Candle and star — gentle light, insight, intimacy. You see what others miss.' },
-    { name:'The Mountain',  sub:'戊土 · Wù Earth',   element:'earth', emoji:'⛰️', tagline:'Mountain — stability, reliability, immovable. You are the foundation.' },
-    { name:'The Garden',    sub:'己土 · Jǐ Earth',   element:'earth', emoji:'🌿', tagline:'Fertile soil — nurturing, receptive, transformative. You help things grow.' },
-    { name:'The Blade',     sub:'庚金 · Gēng Metal',  element:'metal', emoji:'⚔️', tagline:'Sword — decisive, reforming, sharp. You cut through confusion.' },
-    { name:'The Jewel',     sub:'辛金 · Xīn Metal',  element:'metal', emoji:'💎', tagline:'Gem — refined, precious, sensitive. You value quality and depth.' },
-    { name:'The Ocean',     sub:'壬水 · Rén Water',  element:'water', emoji:'🌊', tagline:'Ocean — powerful, flowing, unstoppable. You adapt and persist.' },
-    { name:'The Mist',      sub:'癸水 · Guǐ Water',  element:'water', emoji:'🌫️', tagline:'Still water runs deep. You absorb everything, reflecting the world with quiet clarity.' }
+    { name:'The Pioneer',   slug:'jia',  sub:'甲木 · Jiǎ Wood',  element:'wood',  emoji:'🌳', tagline:'Tall tree — growth, ambition, upward drive. You build and lead with clarity.' },
+    { name:'The Weaver',    slug:'yi',   sub:'乙木 · Yǐ Wood',   element:'wood',  emoji:'🪴', tagline:'Vine and flower — flexible, graceful, adaptive. You connect and nurture.' },
+    { name:'The Radiant',   slug:'bing', sub:'丙火 · Bǐng Fire',  element:'fire',  emoji:'☀️', tagline:'Sun — warmth, visibility, leadership. You light the way for others.' },
+    { name:'The Luminary',  slug:'ding', sub:'丁火 · Dīng Fire',  element:'fire',  emoji:'🕯️', tagline:'Candle and star — gentle light, insight, intimacy. You see what others miss.' },
+    { name:'The Mountain',  slug:'wu',   sub:'戊土 · Wù Earth',   element:'earth', emoji:'⛰️', tagline:'Mountain — stability, reliability, immovable. You are the foundation.' },
+    { name:'The Garden',    slug:'ji',   sub:'己土 · Jǐ Earth',   element:'earth', emoji:'🌿', tagline:'Fertile soil — nurturing, receptive, transformative. You help things grow.' },
+    { name:'The Blade',     slug:'geng', sub:'庚金 · Gēng Metal',  element:'metal', emoji:'⚔️', tagline:'Sword — decisive, reforming, sharp. You cut through confusion.' },
+    { name:'The Jewel',     slug:'xin',  sub:'辛金 · Xīn Metal',  element:'metal', emoji:'💎', tagline:'Gem — refined, precious, sensitive. You value quality and depth.' },
+    { name:'The Ocean',     slug:'ren',  sub:'壬水 · Rén Water',  element:'water', emoji:'🌊', tagline:'Ocean — powerful, flowing, unstoppable. You adapt and persist.' },
+    { name:'The Mist',      slug:'gui',  sub:'癸水 · Guǐ Water',  element:'water', emoji:'🌫️', tagline:'Still water runs deep. You absorb everything, reflecting the world with quiet clarity.' }
   ];
 
   const SEASON_NAMES = ['Spring Wood','Summer Fire','Transitional Earth','Autumn Metal','Winter Water'];
@@ -1106,8 +1106,9 @@
     const season  = SEASON_NAMES[STEM_ELEMENT[state.chart.monthPillar.stem]] || '—';
     const zodiac  = getWesternZodiacSign(state.birthDate);
 
-    // Portrait placeholder
-    setEl('blueprint-detail-visual', t.emoji);
+    // Portrait image — static pre-generated per Day Master slug
+    const imgEl = document.getElementById('blueprint-detail-visual');
+    if (imgEl) { imgEl.src = '/personas/persona-' + t.slug + '.png'; imgEl.alt = t.name; }
     setEl('detail-type-name', t.name);
     setEl('detail-type-sub', t.sub);
     setEl('detail-tagline', t.tagline);

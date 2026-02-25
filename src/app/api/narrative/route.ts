@@ -3,7 +3,9 @@ import Anthropic from '@anthropic-ai/sdk';
 import fs from 'fs';
 import path from 'path';
 
-const client = new Anthropic();
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
 /** Read the system prompt once at module load time */
 function getSystemPrompt(): string {
@@ -67,7 +69,7 @@ export async function POST(req: NextRequest) {
     const userMessage  = buildUserMessage(body);
 
     const message = await client.messages.create({
-      model:      'claude-sonnet-4-5',
+      model:      'claude-sonnet-4-6',
       max_tokens: 1200,
       system:     systemPrompt,
       messages:   [{ role: 'user', content: userMessage }],
