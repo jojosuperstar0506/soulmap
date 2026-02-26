@@ -7,10 +7,10 @@
 
 :root {
   /* ─── Background & Surface ─── */
-  --color-void: #FAF8F4;           /* Primary background — rice white */
-  --color-ground: #F2F0EB;         /* Card / surface background */
-  --color-surface-raised: #E9E6E0; /* Elevated panels */
-  --color-border: #D8D3C8;         /* Subtle borders */
+  --color-void: #F5F5F7;           /* Primary background — cool white */
+  --color-ground: #EEEFF2;         /* Card / surface background */
+  --color-surface-raised: #E5E6EA; /* Elevated panels */
+  --color-border: #CCCDD5;         /* Subtle borders */
   --color-border-active: #A020F0;  /* Active/selected — psychic purple */
 
   /* ─── Brand Accents (one per section, never all at once) ─── */
@@ -79,6 +79,20 @@ body {
 }
 
 /* ─── Global grain overlay ─── */
+body::before {
+  content: '';
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  width: 55vw;
+  height: 55vw;
+  border-radius: 50%;
+  background: var(--color-vermillion);
+  opacity: 0.03;
+  bottom: -20vw;
+  right: -15vw;
+}
+
 body::after {
   content: '';
   position: fixed;
@@ -177,6 +191,18 @@ blockquote {
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+}
+
+.landing-bg::before {
+  content: '';
+  position: absolute;
+  width: 45vw;
+  height: 45vw;
+  border-radius: 50%;
+  background: var(--color-gold);
+  opacity: 0.09;
+  bottom: -12vw;
+  left: -10vw;
 }
 
 .landing-bg::after {
@@ -668,7 +694,7 @@ blockquote {
   left: 0;
   right: 0;
   padding: 1rem 1rem 0.875rem;
-  background: linear-gradient(transparent, rgba(242, 240, 235, 0.92) 40%);
+  background: linear-gradient(transparent, rgba(238, 239, 242, 0.92) 40%);
 }
 
 .soul-portrait-name {
@@ -1104,7 +1130,7 @@ blockquote {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 2px;
+  height: 3px;
   background: var(--card-accent);
 }
 
@@ -1123,8 +1149,11 @@ blockquote {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-ash);
+  color: var(--color-psychic);
   margin: 0 0 0.75rem;
+  display: inline-block;
+  background: rgba(160, 32, 240, 0.07);
+  padding: 0.15rem 0.55rem;
 }
 
 #detail-tagline {
@@ -1156,6 +1185,17 @@ blockquote {
   text-transform: uppercase;
   color: var(--color-ghost);
   margin: 0 0 0.75rem;
+}
+
+.detail-sections h3::before,
+.detail-sections .narrative-section-label::before {
+  content: '';
+  display: block;
+  width: 1.25rem;
+  height: 3px;
+  background: var(--color-psychic);
+  opacity: 0.5;
+  margin-bottom: 0.4rem;
 }
 
 .detail-sections p {
@@ -1235,7 +1275,7 @@ blockquote {
 .narrative-pillar {
   padding: 0.65rem 0.9rem;
   border-left: 2px solid;
-  background: rgba(26,0,53,0.04);
+  background: rgba(26,0,53,0.035);
   border-radius: 0 2px 2px 0;
 }
 
@@ -2154,7 +2194,7 @@ blockquote {
 
 /* Alternate row shading for readability */
 .bazi-row:nth-child(odd):not(.bazi-row-header) {
-  background: rgba(26,0,53,0.04);
+  background: rgba(26,0,53,0.035);
 }
 
 /* ─── Row hierarchy: core (header + main chars) vs reference (details) ─── */
