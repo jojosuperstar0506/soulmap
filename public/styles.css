@@ -17,6 +17,7 @@
   --color-vermillion: #E8372A;     /* Fire, action, current moment */
   --color-cyan: #00C5CD;           /* Water, insight, mist */
   --color-magenta: #C8357A;        /* Metal, refinement, beauty */
+  --color-gold: #D4AF37;           /* Metal element — burnished gold */
   --color-cobalt: #2B4CE0;         /* Wood, depth, growth */
   --color-amber: #FF6B1A;          /* Earth, warmth, cultivation */
 
@@ -37,7 +38,7 @@
   --wood: var(--color-cobalt);
   --fire: var(--color-vermillion);
   --earth: var(--color-amber);
-  --metal: var(--color-ash);
+  --metal: var(--color-gold);
   --water: var(--color-cyan);
 
   /* ─── Legacy aliases for JS compatibility ─── */
@@ -1222,28 +1223,71 @@ blockquote {
   opacity: 1;
 }
 
-/* Work / Love / Growth section */
-.detail-sections .narrative-work-love-growth {
+/* Work / Love / Growth — pillar cards */
+.narrative-pillars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   margin: 0;
 }
 
-.detail-sections .narrative-work-love-growth p {
-  margin: 0 0 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.65;
-  opacity: 0.85;
+.narrative-pillar {
+  padding: 0.65rem 0.9rem;
+  border-left: 2px solid;
+  background: rgba(255,255,255,0.025);
+  border-radius: 0 2px 2px 0;
 }
 
-.detail-sections .narrative-work-love-growth strong {
+.narrative-pillar--work   { border-color: var(--color-cobalt); }
+.narrative-pillar--love   { border-color: var(--color-vermillion); }
+.narrative-pillar--growth { border-color: var(--color-cyan); }
+
+.narrative-pillar-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.35rem;
+}
+
+.narrative-pillar-symbol {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.narrative-pillar--work   .narrative-pillar-symbol { color: var(--color-cobalt); }
+.narrative-pillar--love   .narrative-pillar-symbol { color: var(--color-vermillion); }
+.narrative-pillar--growth .narrative-pillar-symbol { color: var(--color-cyan); }
+
+.narrative-pillar-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.narrative-pillar-en {
   font-family: var(--font-body);
   font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-ash);
-  display: block;
-  margin-bottom: 0.15rem;
-  opacity: 1;
+}
+
+.narrative-pillar--work   .narrative-pillar-en { color: var(--color-cobalt); }
+.narrative-pillar--love   .narrative-pillar-en { color: var(--color-vermillion); }
+.narrative-pillar--growth .narrative-pillar-en { color: var(--color-cyan); }
+
+.narrative-pillar-cn {
+  font-family: var(--font-chinese);
+  font-size: 0.5rem;
+  color: var(--color-ghost);
+}
+
+.narrative-pillar-body {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--color-white-bone);
+  opacity: 0.85;
+  margin: 0;
 }
 
 /* Dev tools */
@@ -1801,8 +1845,10 @@ blockquote {
 /* Row label (leftmost column) */
 .bazi-label {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.15rem;
   font-family: var(--font-chinese);
   font-size: 0.6rem;
   color: var(--color-ghost);
@@ -1810,6 +1856,15 @@ blockquote {
   border-right: 1px solid var(--color-border);
   padding: 0.2rem 0;
   writing-mode: horizontal-tb;
+}
+
+.bazi-label-en {
+  font-family: var(--font-body);
+  font-size: 0.38rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
+  opacity: 0.7;
 }
 
 /* Column header cells */
@@ -1892,8 +1947,17 @@ blockquote {
 .bazi-elem-wood  { color: var(--color-cobalt);     background: rgba(43,76,224,0.12); }
 .bazi-elem-fire  { color: var(--color-vermillion); background: rgba(232,55,42,0.12); }
 .bazi-elem-earth { color: var(--color-amber);      background: rgba(255,107,26,0.12); }
-.bazi-elem-metal { color: var(--color-ash);        background: rgba(136,136,136,0.15); }
+.bazi-elem-metal { color: var(--color-gold);       background: rgba(212,175,55,0.15); }
 .bazi-elem-water { color: var(--color-cyan);       background: rgba(0,197,205,0.12); }
+
+/* Romanization text above Chinese char in stem/branch cells */
+.bazi-romanization {
+  font-family: var(--font-body);
+  font-size: 0.42rem;
+  letter-spacing: 0.03em;
+  color: var(--color-ash);
+  opacity: 0.7;
+}
 
 /* Ten God cell */
 .bazi-cell-tengod {
@@ -1901,6 +1965,16 @@ blockquote {
   font-size: 0.7rem;
   color: var(--color-ash);
   font-weight: 500;
+  gap: 0.2rem;
+}
+
+/* English name below Ten God Chinese */
+.bazi-tg-en {
+  font-family: var(--font-body);
+  font-size: 0.38rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
 }
 
 /* Hidden stems cell */

@@ -21,12 +21,12 @@
     wood:  'var(--color-cobalt)',
     fire:  'var(--color-vermillion)',
     earth: 'var(--color-amber)',
-    metal: 'var(--color-ash)',
+    metal: 'var(--color-gold)',
     water: 'var(--color-cyan)'
   };
   // Hex fallbacks for SVG (CSS vars don't work in SVG attributes)
   const ELEMENT_HEX = {
-    wood:'#2B4CE0', fire:'#E8372A', earth:'#FF6B1A', metal:'#888888', water:'#00C5CD'
+    wood:'#2B4CE0', fire:'#E8372A', earth:'#FF6B1A', metal:'#D4AF37', water:'#00C5CD'
   };
   const STEM_ELEMENT = [0,0,1,1,2,2,3,3,4,4]; // 0=wood 1=fire 2=earth 3=metal 4=water
 
@@ -530,7 +530,7 @@
   function calculateBaZi(birthDateStr, shichenIndex) {
     const [y, m, d] = birthDateStr.split('-').map(Number);
     const dayJdn         = jdn(y, m, d);
-    const dayPillarIndex = (dayJdn + 58) % 60;
+    const dayPillarIndex = (dayJdn + 41) % 60;
     const dayStem        = dayPillarIndex % 10;
     const dayBranch      = dayPillarIndex % 12;
 
@@ -841,15 +841,17 @@
 
     function stemCell(d) {
       return `<div class="bazi-cell">
+        <span class="bazi-romanization">${STEM_ROMANIZATION[d.p.stem]}</span>
         <span class="bazi-char" style="color:${ELEMENT_HEX[d.stemEl]}">${STEMS[d.p.stem]}</span>
-        <span class="bazi-elem-tag bazi-elem-${d.stemEl}">${d.stemEl.charAt(0).toUpperCase()}</span>
+        <span class="bazi-elem-tag bazi-elem-${d.stemEl}">${ELEMENT_NAMES[d.stemEl]}</span>
       </div>`;
     }
 
     function branchCell(d) {
       return `<div class="bazi-cell">
+        <span class="bazi-romanization">${BRANCH_ROMANIZATION[d.p.branch]}</span>
         <span class="bazi-char" style="color:${ELEMENT_HEX[d.branchEl]}">${BRANCHES[d.p.branch]}</span>
-        <span class="bazi-elem-tag bazi-elem-${d.branchEl}">${d.branchEl.charAt(0).toUpperCase()}</span>
+        <span class="bazi-elem-tag bazi-elem-${d.branchEl}">${ELEMENT_NAMES[d.branchEl]}</span>
       </div>`;
     }
 
@@ -872,67 +874,67 @@
     const rows = [
       // Row 0 — header
       `<div class="bazi-row bazi-row-header">
-        <div class="bazi-label">日期</div>
+        <div class="bazi-label"><span>日期</span><span class="bazi-label-en">Pillar</span></div>
         ${PILLAR_LABELS_CN.map((cn, i) => `<div class="bazi-col-head${i===2?' bazi-day-head':''}">${cn}<span class="bazi-col-en">${PILLAR_LABELS_EN[i]}</span></div>`).join('')}
       </div>`,
 
       // Row 1 — 主星 Ten God
       `<div class="bazi-row">
-        <div class="bazi-label">主星</div>
-        ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-tengod${i===2?' bazi-day':''}">${TEN_GOD_NAMES[d.tg]}</div>`).join('')}
+        <div class="bazi-label"><span>主星</span><span class="bazi-label-en">10 Gods</span></div>
+        ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-tengod${i===2?' bazi-day':''}">${TEN_GOD_NAMES[d.tg]}<span class="bazi-tg-en">${TEN_GOD_EN[d.tg]}</span></div>`).join('')}
       </div>`,
 
       // Row 2 — 天干 Heavenly Stems
       `<div class="bazi-row">
-        <div class="bazi-label">天干</div>
+        <div class="bazi-label"><span>天干</span><span class="bazi-label-en">Stems</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${stemCell(d).replace('<div class="bazi-cell">','<div class="bazi-cell">')}</div>`).join('')}
       </div>`,
 
       // Row 3 — 地支 Earthly Branches
       `<div class="bazi-row">
-        <div class="bazi-label">地支</div>
+        <div class="bazi-label"><span>地支</span><span class="bazi-label-en">Branches</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${branchCell(d)}</div>`).join('')}
       </div>`,
 
       // Row 4 — 藏干 Hidden Stems
       `<div class="bazi-row">
-        <div class="bazi-label">藏干</div>
+        <div class="bazi-label"><span>藏干</span><span class="bazi-label-en">Hidden</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${hiddenCell(d)}</div>`).join('')}
       </div>`,
 
       // Row 5 — 副星 Sub Stars (ten gods of hidden stems)
       `<div class="bazi-row">
-        <div class="bazi-label">副星</div>
+        <div class="bazi-label"><span>副星</span><span class="bazi-label-en">Sub Stars</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${subStarCell(d)}</div>`).join('')}
       </div>`,
 
       // Row 6 — 星运 12 Growth Stage (stem in its branch)
       `<div class="bazi-row">
-        <div class="bazi-label">星运</div>
+        <div class="bazi-label"><span>星运</span><span class="bazi-label-en">Stage</span></div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.stage}</div>`).join('')}
       </div>`,
 
       // Row 7 — 自坐 Self-seat (day master in each branch)
       `<div class="bazi-row">
-        <div class="bazi-label">自坐</div>
+        <div class="bazi-label"><span>自坐</span><span class="bazi-label-en">Self</span></div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.selfSeat}</div>`).join('')}
       </div>`,
 
       // Row 8 — 空亡 Empty/Void
       `<div class="bazi-row">
-        <div class="bazi-label">空亡</div>
+        <div class="bazi-label"><span>空亡</span><span class="bazi-label-en">Void</span></div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.kongwang}</div>`).join('')}
       </div>`,
 
       // Row 9 — 纳音 Nayin
       `<div class="bazi-row">
-        <div class="bazi-label">纳音</div>
+        <div class="bazi-label"><span>纳音</span><span class="bazi-label-en">Nayin</span></div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.nayin}</div>`).join('')}
       </div>`,
 
       // Row 10 — 神煞 Spirit Killers
       `<div class="bazi-row bazi-row-last">
-        <div class="bazi-label">神煞</div>
+        <div class="bazi-label"><span>神煞</span><span class="bazi-label-en">Spirits</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${shaCell(d)}</div>`).join('')}
       </div>`
     ];
@@ -959,10 +961,15 @@
     const strip = document.getElementById('dayun-strip');
     if (!strip || !state.chart || !state.chart.daYun) return;
 
+    const dyElKeys = ['wood','fire','earth','metal','water'];
+    const BRANCH_EL_IDX = [4,2,0,0,2,1,1,2,3,3,2,4]; // primary element per branch (water,earth,wood,wood,earth,fire,fire,earth,metal,metal,earth,water)
+
     strip.innerHTML = state.chart.daYun.map((decade, i) => {
-      const accent  = DAYUN_ACCENT_COLORS[i % DAYUN_ACCENT_COLORS.length];
-      const desc    = DAYUN_STEM_DESC[decade.stemIndex];
-      const classes = ['dayun-card', decade.isCurrent ? 'dayun-card-active' : ''].filter(Boolean).join(' ');
+      const stemEl   = dyElKeys[STEM_ELEMENT[decade.stemIndex]];
+      const branchEl = dyElKeys[BRANCH_EL_IDX[decade.branchIndex]];
+      const accent   = ELEMENT_COLORS[stemEl];
+      const desc     = DAYUN_STEM_DESC[decade.stemIndex];
+      const classes  = ['dayun-card', decade.isCurrent ? 'dayun-card-active' : ''].filter(Boolean).join(' ');
       return `
         <div class="${classes}" style="--card-accent:${accent}">
           <div class="dayun-row">
@@ -974,8 +981,8 @@
           <div class="dayun-row">
             <span class="dayun-row-label">天干 · 地支</span>
             <div class="dayun-chars">
-              <span class="dayun-stem">${decade.stemChar}</span>
-              <span class="dayun-branch">${decade.branchChar}</span>
+              <span class="dayun-stem" style="color:${ELEMENT_HEX[stemEl]}">${decade.stemChar}</span>
+              <span class="dayun-branch" style="color:${ELEMENT_HEX[branchEl]}">${decade.branchChar}</span>
             </div>
           </div>
           <div class="dayun-row">
