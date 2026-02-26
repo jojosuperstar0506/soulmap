@@ -1806,6 +1806,17 @@
     const t       = SOUL_TYPES[state.soulTypeIndex];
     const n       = BLUEPRINT_NARRATIVE[state.soulTypeIndex] || null;
     const balance = state.chart.elementBalance;
+
+    // Dynamic background blobs — top 3 chart elements drive blob colors
+    const _sortedEls = Object.entries(balance)
+      .filter(([, v]) => v > 0)
+      .sort((a, b) => b[1] - a[1])
+      .map(([el]) => el);
+    const _r = document.documentElement;
+    _r.style.setProperty('--blob-elem-1', ELEMENT_HEX[_sortedEls[0]] || ELEMENT_HEX.fire);
+    _r.style.setProperty('--blob-elem-2', ELEMENT_HEX[_sortedEls[1]] || ELEMENT_HEX.metal);
+    _r.style.setProperty('--blob-elem-3', ELEMENT_HEX[_sortedEls[2]] || ELEMENT_HEX.water);
+
     const season  = SEASON_NAMES[STEM_ELEMENT[state.chart.monthPillar.stem]] || '—';
     const zodiac  = getWesternZodiacSign(state.birthDate);
 
@@ -2031,7 +2042,7 @@
         // Save button
         const saveBtn = document.createElement('button');
         saveBtn.className = 'oracle-save-btn';
-        saveBtn.setAttribute('aria-label', 'Save to Library');
+        saveBtn.setAttribute('aria-label', 'Save to Wisdom Vault');
         saveBtn.innerHTML = '🔖 Save';
         saveBtn.addEventListener('click', () => {
           const alreadySaved = getStoredAdditions().some(
@@ -2084,7 +2095,7 @@
     });
   }
 
-  // ─── Wisdom Vault / Sacred Library ──────────────────────────────
+  // ─── Wisdom Vault ────────────────────────────────────────────────
   const WISDOM_VAULT_BASE = (typeof window !== 'undefined' && window.WISDOM_VAULT) || [
     { tradition:'daoism',   source:'Tao Te Ching', author:'Lao Tzu',         text:'The highest good is like water. Water benefits the ten thousand things but does not compete.' },
     { tradition:'stoicism', source:'Meditations',  author:'Marcus Aurelius', text:'You have power over your mind — not outside events. Realize this, and you will find strength.' },
@@ -2145,8 +2156,8 @@
       saveAdditions(additions);
     }
 
-    const active = document.querySelector('.library-tab.active');
-    if (document.getElementById('library-list')) renderLibrary(active ? active.getAttribute('data-tradition') : 'all');
+    const active = document.querySelector('.wisdom-vault-tab.active');
+    if (document.getElementById('wisdom-vault-list')) renderWisdomVault(active ? active.getAttribute('data-tradition') : 'all');
     return true;
   }
 
@@ -2165,30 +2176,30 @@
       .replace(/"/g, '&quot;');
   }
 
-  function renderLibrary(filter) {
-    const list  = document.getElementById('library-list');
+  function renderWisdomVault(filter) {
+    const list  = document.getElementById('wisdom-vault-list');
     const vault = getWisdomVault();
     const items = filter === 'all' ? vault : vault.filter(x => x.tradition === filter);
     list.innerHTML = items.map(x => {
       if (x.tradition === 'saved') {
-        return `<div class="library-item library-item--saved">
+        return `<div class="wisdom-vault-item wisdom-vault-item--saved">
           <span class="tradition">saved</span>
           <h4 class="oracle-saved-question">${escapeHtml(x.author)}</h4>
           <div class="oracle-saved-body">${renderMarkdown(x.text)}</div>
         </div>`;
       }
       const title = x.source + (x.author ? ' — ' + x.author : '');
-      return `<div class="library-item"><span class="tradition">${x.tradition}</span><h4>${title}</h4><p>${x.text}</p></div>`;
+      return `<div class="wisdom-vault-item"><span class="tradition">${x.tradition}</span><h4>${title}</h4><p>${x.text}</p></div>`;
     }).join('');
   }
 
-  function initLibrary() {
-    renderLibrary('all');
-    document.querySelectorAll('.library-tab').forEach(btn => {
+  function initWisdomVault() {
+    renderWisdomVault('all');
+    document.querySelectorAll('.wisdom-vault-tab').forEach(btn => {
       btn.addEventListener('click', function () {
-        document.querySelectorAll('.library-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.wisdom-vault-tab').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-        renderLibrary(this.getAttribute('data-tradition'));
+        renderWisdomVault(this.getAttribute('data-tradition'));
       });
     });
   }
@@ -2391,7 +2402,7 @@
     initOnboard();
     initTabs();
     initOracle();
-    initLibrary();
+    initWisdomVault();
     initSpark();
     initStillPoint();
     initRefreshNarrative();

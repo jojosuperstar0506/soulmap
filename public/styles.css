@@ -22,9 +22,9 @@
   --color-amber: #9B5523;          /* Earth — terracotta/sienna */
 
   /* ─── Text ─── */
-  --color-white-bone: #1A0035;     /* Primary text — darkest electric purple */
-  --color-ash: #7020C0;            /* Secondary text — mid electric purple */
-  --color-ghost: #B060E0;          /* Disabled / tertiary — light electric purple */
+  --color-white-bone: #0F0014;     /* Primary text — near-black (barely perceptible purple) */
+  --color-ash: #58566A;            /* Secondary text — cool grey-purple (not vivid) */
+  --color-ghost: #8C8A9A;          /* Disabled / tertiary — light cool grey */
   --color-psychic: #A020F0;        /* Brand token — electric psychic purple (wordmark) */
 
   /* ─── Typography ─── */
@@ -87,7 +87,7 @@ body::before {
   width: 55vw;
   height: 55vw;
   border-radius: 50%;
-  background: var(--color-vermillion);
+  background: var(--blob-elem-3, var(--color-vermillion));
   opacity: 0.03;
   bottom: -20vw;
   right: -15vw;
@@ -199,7 +199,7 @@ blockquote {
   width: 45vw;
   height: 45vw;
   border-radius: 50%;
-  background: var(--color-gold);
+  background: var(--blob-elem-2, var(--color-gold));
   opacity: 0.09;
   bottom: -12vw;
   left: -10vw;
@@ -211,7 +211,7 @@ blockquote {
   width: 70vw;
   height: 70vw;
   border-radius: 50%;
-  background: var(--color-psychic);
+  background: var(--blob-elem-1, var(--color-psychic));
   opacity: 0.07;
   top: -20vw;
   right: -20vw;
@@ -476,8 +476,13 @@ blockquote {
 /* ONBOARDING                                                      */
 /* ═══════════════════════════════════════════════════════════════ */
 
+/* Override default .view padding for onboarding — keeps all fields on screen */
+#view-onboard {
+  padding: 1rem 1.5rem 0.5rem;
+}
+
 .onboard-header {
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .step-num {
@@ -492,7 +497,7 @@ blockquote {
 
 .onboard-header h2 {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 400;
   margin: 0 0 0.25rem;
   color: var(--color-white-bone);
@@ -500,10 +505,10 @@ blockquote {
 }
 
 .onboard-header p {
-  color: var(--color-ash);
+  color: var(--color-ghost);
   margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.6;
+  font-size: 0.75rem;
+  line-height: 1.55;
 }
 
 .onboard-form {
@@ -512,7 +517,12 @@ blockquote {
 
 .onboard-form label {
   display: block;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.625rem;
+}
+
+/* Labels inside form-rows don't need their own trailing margin — the row handles it */
+.form-row label {
+  margin-bottom: 0;
 }
 
 .onboard-form label span {
@@ -523,7 +533,7 @@ blockquote {
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-ash);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 
 .onboard-form label small {
@@ -536,11 +546,12 @@ blockquote {
   letter-spacing: 0;
 }
 
+.onboard-form input[type="text"],
 .onboard-form input[type="date"],
 .onboard-form select,
 .onboard-form textarea {
   width: 100%;
-  padding: 0.7rem 0.9rem;
+  padding: 0.6rem 0.75rem;
   font-family: var(--font-body);
   font-size: 0.9rem;
   background: var(--color-ground);
@@ -548,18 +559,19 @@ blockquote {
   border-radius: 2px;
   color: var(--color-white-bone);
   transition: border-color 0.2s ease;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 .onboard-form select {
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23B060E0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.9rem center;
   padding-right: 2.5rem;
 }
 
+.onboard-form input[type="text"]:focus,
 .onboard-form input[type="date"]:focus,
 .onboard-form select:focus,
 .onboard-form textarea:focus {
@@ -569,13 +581,21 @@ blockquote {
 
 .onboard-form textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 56px;
 }
 
 .form-actions {
   display: flex;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
+}
+
+/* Two-column grid for paired form fields */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 0.75rem;
+  margin-bottom: 0.625rem;
 }
 
 .form-actions .btn-ghost { margin-right: auto; }
@@ -1275,7 +1295,7 @@ blockquote {
 .narrative-pillar {
   padding: 0.65rem 0.9rem;
   border-left: 2px solid;
-  background: rgba(26,0,53,0.035);
+  background: rgba(15,0,20,0.035);
   border-radius: 0 2px 2px 0;
 }
 
@@ -1596,17 +1616,17 @@ blockquote {
 .oracle-leave-dismiss:hover { opacity: 1; }
 
 /* ═══════════════════════════════════════════════════════════════ */
-/* SACRED LIBRARY TAB                                             */
+/* WISDOM VAULT TAB                                             */
 /* ═══════════════════════════════════════════════════════════════ */
 
-.library-nav {
+.wisdom-vault-nav {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
   margin-bottom: 1.25rem;
 }
 
-.library-tab {
+.wisdom-vault-tab {
   padding: 0.3rem 0.7rem;
   font-family: var(--font-body);
   font-size: 0.625rem;
@@ -1621,18 +1641,18 @@ blockquote {
   transition: all 0.2s ease;
 }
 
-.library-tab:hover {
+.wisdom-vault-tab:hover {
   color: var(--color-ash);
   border-color: var(--color-ghost);
 }
 
-.library-tab.active {
+.wisdom-vault-tab.active {
   color: var(--color-white-bone);
   border-color: var(--color-cobalt);
   background: rgba(58, 125, 68, 0.10);
 }
 
-.library-item {
+.wisdom-vault-item {
   background: var(--color-ground);
   border: 1px solid var(--color-border);
   border-radius: 2px;
@@ -1644,7 +1664,7 @@ blockquote {
   --card-accent: var(--color-cobalt);
 }
 
-.library-item::before {
+.wisdom-vault-item::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -1653,11 +1673,11 @@ blockquote {
   opacity: 0.5;
 }
 
-.library-item:hover {
+.wisdom-vault-item:hover {
   border-color: var(--color-ghost);
 }
 
-.library-item h4 {
+.wisdom-vault-item h4 {
   margin: 0 0 0.3rem;
   font-family: var(--font-display);
   font-size: 0.925rem;
@@ -1665,7 +1685,7 @@ blockquote {
   color: var(--color-white-bone);
 }
 
-.library-item .tradition {
+.wisdom-vault-item .tradition {
   font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.15em;
@@ -1674,7 +1694,7 @@ blockquote {
   margin-bottom: 0.5rem;
 }
 
-.library-item p {
+.wisdom-vault-item p {
   margin: 0;
   font-size: 0.85rem;
   color: var(--color-ash);
@@ -1682,7 +1702,7 @@ blockquote {
 }
 
 /* Saved Oracle entries */
-.library-item--saved { border-left: 2px solid var(--color-gold); }
+.wisdom-vault-item--saved { border-left: 2px solid var(--color-gold); }
 .oracle-saved-question {
   font-size: 0.78rem;
   font-style: italic;
@@ -2194,7 +2214,7 @@ blockquote {
 
 /* Alternate row shading for readability */
 .bazi-row:nth-child(odd):not(.bazi-row-header) {
-  background: rgba(26,0,53,0.035);
+  background: rgba(15,0,20,0.035);
 }
 
 /* ─── Row hierarchy: core (header + main chars) vs reference (details) ─── */
@@ -2470,7 +2490,7 @@ blockquote {
 }
 
 .cycle-narrative-domains > div {
-  background: rgba(26,0,53,0.03);
+  background: rgba(15,0,20,0.03);
   border-radius: 2px;
   padding: 0.6rem 0.75rem;
 }

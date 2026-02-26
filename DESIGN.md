@@ -9,7 +9,7 @@
 **Style:** Neo-Risograph Eastern Mythology UI — "ancient wisdom transmitted through an analog signal."
 **Mood:** Cool, cosmic, slightly analog/print-like. Not digital-glassy. Like an independent artist's mystical zine.
 **Background:** Cool white (`#F5F5F7`) — near-pure white with a very faint cool/blue undertone. Crisp paper stock, clearly not parchment.
-**Text:** Electric purple hierarchy — primary `#1A0035` (darkest), secondary `#7020C0` (mid), tertiary `#B060E0` (light). All on the same `#A020F0` hue axis.
+**Text:** Near-black primary (`#0F0014`) + cool grey-purple secondary (`#58566A`). Electric purple (`#A020F0`) is accent-only — wordmark, active states, section bars, chips.
 **Brand token:** Electric psychic purple (`#A020F0`) for the SoulMap wordmark and active UI states.
 **Borders/corners:** Almost no rounding — `border-radius: 2px` globally. Sharp, print-like.
 **Grain texture:** SVG noise overlay at 12% opacity for the cosmic analog feel.
@@ -34,9 +34,9 @@ All values live as CSS custom properties in `:root` (`public/styles.css`).
 ### Text
 | Token | Hex | Use |
 |-------|-----|-----|
-| `--color-white-bone` | `#1A0035` | Primary text — darkest electric purple |
-| `--color-ash` | `#7020C0` | Secondary text — mid electric purple |
-| `--color-ghost` | `#B060E0` | Disabled / tertiary — light electric purple |
+| `--color-white-bone` | `#0F0014` | Primary text — near-black (barely perceptible purple DNA) |
+| `--color-ash` | `#58566A` | Secondary text — cool grey-purple |
+| `--color-ghost` | `#8C8A9A` | Disabled / tertiary — light cool grey |
 
 ### Brand Accents
 | Token | Hex | Name | Notes |
@@ -148,8 +148,8 @@ The canonical element color mapping — used in Four Pillars chars, element bala
 | Feb 2025 | Four Pillars max-width 520px | Wide desktop columns looked sparse/unintentional |
 | Feb 2025 | Core/ref row hierarchy in grid | Reduces visual noise; focuses attention on main pillars |
 | Feb 2026 | Background settled on **cool white** `#F5F5F7` | Faint cool/blue undertone — clearly not parchment. Element colors and electric purple text pop maximally. |
-| Feb 2026 | 色块 abstract background blobs added | Three fixed circles: psychic purple (top-right, landing), gold (bottom-left, landing), vermillion (bottom-right, persistent). Neo-Risograph multi-layer print feel. |
+| Feb 2026 | 色块 blobs made **dynamic from BaZi elements** | Background blobs now reflect user's top 3 dominant elements. `renderAppBlueprint()` in `app.js` sets `--blob-elem-1/2/3` via `setProperty()`. CSS fallbacks: psychic/gold/vermillion pre-load. |
 | Feb 2026 | Section label `::before` color bars added | 3px psychic purple bar above each `.detail-sections h3` — editorial section marker. Soul type sub-label gets tinted chip background `rgba(160,32,240,0.07)`. |
-| Feb 2026 | Text hierarchy unified on `#A020F0` hue axis | All text shades (primary `#1A0035`, secondary `#7020C0`, tertiary `#B060E0`) derived from same electric purple hue. Coherent, editorial, distinctly SoulMap. |
+| Feb 2026 | **NEO pop** text hierarchy — near-black body + accent-only purple | Body text `#0F0014` (near-black, barely perceptible purple); secondary `#58566A` (grey-purple); `#A020F0` accent-only. Electric purple pops because it's not competing with body text. |
 | Feb 2026 | `--color-psychic: #A020F0` — electric psychic purple | Upgraded from #7B3FF2; #A020F0 is a true saturated psychic purple, reserved for SoulMap wordmark + active UI states |
 | Feb 2026 | Row striping changed from `rgba(0,0,0,X)` → `rgba(30,21,53,X)` | Black overlay cast cold grey on lavender; indigo-tint overlay reads naturally with new background |
