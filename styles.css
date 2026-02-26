@@ -1900,6 +1900,7 @@ blockquote {
 
 /* Standard data cell */
 .bazi-cell {
+  flex: 1;                  /* fill wrapper div's full column width */
   display: flex;
   flex-direction: column;
   align-items: center;
