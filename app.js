@@ -530,7 +530,7 @@
   function calculateBaZi(birthDateStr, shichenIndex) {
     const [y, m, d] = birthDateStr.split('-').map(Number);
     const dayJdn         = jdn(y, m, d);
-    const dayPillarIndex = (dayJdn + 41) % 60;
+    const dayPillarIndex = (dayJdn + 49) % 60;
     const dayStem        = dayPillarIndex % 10;
     const dayBranch      = dayPillarIndex % 12;
 
@@ -713,6 +713,14 @@
     'Yang Wood','Yin Wood','Yang Fire','Yin Fire','Yang Earth',
     'Yin Earth','Yang Metal','Yin Metal','Yang Water','Yin Water'
   ];
+  const DAY_MASTER_METAPHORS = [
+    'Ancient Oak','Willow','Sun','Candlelight','Mountain',
+    'Garden Soil','Sword','Gemstone','Ocean','Mist'
+  ];
+  const BRANCH_ANIMALS = [
+    'Rat','Ox','Tiger','Rabbit','Dragon','Snake',
+    'Horse','Goat','Monkey','Rooster','Dog','Pig'
+  ];
   const ELEMENT_NAMES_CAP = ['Wood','Fire','Earth','Metal','Water'];
 
   function formatElementBalance(chart) {
@@ -728,9 +736,11 @@
 
   async function fetchNarrativeFromAPI(chart) {
     try {
-      const stemIdx = chart.dayMaster;
+      const stemIdx       = chart.dayMaster;
+      const currentDecade = (chart.daYun || []).find(d => d.isCurrent) || null;
       const payload = {
         dayMaster:         STEMS[stemIdx] + ' (' + (STEM_NAMES_EN[stemIdx] || '') + ')',
+        dayMasterMetaphor: DAY_MASTER_METAPHORS[stemIdx] || '',
         pillarsStr:        chart.pillarsStr || '',
         elementBalance:    formatElementBalance(chart),
         dayMasterStrength: chart.dayMasterStrength || 'Moderate',
@@ -738,6 +748,9 @@
           e => e ? e[0].toUpperCase() + e.slice(1) : ''
         ).filter(Boolean),
         soulType:          (SOUL_TYPES[stemIdx] || {}).name || '',
+        soulTypeTagline:   (SOUL_TYPES[stemIdx] || {}).tagline || '',
+        luckPillarStr:     formatLuckPillar(currentDecade),
+        annualPillarStr:   formatAnnualPillar(chart.annualPillar),
         occupation:        state.occupation   || '',
         relationship:      state.relationship || '',
         currentConcern:    state.currentConcern || '',
@@ -758,10 +771,25 @@
     }
   }
 
+  function formatLuckPillar(decade) {
+    if (!decade) return 'not yet active';
+    const stemName = STEM_NAMES_EN[decade.stemIndex] || '';
+    const animal   = BRANCH_ANIMALS[decade.branchIndex] || '';
+    return `${STEM_ROMANIZATION[decade.stemIndex]} ${BRANCH_ROMANIZATION[decade.branchIndex]} — ${stemName} ${animal}, ages ${decade.startAge}–${decade.endAge} (${decade.startYear}–${decade.endYear})`;
+  }
+
+  function formatAnnualPillar(ap) {
+    if (!ap) return 'not calculated';
+    const TEN_GOD_ARCHETYPE = ['Mirror','Shadow','Muse','Maverick','Windfall','Harvest','Challenger','Architect','Mystic','Guardian'];
+    const tg = TEN_GOD_ARCHETYPE[ap.tenGod] || '';
+    return `${STEM_ROMANIZATION[ap.stem]} ${BRANCH_ROMANIZATION[ap.branch]} — ${STEM_NAMES_EN[ap.stem]} ${BRANCH_ANIMALS[ap.branch]}${tg ? ', Ten God: ' + tg : ''} (year ${ap.year})`;
+  }
+
   function updateNarrativeSection(narrative) {
     if (!narrative) return;
     const s = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '—'; };
     s('detail-core-essence',    narrative.coreEssence);
+    s('detail-season',          narrative.season);
     s('detail-classical-text',  narrative.classicalQuote);
     s('detail-classical-source',narrative.classicalSource || '');
     s('detail-work',   narrative.work);
@@ -1202,6 +1230,7 @@
       if (placeholder) placeholder.style.display = 'none';
       const na = state.narrativeFromAPI;
       setEl('detail-core-essence', na.coreEssence);
+      setEl('detail-season', na.season);
       setEl('detail-work', na.work);
       setEl('detail-love', na.love);
       setEl('detail-growth', na.growth);
@@ -1264,9 +1293,11 @@
   function buildOracleChartContext() {
     if (!state.chart) return null;
     const c = state.chart;
-    const stemIdx = c.dayMaster;
+    const stemIdx       = c.dayMaster;
+    const currentDecade = (c.daYun || []).find(d => d.isCurrent) || null;
     return {
       dayMaster:         STEMS[stemIdx] + ' (' + (STEM_NAMES_EN[stemIdx] || '') + ')',
+      dayMasterMetaphor: DAY_MASTER_METAPHORS[stemIdx] || '',
       pillarsStr:        c.pillarsStr || '',
       elementBalance:    formatElementBalance(c),
       dayMasterStrength: c.dayMasterStrength || 'Moderate',
@@ -1274,6 +1305,8 @@
         e => e ? e[0].toUpperCase() + e.slice(1) : ''
       ).filter(Boolean),
       soulType:          (SOUL_TYPES[stemIdx] || {}).name || '',
+      luckPillarStr:     formatLuckPillar(currentDecade),
+      annualPillarStr:   formatAnnualPillar(c.annualPillar),
       occupation:        state.occupation    || '',
       relationship:      state.relationship  || '',
       currentConcern:    state.currentConcern || '',

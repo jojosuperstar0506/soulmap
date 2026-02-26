@@ -19,11 +19,14 @@ function getSystemPrompt(): string {
 
 interface ChartContext {
   dayMaster?: string;
+  dayMasterMetaphor?: string;
   pillarsStr?: string;
   elementBalance?: string;
   dayMasterStrength?: string;
   favorableElements?: string[];
   soulType?: string;
+  luckPillarStr?: string;
+  annualPillarStr?: string;
   occupation?: string;
   relationship?: string;
   currentConcern?: string;
@@ -46,17 +49,22 @@ function buildSystemPrompt(base: string, ctx?: ChartContext): string {
     '',
     '---',
     'CHART CONTEXT FOR THIS SESSION:',
-    `Day Master: ${ctx.dayMaster || 'unknown'}`,
+    `Day Master: ${ctx.dayMaster || 'unknown'} — known as the ${ctx.dayMasterMetaphor || ''}`,
     `Day Master Strength: ${ctx.dayMasterStrength || 'Moderate'}`,
     `Four Pillars: ${ctx.pillarsStr || 'not provided'}`,
     `Element Balance: ${ctx.elementBalance || 'not provided'}`,
     `Favorable Elements: ${fav}`,
     `Soul Type: ${ctx.soulType || 'not provided'}`,
+    `Current Life Season (大运): ${ctx.luckPillarStr || 'not available'}`,
+    `Current Year Energy (流年): ${ctx.annualPillarStr || 'not available'}`,
     `Occupation: ${ctx.occupation || 'not specified'}`,
     `Relationship Status: ${ctx.relationship || 'not specified'}`,
     `Current Concern: ${ctx.currentConcern || 'not specified'}`,
     '---',
-    'You are answering this person\'s specific question about their chart and life. Be direct, warm, and grounded in classical BaZi wisdom. Answer in 2–4 paragraphs. Reference their specific chart details when naturally relevant. Include a classical text quote (《滴天髓》《穷通宝鉴》《子平真诠》or similar) only when it fits the question naturally — do not force it.',
+    `This person is in the life season: ${ctx.luckPillarStr || 'not available'}. Reference this season when their question touches timing or current circumstances.`,
+    `The current year energy is: ${ctx.annualPillarStr || 'not available'}. Mention this when the question involves current-year decisions.`,
+    '',
+    'You are answering their specific question. Be direct, warm, grounded. Use the elemental metaphor name (Ancient Oak / Mist / Sword) — not type labels. Reference specific chart data when naturally relevant. Classical reference only when it fits naturally.',
   ].join('\n') : '';
 
   return base + chartBlock;

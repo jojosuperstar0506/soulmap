@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
   // @vercel/nft can't statically trace path.join(process.cwd(), ...) calls.
   outputFileTracingIncludes: {
     '/api/narrative': ['./src/content/**/*.md'],
+    '/api/oracle':    ['./src/content/**/*.md'],
   },
 };
 

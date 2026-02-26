@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B + Oracle AI + 10 soul portraits complete; Phase 2 engagement layer in progress)
+> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B + Oracle AI + 10 soul portraits complete; BaZi engine rebuilt with solar term accuracy; Phase 2 engagement layer in progress)
 
 ---
 
@@ -49,11 +49,17 @@
   - [x] Add `getShenSha(chart)` to app.js
   - [x] Rewrite `renderFourPillars()` — row-based CSS grid (10 rows × 5 cols)
   - [x] Add `.bazi-grid` CSS to styles.css
-  - [ ] Cross-validate output against a reference BaZi tool for a known date ← **5 bugs fixed (2026-02-25); needs human spot-check**
-    - Solar term engine (Meeus ch.25) replaces hardcoded month/year heuristics
-    - 子月/丑月 month stem formula fixed
-    - 子 branch element corrected wood→water
-    - 大运 starting age uses actual 节气 dates instead of proxy
+  - [x] **BaZi engine accuracy overhaul (2026-02-25)** — 6 bugs found and fixed in `public/app.js`:
+    1. Month pillar: replaced calendar-month heuristic with solar term boundaries (节气) using Meeus ch.25 astronomical algorithm
+    2. Year pillar: replaced hardcoded "before Feb 5" with actual 立春 JDE computed per year
+    3. Month stem formula: fixed `(monthBranch - 2 + 12) % 12` — old `+20` formula gave wrong stems for 子月 and 丑月
+    4. Branch element map: 子 was mapped to wood (0); corrected to water (4)
+    5. 大运 starting age: now uses `nearestSolarTermJDN()` instead of a proxy 15th-of-month date
+    6. **Day pillar offset recalibrated** — `(dayJdn + 58) % 60` → `(dayJdn + 49) % 60`; cross-validated against known correct chart (1998-05-06 → 癸丑日, 己未时 ✓)
+    - UTC+8 offset removed from all solar term JDE→JDN conversions (face-value 公历, no timezone math)
+    - New functions: `sunLongitude()`, `solarTermJDE()`, `getBaZiMonth()`, `getBaZiTermJDNs()`, `nearestSolarTermJDN()`
+    - Automated browser tests passed: 立春 dates ×5 years, month boundary cases, 子月 stem, element balance water count, Joanna reference chart
+  - [ ] Cross-validate output against an external reference BaZi tool for additional known dates ← still useful for extra confidence
 - [x] Persona card portrait — 10 base stem portraits generated with Neo-Risograph style via Gemini Imagen and wired into Blueprint UI (`scripts/generate-personas.mjs`, `public/personas/`) ← **completed 2026-02-25**
   - Authored `scripts/generate-personas.mjs` (3-model cascade: Imagen4 → Flash2.5 → Flash2.0exp)
   - Added `slug` field to all 10 `SOUL_TYPES` entries in `app.js`
@@ -214,7 +220,7 @@
 
 ## Open Questions (from PRD §11)
 
-- [ ] **BaZi library:** Use `lunar-javascript` npm or pure custom logic? Test first.
+- [x] **BaZi library:** Use `lunar-javascript` npm or pure custom logic? → **Decision: pure custom logic** — solar term engine implemented from scratch using Meeus astronomical algorithm; no npm dependency needed ✓
 - [ ] **True solar time:** Skip for MVP, add in Phase 2 as "refine your chart" feature? → **Decision: skip for MVP** ✓
 - [ ] **Meditation audio:** AI voice (ElevenLabs) vs. human voice actor? → Start with AI, upgrade with revenue.
 - [ ] **Share image generation:** Server-side (Puppeteer) vs. client-side (html2canvas)?
