@@ -1335,6 +1335,30 @@
     return json.answer;
   }
 
+  // Lightweight markdown renderer for Oracle AI responses only.
+  // Security: only called on AI-generated text, never on user input.
+  function renderMarkdown(text) {
+    // 1. Horizontal rule
+    let html = text.replace(/^---$/gm, '<hr class="oracle-hr">');
+    // 2. Headings
+    html = html.replace(/^### (.+)$/gm, '<h3 class="oracle-h3">$1</h3>');
+    html = html.replace(/^## (.+)$/gm,  '<h2 class="oracle-h2">$1</h2>');
+    // 3. Bold and italic
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.+?)\*/g,     '<em>$1</em>');
+    // 4. Split on double newlines → paragraphs (skip already-converted block tags)
+    return html
+      .split(/\n{2,}/)
+      .map(block => {
+        const trimmed = block.trim();
+        if (!trimmed) return '';
+        if (/^<(h[23]|hr)/.test(trimmed)) return trimmed;
+        return '<p>' + trimmed.replace(/\n/g, ' ') + '</p>';
+      })
+      .filter(Boolean)
+      .join('\n');
+  }
+
   function initOracle() {
     const form        = document.getElementById('oracle-form');
     const input       = document.getElementById('oracle-input');
@@ -1348,6 +1372,12 @@
     document.querySelectorAll('.oracle-suggestion').forEach(btn => {
       btn.addEventListener('click', () => { input.value = btn.getAttribute('data-q'); input.focus(); });
     });
+
+    // Dismiss leave-warning banner (one-time)
+    document.getElementById('btn-dismiss-oracle-warning')?.addEventListener('click', () => {
+      const w = document.getElementById('oracle-leave-warning');
+      if (w) w.hidden = true;
+    }, { once: true });
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -1380,9 +1410,40 @@
         typing.remove();
         const reply = document.createElement('div');
         reply.className = 'msg assistant';
-        reply.textContent = answer;
+        reply.innerHTML = renderMarkdown(answer);
+
+        // Save button
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'oracle-save-btn';
+        saveBtn.setAttribute('aria-label', 'Save to Library');
+        saveBtn.innerHTML = '🔖 Save';
+        saveBtn.addEventListener('click', () => {
+          const alreadySaved = getStoredAdditions().some(
+            e => e.tradition === 'saved' && e.text === answer
+          );
+          if (alreadySaved) {
+            saveBtn.textContent = '✓ Saved';
+            saveBtn.disabled = true;
+            return;
+          }
+          addCitationToVault({
+            tradition: 'saved',
+            source:    'SoulMap Oracle',
+            author:    q.slice(0, 80) + (q.length > 80 ? '…' : ''),
+            text:      answer,
+            savedAt:   Date.now()
+          });
+          saveBtn.textContent = '✓ Saved';
+          saveBtn.disabled = true;
+        });
+        reply.appendChild(saveBtn);
+
         messages.appendChild(reply);
         messages.scrollTop = messages.scrollHeight;
+
+        // Show leave-warning banner after first reply
+        const warning = document.getElementById('oracle-leave-warning');
+        if (warning) warning.hidden = false;
 
         // Save to conversation history for follow-up context
         conversationHistory.push({ role: 'user',      content: q      });
@@ -1454,11 +1515,26 @@
     return null;
   }
 
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
   function renderLibrary(filter) {
     const list  = document.getElementById('library-list');
     const vault = getWisdomVault();
     const items = filter === 'all' ? vault : vault.filter(x => x.tradition === filter);
     list.innerHTML = items.map(x => {
+      if (x.tradition === 'saved') {
+        return `<div class="library-item library-item--saved">
+          <span class="tradition">saved</span>
+          <h4 class="oracle-saved-question">${escapeHtml(x.author)}</h4>
+          <p>${escapeHtml(x.text)}</p>
+        </div>`;
+      }
       const title = x.source + (x.author ? ' — ' + x.author : '');
       return `<div class="library-item"><span class="tradition">${x.tradition}</span><h4>${title}</h4><p>${x.text}</p></div>`;
     }).join('');

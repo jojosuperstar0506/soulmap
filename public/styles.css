@@ -1391,6 +1391,57 @@ blockquote {
   line-height: 1.65;
 }
 
+/* ── Rendered markdown inside Oracle assistant messages ── */
+.oracle-messages .msg.assistant {
+  padding: 1rem 1.15rem;
+  line-height: 1.75;
+}
+
+.msg.assistant p {
+  margin: 0 0 0.9rem;
+}
+.msg.assistant p:last-of-type {
+  margin-bottom: 0;
+}
+
+.msg.assistant h2.oracle-h2 {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+  margin: 1.25rem 0 0.4rem;
+}
+.msg.assistant h2.oracle-h2:first-child { margin-top: 0; }
+
+.msg.assistant h3.oracle-h3 {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: var(--color-cobalt);
+  margin: 1rem 0 0.3rem;
+}
+.msg.assistant h3.oracle-h3:first-child { margin-top: 0; }
+
+.msg.assistant hr.oracle-hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.1rem 0;
+}
+
+.msg.assistant strong {
+  font-weight: 700;
+  color: var(--color-white-bone);
+}
+
+.msg.assistant em {
+  font-style: italic;
+  color: var(--color-ash);
+}
+
 .oracle-messages .msg.user {
   background: rgba(0, 197, 205, 0.06);
   border-left: 2px solid var(--color-cyan);
@@ -1458,6 +1509,50 @@ blockquote {
 }
 
 .oracle-input-form .btn { flex-shrink: 0; }
+
+/* Oracle save button */
+.oracle-save-btn {
+  display: inline-block;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: var(--color-ash);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+.oracle-save-btn:hover { color: var(--color-gold); }
+.oracle-save-btn:disabled { color: var(--color-gold); cursor: default; }
+
+/* Oracle leave-warning banner */
+.oracle-leave-warning[hidden] { display: none !important; }
+.oracle-leave-warning {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  background: color-mix(in srgb, var(--color-gold) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--color-ash);
+  line-height: 1.4;
+}
+.oracle-leave-dismiss {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: var(--color-ash);
+  cursor: pointer;
+  padding: 0 2px;
+  opacity: 0.6;
+}
+.oracle-leave-dismiss:hover { opacity: 1; }
 
 /* ═══════════════════════════════════════════════════════════════ */
 /* SACRED LIBRARY TAB                                             */
@@ -1543,6 +1638,15 @@ blockquote {
   font-size: 0.85rem;
   color: var(--color-ash);
   line-height: 1.6;
+}
+
+/* Saved Oracle entries */
+.library-item--saved { border-left: 2px solid var(--color-gold); }
+.oracle-saved-question {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--color-ash);
+  margin-bottom: 6px;
 }
 
 /* ═══════════════════════════════════════════════════════════════ */
