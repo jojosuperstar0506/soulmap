@@ -1340,9 +1340,10 @@
   function renderMarkdown(text) {
     // 1. Horizontal rule
     let html = text.replace(/^---$/gm, '<hr class="oracle-hr">');
-    // 2. Headings
+    // 2. Headings — handle #, ##, ### (AI uses any of these)
     html = html.replace(/^### (.+)$/gm, '<h3 class="oracle-h3">$1</h3>');
     html = html.replace(/^## (.+)$/gm,  '<h2 class="oracle-h2">$1</h2>');
+    html = html.replace(/^# (.+)$/gm,   '<h2 class="oracle-h2">$1</h2>');
     // 3. Bold and italic
     html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*(.+?)\*/g,     '<em>$1</em>');
