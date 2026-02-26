@@ -14,12 +14,12 @@
   --color-border-active: #E8372A;  /* Active/selected — vermillion */
 
   /* ─── Brand Accents (one per section, never all at once) ─── */
-  --color-vermillion: #E8372A;     /* Fire, action, current moment */
-  --color-cyan: #00C5CD;           /* Water, insight, mist */
-  --color-magenta: #C8357A;        /* Metal, refinement, beauty */
-  --color-gold: #D4AF37;           /* Metal element — burnished gold */
-  --color-cobalt: #2B4CE0;         /* Wood, depth, growth */
-  --color-amber: #FF6B1A;          /* Earth, warmth, cultivation */
+  --color-vermillion: #E8372A;     /* Fire — vermillion red */
+  --color-cyan: #1A4DB5;           /* Water — deep sapphire */
+  --color-magenta: #C8357A;        /* UI accent — magenta */
+  --color-gold: #D4AF37;           /* Metal — burnished gold */
+  --color-cobalt: #3A7D44;         /* Wood — forest green */
+  --color-amber: #9B5523;          /* Earth — terracotta/sienna */
 
   /* ─── Text ─── */
   --color-white-bone: #1A1510;     /* Primary text — dark warm ink */
@@ -1944,11 +1944,11 @@ blockquote {
   border-radius: 1px;
 }
 
-.bazi-elem-wood  { color: var(--color-cobalt);     background: rgba(43,76,224,0.12); }
+.bazi-elem-wood  { color: var(--color-cobalt);     background: rgba(58,125,68,0.12); }
 .bazi-elem-fire  { color: var(--color-vermillion); background: rgba(232,55,42,0.12); }
-.bazi-elem-earth { color: var(--color-amber);      background: rgba(255,107,26,0.12); }
+.bazi-elem-earth { color: var(--color-amber);      background: rgba(155,85,35,0.12); }
 .bazi-elem-metal { color: var(--color-gold);       background: rgba(212,175,55,0.15); }
-.bazi-elem-water { color: var(--color-cyan);       background: rgba(0,197,205,0.12); }
+.bazi-elem-water { color: var(--color-cyan);       background: rgba(26,77,181,0.12); }
 
 /* Romanization text above Chinese char in stem/branch cells */
 .bazi-romanization {

@@ -26,7 +26,7 @@
   };
   // Hex fallbacks for SVG (CSS vars don't work in SVG attributes)
   const ELEMENT_HEX = {
-    wood:'#2B4CE0', fire:'#E8372A', earth:'#FF6B1A', metal:'#D4AF37', water:'#00C5CD'
+    wood:'#3A7D44', fire:'#E8372A', earth:'#9B5523', metal:'#D4AF37', water:'#1A4DB5'
   };
   const STEM_ELEMENT = [0,0,1,1,2,2,3,3,4,4]; // 0=wood 1=fire 2=earth 3=metal 4=water
 
