@@ -2649,25 +2649,38 @@ blockquote {
 }
 
 /* ═══════════════════════════════════════════════════════════════ */
-/* LIGHT CARD SURFACES — dark text context                        */
-/* Card surfaces (#F0EEF8 / #E4E1F5) are off-white lavender.      */
-/* Override text tokens locally so descendants auto-resolve dark. */
-/* Void-level elements (landing, header, nav) are NOT in scope    */
-/* and naturally keep light-on-dark text.                         */
+/* ALL LIGHT CARD SURFACES — comprehensive dark text context      */
+/* Every surface with --color-ground / --color-surface-raised     */
+/* background gets dark text via CSS custom property cascade.     */
+/* Single source of truth — add any new card selector here.       */
+/* Void zones (landing, header, nav) are not listed → keep light. */
 /* ═══════════════════════════════════════════════════════════════ */
 
-.bazi-grid,
 .card-base,
+.card-active,
+.blueprint-detail-card,
+.blueprint-reveal-card,
+.blueprint-detail-visual,
 .blueprint-meta-item,
 .profile-btn,
+.profile-sheet-panel,
+.oracle-template-card,
+.oracle-chat,
+.oracle-messages .msg.assistant,
+.oracle-input-form textarea,
+.wisdom-vault-item,
+.spark-card,
+.meditation-item,
+.dayun-card,
+.bazi-grid,
 .onboard-form input[type="text"],
 .onboard-form input[type="date"],
 .onboard-form select,
 .onboard-form textarea {
-  --color-white-bone: #0A0814; /* Solid near-black — no grey on cards */
-  --color-ash:        #0A0814; /* Solid near-black — no grey */
-  --color-ghost:      #0A0814; /* Solid near-black — no grey */
-  --color-border:     rgba(18,16,30,0.12); /* Crisp cell lines on light surface */
+  --color-white-bone: #0A0814; /* Solid near-black on light card */
+  --color-ash:        #0A0814; /* Solid near-black */
+  --color-ghost:      #0A0814; /* Solid near-black */
+  --color-border:     rgba(18,16,30,0.12); /* Crisp lines on light surface */
   color: #0A0814;
 }
 
