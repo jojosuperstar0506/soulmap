@@ -7,10 +7,10 @@
 
 :root {
   /* ─── Background & Surface ─── */
-  --color-void: #080808;           /* Primary background — near-black */
-  --color-ground: #111111;         /* Card / surface background */
-  --color-surface-raised: #1A1A1A; /* Elevated panels */
-  --color-border: #2A2A2A;         /* Subtle borders */
+  --color-void: #F4EFE4;           /* Primary background — warm parchment */
+  --color-ground: #EAE4D4;         /* Card / surface background */
+  --color-surface-raised: #DED8C8; /* Elevated panels */
+  --color-border: #C5BCA8;         /* Subtle borders */
   --color-border-active: #E8372A;  /* Active/selected — vermillion */
 
   /* ─── Brand Accents (one per section, never all at once) ─── */
@@ -22,9 +22,9 @@
   --color-amber: #FF6B1A;          /* Earth, warmth, cultivation */
 
   /* ─── Text ─── */
-  --color-white-bone: #F2EDE4;     /* Primary text — warm white */
-  --color-ash: #888888;            /* Secondary text */
-  --color-ghost: #444444;          /* Disabled / tertiary */
+  --color-white-bone: #1A1510;     /* Primary text — dark warm ink */
+  --color-ash: #5C5448;            /* Secondary text */
+  --color-ghost: #9C8E7C;          /* Disabled / tertiary */
 
   /* ─── Typography ─── */
   --font-display: 'Playfair Display', Georgia, serif;
@@ -32,7 +32,7 @@
   --font-chinese: 'Noto Serif SC', 'Source Han Serif SC', serif;
 
   /* ─── Grain ─── */
-  --grain-opacity: 0.35;
+  --grain-opacity: 0.12;
 
   /* ─── Five Elements palette (mapped to brand accents) ─── */
   --wood: var(--color-cobalt);
@@ -419,7 +419,7 @@ blockquote {
 
 .divider {
   border: none;
-  border-top: 1px solid #222222;
+  border-top: 1px solid var(--color-border);
   margin: 24px 0;
 }
 
@@ -434,7 +434,7 @@ blockquote {
 .divider-labeled::after {
   content: '';
   flex: 1;
-  border-top: 1px solid #222222;
+  border-top: 1px solid var(--color-border);
 }
 
 .divider-label-text {
@@ -667,7 +667,7 @@ blockquote {
   left: 0;
   right: 0;
   padding: 1rem 1rem 0.875rem;
-  background: linear-gradient(transparent, rgba(8, 8, 8, 0.92) 40%);
+  background: linear-gradient(transparent, rgba(234, 228, 212, 0.92) 40%);
 }
 
 .soul-portrait-name {
@@ -1026,7 +1026,7 @@ blockquote {
   display: flex;
   justify-content: space-around;
   padding: 0;
-  background: #0D0D0D;
+  background: var(--color-ground);
   border-top: 1px solid var(--color-border);
   z-index: 100;
 }
@@ -1234,7 +1234,7 @@ blockquote {
 .narrative-pillar {
   padding: 0.65rem 0.9rem;
   border-left: 2px solid;
-  background: rgba(255,255,255,0.025);
+  background: rgba(0,0,0,0.04);
   border-radius: 0 2px 2px 0;
 }
 
@@ -2026,5 +2026,5 @@ blockquote {
 
 /* Alternate row shading for readability */
 .bazi-row:nth-child(odd):not(.bazi-row-header) {
-  background: rgba(255,255,255,0.015);
+  background: rgba(0,0,0,0.04);
 }
