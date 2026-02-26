@@ -18,6 +18,19 @@ function getSystemPrompt(): string {
   }
 }
 
+interface SeasonHiddenTheme {
+  char: string;
+  tenGodEN: string;
+  role: string;
+}
+
+interface CurrentSeasonProfile {
+  stemChar: string;
+  stemTenGodEN: string;
+  branchChar: string;
+  hiddenThemes: SeasonHiddenTheme[];
+}
+
 interface NarrativeRequestBody {
   dayMaster?: string;
   dayMasterMetaphor?: string;
@@ -33,6 +46,7 @@ interface NarrativeRequestBody {
   relationship?: string;
   currentConcern?: string;
   dayMasterStemIdx?: number;
+  currentSeasonProfile?: CurrentSeasonProfile;
 }
 
 function buildUserMessage(body: NarrativeRequestBody): string {
@@ -48,6 +62,9 @@ function buildUserMessage(body: NarrativeRequestBody): string {
     `Soul Type: ${body.soulType || 'not provided'} — ${body.soulTypeTagline || ''}`,
     `Current Life Season (大运): ${body.luckPillarStr || 'not available'}`,
     `Current Year Energy (流年): ${body.annualPillarStr || 'not available'}`,
+    ...(body.currentSeasonProfile ? [
+      `Current Season Hidden Themes: ${body.currentSeasonProfile.stemChar}(${body.currentSeasonProfile.stemTenGodEN}, stem) ${body.currentSeasonProfile.branchChar} branch — hidden: ${(body.currentSeasonProfile.hiddenThemes || []).map(h => `${h.char}(${h.tenGodEN},${h.role})`).join(', ')}`,
+    ] : []),
     `Occupation: ${body.occupation || 'not specified'}`,
     `Relationship Status: ${body.relationship || 'not specified'}`,
     `Current Concern: ${body.currentConcern || 'not specified'}`,
@@ -63,7 +80,7 @@ function buildUserMessage(body: NarrativeRequestBody): string {
     '  "classicalSource": "OPTIONAL — only if classicalQuote present."',
     '}',
     '',
-    'SPECIFICITY MANDATE: Before finalizing, test each sentence: could it apply word-for-word to any person of this Day Master type? If yes, rewrite it — anchor it to specific percentages, the current luck pillar, or a specific pillar combination.',
+    'SPECIFICITY MANDATE: Before finalizing, test each sentence: could it apply word-for-word to any person of this Day Master type? If yes, rewrite it — anchor it to specific behaviors, the current luck pillar, or a specific pillar combination. Element balance appears ONCE as a brief overview in coreEssence paragraph 2; everywhere else use behavioral and experiential language, not element percentages.',
     '',
     'Classical sources to prefer (when they fit the day master): 《滴天髓》《穷通宝鉴》《子平真诠》《三命通会》《渊海子平》《神峰通考》《千里命稿》',
   ];

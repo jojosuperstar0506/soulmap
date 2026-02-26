@@ -787,6 +787,47 @@ blockquote {
   line-height: 1.6;
 }
 
+/* ─── Dominant Ten God Badge ─── */
+.dominant-ten-god-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  background: color-mix(in srgb, var(--color-cobalt) 8%, var(--color-ground));
+  border: 1px solid color-mix(in srgb, var(--color-cobalt) 25%, transparent);
+  border-radius: 2px;
+}
+
+.dtg-label {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-cobalt);
+}
+
+.dtg-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-white-bone);
+  line-height: 1.2;
+}
+
+.dtg-cn {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--color-ghost);
+  margin-left: 0.25rem;
+}
+
+.dtg-brief {
+  font-size: 0.78rem;
+  color: var(--color-ash);
+  line-height: 1.55;
+  margin-top: 0.15rem;
+}
+
 .blueprint-meta {
   display: flex;
   flex-wrap: wrap;
@@ -1816,6 +1857,337 @@ blockquote {
 }
 
 /* ═══════════════════════════════════════════════════════════════ */
+/* WISDOM VAULT v2 — Filter rows, cards, badges, modal            */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* ── Filter rows ─────────────────────────────────────────────── */
+.vault-filter-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.25rem;
+}
+.vault-filter-row::-webkit-scrollbar { display: none; }
+
+.vault-filter-themes {
+  margin-bottom: 0.6rem;
+}
+
+.vault-filter-traditions {
+  margin-bottom: 1.25rem;
+  opacity: 0.8;
+}
+
+.vault-filter-btn {
+  padding: 0.3rem 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 1px;
+  color: var(--color-ghost);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.vault-filter-btn:hover {
+  color: var(--color-ash);
+  border-color: var(--color-ghost);
+}
+
+.vault-filter-btn.active {
+  color: var(--color-white-bone);
+  border-color: var(--color-psychic);
+  background: rgba(122, 30, 186, 0.12);
+}
+
+/* Smaller pills for the tradition row */
+.vault-filter-traditions .vault-filter-btn {
+  font-size: 0.565rem;
+  padding: 0.22rem 0.55rem;
+  letter-spacing: 0.11em;
+}
+
+/* ── Vault badges ─────────────────────────────────────────────── */
+.vault-badge {
+  display: inline-block;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 1px;
+  line-height: 1.5;
+}
+
+.vault-badge--tradition {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--color-border);
+  color: var(--color-ghost);
+}
+
+.vault-badge--theme {
+  background: rgba(122, 30, 186, 0.1);
+  border: 1px solid rgba(122, 30, 186, 0.25);
+  color: var(--color-psychic);
+}
+
+/* ── Vault cards ──────────────────────────────────────────────── */
+.vault-card {
+  background: var(--color-ground);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  padding: 0.85rem 0.9rem 0.8rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+
+.vault-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--color-psychic);
+  opacity: 0.35;
+  transition: opacity 0.18s ease;
+}
+
+.vault-card:hover {
+  border-color: rgba(122, 30, 186, 0.4);
+  background: rgba(122, 30, 186, 0.04);
+}
+
+.vault-card:hover::before {
+  opacity: 0.6;
+}
+
+.vault-card:focus {
+  outline: 1px solid var(--color-psychic);
+  outline-offset: 2px;
+}
+
+/* Saved Oracle cards — different accent */
+.vault-card--oracle::before {
+  background: var(--color-gold);
+}
+
+.vault-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.55rem;
+}
+
+.vault-card-text {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--color-white-bone);
+}
+
+.vault-card-source {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
+  margin-top: 0.3rem;
+}
+
+.vault-card-question {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--color-ash);
+  margin: 0 0 0.5rem;
+}
+
+.vault-empty {
+  text-align: center;
+  color: var(--color-ghost);
+  font-size: 0.8rem;
+  padding: 2rem 1rem;
+}
+
+/* ── Save button (bookmark icon on card) ─────────────────────── */
+.vault-save-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  padding: 0.1rem 0.25rem;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-ghost);
+  opacity: 0.45;
+  transition: opacity 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  flex-shrink: 0;
+}
+
+.vault-save-btn:hover {
+  opacity: 1;
+  color: var(--color-psychic);
+}
+
+.vault-save-btn--saved {
+  color: var(--color-psychic);
+  opacity: 1;
+}
+
+@keyframes vaultSavePulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.vault-save-btn--pulse {
+  animation: vaultSavePulse 0.4s ease;
+}
+
+/* ── Modal overlay ────────────────────────────────────────────── */
+.vault-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.82);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 9000;
+  padding: 0 0 env(safe-area-inset-bottom, 0);
+  animation: vaultModalIn 0.22s ease;
+}
+
+.vault-modal-overlay[hidden] {
+  display: none;
+}
+
+@keyframes vaultModalIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Modal card ───────────────────────────────────────────────── */
+.vault-modal-card {
+  background: var(--color-deep);
+  border: 1px solid var(--color-border);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  width: 100%;
+  max-width: 580px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 1.5rem 1.25rem 2rem;
+  position: relative;
+  scrollbar-width: none;
+  animation: vaultCardUp 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vault-modal-card::-webkit-scrollbar { display: none; }
+
+@keyframes vaultCardUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.vault-modal-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  background: none;
+  border: none;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--color-ghost);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  transition: color 0.15s ease;
+}
+
+.vault-modal-close:hover { color: var(--color-white-bone); }
+
+.vault-modal-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.vault-modal-quote {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--color-white-bone);
+  margin: 0 0 0.75rem;
+  padding: 0;
+  quotes: none;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.vault-modal-quote::before {
+  content: '"';
+  position: absolute;
+  left: 0;
+  top: -0.1em;
+  font-size: 1.6rem;
+  color: var(--color-psychic);
+  opacity: 0.6;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+
+.vault-modal-source {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
+  margin-bottom: 0.9rem;
+}
+
+.vault-modal-why {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--color-ghost);
+  line-height: 1.55;
+  border-left: 2px solid var(--color-gold);
+  padding-left: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.vault-modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.vault-modal-save {
+  min-width: 6rem;
+}
+
+.vault-modal-save--saved {
+  border-color: var(--color-psychic);
+  color: var(--color-psychic);
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
 /* DAILY SPARK TAB                                                 */
 /* ═══════════════════════════════════════════════════════════════ */
 
@@ -1861,7 +2233,18 @@ blockquote {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-ghost);
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.spark-affinity {
+  font-size: 0.72rem;
+  color: var(--color-cobalt);
+  margin: 0 0 1rem;
+  padding: 0.4rem 0.7rem;
+  background: color-mix(in srgb, var(--color-cobalt) 8%, transparent);
+  border-left: 2px solid var(--color-cobalt);
+  border-radius: 0 2px 2px 0;
+  line-height: 1.5;
 }
 
 .spark-text,
@@ -1946,6 +2329,81 @@ blockquote {
 /* ═══════════════════════════════════════════════════════════════ */
 /* LIFE SEASONS (大运) SECTION                                     */
 /* ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Annual Arc (流年 This Year) ─── */
+.annual-arc {
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.5rem;
+  background: var(--color-ground);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 20%, transparent);
+  border-radius: 2px;
+}
+
+.annual-arc-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.annual-arc-pillar {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  letter-spacing: 0.05em;
+}
+
+.annual-scores-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.annual-score-item {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr 2rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.annual-score-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
+}
+
+.annual-score-bar-wrap {
+  height: 4px;
+  background: color-mix(in srgb, var(--color-void) 30%, transparent);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.annual-score-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.annual-score-num {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--color-ghost);
+  text-align: right;
+}
+
+.annual-theme {
+  font-size: 0.78rem;
+  color: var(--color-ash);
+  line-height: 1.6;
+  margin: 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-void) 15%, transparent);
+}
 
 .dayun-section {
   margin-bottom: 0.5rem;

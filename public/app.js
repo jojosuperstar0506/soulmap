@@ -54,6 +54,66 @@
                          'Ind. Wealth','Dir. Wealth','7 Killings','Dir. Officer',
                          'Ind. Seal','Dir. Seal'];
 
+  // Archetype names (used across scoring, narrative, and display)
+  const TEN_GOD_ARCHETYPE = ['Mirror','Shadow','Muse','Maverick','Windfall','Harvest',
+                              'Challenger','Architect','Mystic','Guardian'];
+
+  // One-sentence brief for each archetype (used in Dominant Ten God badge)
+  const TEN_GOD_BRIEF = [
+    'You define yourself through peers — collaboration and competition are your forge.',       // Mirror
+    'You take risks others won\'t — bold action is your edge and your blind spot.',            // Shadow
+    'Creative output flows naturally from you — talent that looks effortless to others.',      // Muse
+    'You break patterns and challenge norms — innovation lives here, alongside friction.',     // Maverick
+    'Windfall and unexpected opportunity seek you — wealth arrives through unconventional paths.', // Windfall
+    'You build wealth steadily through patience and relationship — trust compounds over time.',// Harvest
+    'Pressure and competition forge you — you become most powerful when challenged.',          // Challenger
+    'You earn authority through structure — institutions and systems are your domain.',        // Architect
+    'Deep solitary wisdom is your gift — insight arrives in stillness and silence.',           // Mystic
+    'You attract mentors and protection — others invest in you because they see your potential.', // Guardian
+  ];
+
+  // Element → traditional affinity for wisdom vault matching
+  const ELEMENT_TRADITION = { wood:'vedic', fire:'sufi', earth:'confucianism', metal:'stoicism', water:'daoism' };
+
+  /** Return today's BaZi day stem+branch using the same +49 offset as the birth engine */
+  function getTodayBaZiDay() {
+    const jdn = Math.floor(Date.now() / 86400000 + 2440587.5);
+    const idx  = (jdn + 49) % 60;
+    return { stemIdx: idx % 10, branchIdx: idx % 12 };
+  }
+
+  /** Compute the dominant Ten God across a chart (excluding self/day stem).
+   *  Returns the Ten God index (0–9) with highest weighted presence. */
+  function computeDominantTenGod(chart) {
+    const dm = chart.dayPillar.stem;
+    const scores = new Array(10).fill(0);
+
+    // Stems: month gets 1.2× weight (most influential), year/hour get 1.0×
+    const stemWeights = [
+      { s: chart.yearPillar.stem,  w: 1.0 },
+      { s: chart.monthPillar.stem, w: 1.2 },
+      { s: chart.hourPillar.stem,  w: 1.0 },
+    ];
+    for (const { s, w } of stemWeights) {
+      scores[getTenGod(dm, s)] += w;
+    }
+
+    // Hidden stems of all four branches
+    const roleWeight = { main: 0.8, secondary: 0.5, residual: 0.25 };
+    for (const pillar of [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar]) {
+      for (const hs of (HIDDEN_STEMS_ROLES[pillar.branch] || [])) {
+        scores[getTenGod(dm, hs.s)] += (roleWeight[hs.r] || 0.25);
+      }
+    }
+
+    // Skip 0 (Mirror/比肩) and 1 (Shadow/劫财) — they just mean "same element as DM"
+    let best = 2, bestScore = scores[2];
+    for (let i = 3; i < 10; i++) {
+      if (scores[i] > bestScore) { best = i; bestScore = scores[i]; }
+    }
+    return best;
+  }
+
   // 5-element generating cycle: wood→fire→earth→metal→water→wood
   // controlling cycle: wood→earth→water→fire→metal→wood
   const GENERATES = [1,2,3,4,0]; // element index → what it generates
@@ -422,6 +482,9 @@
   const PROFILES_KEY           = 'soulmap_profiles';
   const ACTIVE_PROFILE_KEY     = 'soulmap_active_profile';
 
+  /** Exposed by initOracle() so activateProfile() can clear history on profile switch */
+  let oracleApiReset = null;
+
   let state = {
     birthDate: '', shichen: 0, gender: 'male',
     occupation: '', relationship: '', currentConcern: '',
@@ -522,10 +585,10 @@
     if (typeEl) typeEl.textContent = SOUL_TYPES[chart.dayMaster].name;
     // Re-curate "For You" now that state.chart is populated
     if (document.getElementById('wisdom-vault-list')) {
-      const activeTab = document.querySelector('.wisdom-vault-tab.active');
-      const currentFilter = activeTab ? activeTab.getAttribute('data-tradition') : 'all';
-      if (currentFilter === 'all') renderWisdomVault('all');
+      renderWisdomVault(vaultFilterType, vaultFilterValue);
     }
+    // Reset Oracle history for the new profile
+    if (oracleApiReset) oracleApiReset(p.id);
   }
 
   /** One-time migration: move any 'saved' items from the global vault key
@@ -844,7 +907,7 @@
     const dmElStr     = dayEl; // already computed above as dayEl
     const { usefulGods, harmfulGods } = deriveUsefulGods(dmElStr, arcStrength);
 
-    return {
+    const baseChart = {
       yearPillar:  { stem: yearStem,  branch: yearBranch  },
       monthPillar: { stem: monthStem, branch: monthBranch },
       dayPillar:   { stem: dayStem,   branch: dayBranch   },
@@ -862,6 +925,9 @@
       usefulGods,
       harmfulGods,
     };
+    baseChart.shenSha = getShenSha(baseChart);
+    baseChart.dominantTenGod = computeDominantTenGod(baseChart);
+    return baseChart;
   }
 
   // ─── 大运 Major Luck Periods ─────────────────────────────────────
@@ -960,6 +1026,15 @@
       : (monBrMainEl && useful.includes(monBrMainEl))  ? -1   // removing support = bad
       : 0;                                                     // neutral element = no change
 
+    // ── SPIRIT KILLER (神煞) bonuses ─────────────────────────────
+    // Check if the decade branch IS a special spirit position for this chart.
+    const yearBr = chart.yearPillar.branch;
+    const monBr  = chart.monthPillar.branch;
+    const hasNoble    = (TIANYI_MAP[dm]  || []).includes(decade.branchIndex); // 天乙贵人
+    const hasRomance  = TAOHUA_MAP[yearBr] === decade.branchIndex;             // 桃花
+    const hasTravel   = YIMA_MAP[yearBr]   === decade.branchIndex;             // 驿马
+    const hasHealer   = (monBr + 1) % 12  === decade.branchIndex;             // 天医
+
     // ── WEALTH ────────────────────────────────────────────────────
     let wealth = 50;
     if (stemTenGod === 'harvest' || stemTenGod === 'windfall') wealth += 12;
@@ -1017,6 +1092,9 @@
     love += lVit[twelveStage] ?? 0;
     if (stemTenGod === 'guardian' || mainHS.tenGod === 'guardian') love += 4;
     love += monClashDir > 0 ? 6 : monClashDir < 0 ? -8 : 0;
+    // 神煞 spirit bonuses for love
+    if (hasNoble)   love += 10; // 天乙贵人 → social grace, guardian figures
+    if (hasRomance) love += 12; // 桃花 → magnetic attraction
     love = Math.max(5, Math.min(95, Math.round(love)));
 
     // ── CAREER ───────────────────────────────────────────────────
@@ -1040,6 +1118,9 @@
                    nurture:-2, conception:-4, retreat:-4, stillness:-6, vault:-6, void:-8 };
     career += cVit[twelveStage] ?? 0;
     career += monClashDir > 0 ? 8 : monClashDir < 0 ? -10 : 0;
+    // 神煞 spirit bonuses for career
+    if (hasNoble)  career += 8;  // 天乙贵人 → helpful patrons, doors open
+    if (hasTravel) career += 10; // 驿马 → movement, opportunity, relocation luck
     career = Math.max(5, Math.min(95, Math.round(career)));
 
     // ── HEALTH ───────────────────────────────────────────────────
@@ -1063,6 +1144,8 @@
     health -= clashCount * 4;
     if (isWeak   && health < 50) health -= 5;
     if (isStrong && health < 50) health += 3;
+    // 神煞 spirit bonus for health
+    if (hasHealer) health += 8; // 天医 → recovery support, vitality boost
     health = Math.max(5, Math.min(95, Math.round(health)));
 
     return { wealth, love, career, health, stemTenGod, twelveStage, interactions };
@@ -1139,23 +1222,25 @@
     try {
       const stemIdx       = chart.dayMaster;
       const currentDecade = (chart.daYun || []).find(d => d.isCurrent) || null;
+      const currentSeasonProfile = currentDecade ? buildSeasonProfile(currentDecade, stemIdx) : null;
       const payload = {
-        dayMaster:         STEMS[stemIdx] + ' (' + (STEM_NAMES_EN[stemIdx] || '') + ')',
-        dayMasterMetaphor: DAY_MASTER_METAPHORS[stemIdx] || '',
-        pillarsStr:        chart.pillarsStr || '',
-        elementBalance:    formatElementBalance(chart),
-        dayMasterStrength: chart.dayMasterStrength || 'Moderate',
-        favorableElements: (chart.favorableElements || []).map(
+        dayMaster:             STEMS[stemIdx] + ' (' + (STEM_NAMES_EN[stemIdx] || '') + ')',
+        dayMasterMetaphor:     DAY_MASTER_METAPHORS[stemIdx] || '',
+        pillarsStr:            chart.pillarsStr || '',
+        elementBalance:        formatElementBalance(chart),
+        dayMasterStrength:     chart.dayMasterStrength || 'Moderate',
+        favorableElements:     (chart.favorableElements || []).map(
           e => e ? e[0].toUpperCase() + e.slice(1) : ''
         ).filter(Boolean),
-        soulType:          (SOUL_TYPES[stemIdx] || {}).name || '',
-        soulTypeTagline:   (SOUL_TYPES[stemIdx] || {}).tagline || '',
-        luckPillarStr:     formatLuckPillar(currentDecade),
-        annualPillarStr:   formatAnnualPillar(chart.annualPillar),
-        occupation:        state.occupation   || '',
-        relationship:      state.relationship || '',
-        currentConcern:    state.currentConcern || '',
-        dayMasterStemIdx:  stemIdx
+        soulType:              (SOUL_TYPES[stemIdx] || {}).name || '',
+        soulTypeTagline:       (SOUL_TYPES[stemIdx] || {}).tagline || '',
+        luckPillarStr:         formatLuckPillar(currentDecade),
+        annualPillarStr:       formatAnnualPillar(chart.annualPillar),
+        occupation:            state.occupation   || '',
+        relationship:          state.relationship || '',
+        currentConcern:        state.currentConcern || '',
+        dayMasterStemIdx:      stemIdx,
+        currentSeasonProfile,
       };
       const res = await fetch('/api/narrative', {
         method:  'POST',
@@ -1181,9 +1266,25 @@
 
   function formatAnnualPillar(ap) {
     if (!ap) return 'not calculated';
-    const TEN_GOD_ARCHETYPE = ['Mirror','Shadow','Muse','Maverick','Windfall','Harvest','Challenger','Architect','Mystic','Guardian'];
     const tg = TEN_GOD_ARCHETYPE[ap.tenGod] || '';
     return `${STEM_ROMANIZATION[ap.stem]} ${BRANCH_ROMANIZATION[ap.branch]} — ${STEM_NAMES_EN[ap.stem]} ${BRANCH_ANIMALS[ap.branch]}${tg ? ', Ten God: ' + tg : ''} (year ${ap.year})`;
+  }
+
+  /** Build a structured season profile for the current luck decade.
+   *  Returns stem + branch + hidden-stem Ten God breakdown for the narrative API. */
+  function buildSeasonProfile(decade, dm) {
+    if (!decade) return null;
+    const hidden = (HIDDEN_STEMS_ROLES[decade.branchIndex] || []).map(hs => ({
+      char:     STEMS[hs.s],
+      tenGodEN: TEN_GOD_ARCHETYPE[getTenGod(dm, hs.s)] || '',
+      role:     hs.r,
+    }));
+    return {
+      stemChar:     STEMS[decade.stemIndex],
+      stemTenGodEN: TEN_GOD_ARCHETYPE[getTenGod(dm, decade.stemIndex)] || '',
+      branchChar:   BRANCHES[decade.branchIndex],
+      hiddenThemes: hidden,
+    };
   }
 
   function updateNarrativeSection(narrative) {
@@ -1806,6 +1907,134 @@
   // Expose for inline onclick
   window.fetchCycleNarrative = fetchCycleNarrative;
 
+  // ─── Annual Year Scoring (流年) ───────────────────────────────────
+  /** Score the current annual pillar across Wealth / Love / Career / Health */
+  function scoreAnnualYear(chart) {
+    const ap = chart.annualPillar;
+    if (!ap) return null;
+    const dm      = chart.dayPillar.stem;
+    const useful  = chart.usefulGods  || [];
+    const harmful = chart.harmfulGods || [];
+    const gender  = state.gender || 'female';
+
+    const stemTenGod  = getScoreTenGod(dm, ap.stem);
+    const stemEl      = STEM_EL_NAME[ap.stem];
+    const hiddenStems = (HIDDEN_STEMS_ROLES[ap.branch] || []).map(h => ({
+      ...h, element: STEM_EL_NAME[h.s], tenGod: getScoreTenGod(dm, h.s),
+    }));
+    const mainHS      = hiddenStems[0] || { element: stemEl, tenGod: stemTenGod, r: 'main' };
+    const twelveStage = getTwelveStageEn(dm, ap.branch);
+    const interactions = findBranchInteractions(ap.branch, chart);
+    const dayClash    = interactions.some(i => i.withPillar === 'day' && i.type === 'clash');
+
+    // Spirit killers for annual branch
+    const yearBr     = chart.yearPillar.branch;
+    const monBr      = chart.monthPillar.branch;
+    const hasNoble   = (TIANYI_MAP[dm]  || []).includes(ap.branch);
+    const hasRomance = TAOHUA_MAP[yearBr] === ap.branch;
+    const hasTravel  = YIMA_MAP[yearBr]   === ap.branch;
+    const hasHealer  = (monBr + 1) % 12  === ap.branch;
+
+    // Wealth
+    let wealth = 50;
+    if (stemTenGod === 'harvest' || stemTenGod === 'windfall') wealth += 12;
+    if (stemTenGod === 'muse')   wealth += 8;
+    if (useful.includes(stemEl))  wealth += 10;
+    if (harmful.includes(stemEl)) wealth -= 8;
+    for (const hs of hiddenStems) {
+      if (hs.tenGod === 'harvest' || hs.tenGod === 'windfall') wealth += hs.r === 'main' ? 8 : 4;
+      if (useful.includes(hs.element))  wealth += hs.r === 'main' ? 4 : 2;
+      if (harmful.includes(hs.element)) wealth -= hs.r === 'main' ? 4 : 2;
+    }
+    if (dayClash) wealth -= 12;
+    wealth = Math.max(5, Math.min(95, Math.round(wealth)));
+
+    // Love
+    let love = 50;
+    const lBonus = { guardian:12, muse:10, architect:8, harvest:8, mirror:6,
+                     mystic:-4, maverick:-10, challenger:-6, shadow:-4, windfall:2 };
+    love += lBonus[stemTenGod] ?? 0;
+    if (gender === 'female') { if (stemTenGod === 'architect') love += 6; }
+    else                     { if (stemTenGod === 'harvest')   love += 6; }
+    if (hasNoble)   love += 10;
+    if (hasRomance) love += 12;
+    if (dayClash)   love -= 18;
+    love = Math.max(5, Math.min(95, Math.round(love)));
+
+    // Career
+    let career = 50;
+    const cBonus = { architect:12, challenger:8, muse:8, maverick:5, windfall:4,
+                     harvest:3, mirror:0, shadow:-8, guardian:2, mystic:4 };
+    career += cBonus[stemTenGod] ?? 0;
+    if (useful.includes(stemEl))  career += 8;
+    if (harmful.includes(stemEl)) career -= 6;
+    if (hasNoble)  career += 8;
+    if (hasTravel) career += 10;
+    career = Math.max(5, Math.min(95, Math.round(career)));
+
+    // Health
+    let health = 50;
+    const hVit = { zenith:30, ascension:24, rising:18, awakening:14, waning:4, nurture:6,
+                   initiation:-4, conception:-2, retreat:-10, stillness:-14, vault:-16, void:-20 };
+    health += hVit[twelveStage] ?? 0;
+    if (useful.includes(stemEl))  health += 8;
+    if (harmful.includes(stemEl)) health -= 6;
+    if (stemTenGod === 'guardian') health += 10;
+    if (stemTenGod === 'mystic')   health += 6;
+    if (mainHS.tenGod === 'guardian' || mainHS.tenGod === 'mystic') health += 4;
+    if (hasHealer) health += 8;
+    health = Math.max(5, Math.min(95, Math.round(health)));
+
+    return { wealth, love, career, health, stemTenGod, twelveStage };
+  }
+
+  /** Render the 流年 "This Year" card in the Blueprint tab */
+  function renderAnnualArc(chart) {
+    const el = document.getElementById('annual-arc');
+    if (!el) return;
+    const scores = scoreAnnualYear(chart);
+    if (!scores) { el.style.display = 'none'; return; }
+    el.style.display = '';
+    const ap = chart.annualPillar;
+    const pillarCharsEl = document.getElementById('annual-pillar-chars');
+    if (pillarCharsEl) pillarCharsEl.textContent = ap.stemChar + ap.branchChar;
+
+    const domains = [
+      { key:'wealth', label:'Wealth', color:'var(--color-gold)' },
+      { key:'career', label:'Career', color:'var(--color-cobalt)' },
+      { key:'love',   label:'Love',   color:'var(--color-vermillion)' },
+      { key:'health', label:'Health', color:'var(--color-cyan)' },
+    ];
+    const rowEl = document.getElementById('annual-scores-row');
+    if (rowEl) {
+      rowEl.innerHTML = domains.map(d =>
+        `<div class="annual-score-item">
+          <div class="annual-score-label">${d.label}</div>
+          <div class="annual-score-bar-wrap">
+            <div class="annual-score-bar-fill" style="width:${scores[d.key]}%;background:${d.color}"></div>
+          </div>
+          <div class="annual-score-num">${scores[d.key]}</div>
+        </div>`
+      ).join('');
+    }
+    const ANNUAL_INSIGHTS = {
+      architect: 'Architect energy opens formal recognition — push for structure and clarity this year.',
+      harvest:   'Harvest star is active — patient effort compounds. Relationships become wealth channels.',
+      windfall:  'Windfall stirs — stay open to unexpected opportunity outside your usual path.',
+      challenger:'Challenger pressure forges you. Channel friction into output, not reaction.',
+      muse:      'Muse energy flows — creative and expressive work gains real traction.',
+      maverick:  'Maverick sparks disruption. Question what no longer fits; don\'t defend the old.',
+      guardian:  'Guardian wraps this year in support. Lean on mentors — they will hold.',
+      mystic:    'Mystic depth deepens. Quiet insight arrives. Protect your inner space.',
+      mirror:    'Mirror energy brings peers into focus. Choose your circle with care.',
+      shadow:    'Shadow year: watch for risk escalation. Bold moves carry real downside.',
+    };
+    const themeEl = document.getElementById('annual-theme');
+    if (themeEl) {
+      themeEl.textContent = ANNUAL_INSIGHTS[scores.stemTenGod] || 'A year of steady unfolding — tend to what matters most.';
+    }
+  }
+
   // ─── Main Blueprint Renderer ─────────────────────────────────────
   function renderAppBlueprint() {
     if (!state.chart) return;
@@ -1839,6 +2068,19 @@
     setEl('detail-type-name', t.name);
     setEl('detail-type-sub', t.sub);
     setEl('detail-tagline', t.tagline);
+
+    // Dominant Ten God badge
+    const badgeEl = document.getElementById('dominant-ten-god-badge');
+    if (badgeEl && state.chart.dominantTenGod != null) {
+      const dtgIdx  = state.chart.dominantTenGod;
+      const dtgName = TEN_GOD_ARCHETYPE[dtgIdx] || '';
+      const dtgCN   = TEN_GOD_NAMES[dtgIdx] || '';
+      const dtgBrief = TEN_GOD_BRIEF[dtgIdx] || '';
+      badgeEl.innerHTML =
+        `<span class="dtg-label">Dominant Archetype</span>` +
+        `<span class="dtg-name">${dtgName} <span class="dtg-cn">${dtgCN}</span></span>` +
+        `<span class="dtg-brief">${dtgBrief}</span>`;
+    }
 
     // Meta
     setEl('detail-destiny-structure', 'Strength: ' + getDayMasterStrength());
@@ -1905,6 +2147,9 @@
     } else if (concernSection) {
       concernSection.hidden = true;
     }
+
+    // Annual Arc (流年)
+    renderAnnualArc(state.chart);
 
     // Life Seasons + Energy Charts
     renderDaYun();
@@ -2039,13 +2284,70 @@
     const input       = document.getElementById('oracle-input');
     const messages    = document.getElementById('oracle-messages');
     const placeholder = document.getElementById('oracle-placeholder');
+    const templatesEl = document.getElementById('oracle-templates');
     const sendBtn     = form ? form.querySelector('button[type="submit"]') : null;
 
     // Conversation history for multi-turn context (role/content pairs)
     const conversationHistory = [];
 
+    // ── Per-profile localStorage key ──────────────────────────────
+    function oracleKey() {
+      return 'soulmap_oracle_' + (state.profileId || 'default');
+    }
+
+    // ── Load saved history for current profile ────────────────────
+    function loadOracleHistory() {
+      try {
+        const raw = localStorage.getItem(oracleKey());
+        if (!raw) return [];
+        return JSON.parse(raw) || [];
+      } catch (_) { return []; }
+    }
+
+    function saveOracleHistory() {
+      try {
+        localStorage.setItem(oracleKey(), JSON.stringify(conversationHistory.slice(-20)));
+      } catch (_) {}
+    }
+
+    // ── Restore saved messages into DOM ───────────────────────────
+    function restoreHistory(history) {
+      conversationHistory.length = 0;
+      if (!messages) return;
+      // Clear any existing DOM messages
+      messages.innerHTML = '';
+      history.forEach(({ role, content }) => {
+        conversationHistory.push({ role, content });
+        const div = document.createElement('div');
+        div.className = 'msg ' + role;
+        if (role === 'assistant') div.innerHTML = renderMarkdown(content);
+        else div.textContent = content;
+        messages.appendChild(div);
+      });
+      if (history.length > 0) {
+        if (placeholder) placeholder.style.display = 'none';
+        if (templatesEl)  templatesEl.style.display  = 'none';
+        messages.scrollTop = messages.scrollHeight;
+      }
+    }
+
+    // ── Reset Oracle when profile changes ─────────────────────────
+    oracleApiReset = function(newProfileId) {
+      conversationHistory.length = 0;
+      if (messages)    messages.innerHTML = '';
+      if (placeholder) placeholder.style.display = '';
+      if (templatesEl) templatesEl.style.display  = '';
+      const warning = document.getElementById('oracle-leave-warning');
+      if (warning) warning.hidden = true;
+      // Load history for the new profile
+      const newKey = 'soulmap_oracle_' + (newProfileId || 'default');
+      try {
+        const raw = localStorage.getItem(newKey);
+        if (raw) restoreHistory(JSON.parse(raw) || []);
+      } catch (_) {}
+    };
+
     // ── Render deep-dive template cards ───────────────────────────
-    const templatesEl = document.getElementById('oracle-templates');
     if (templatesEl) {
       const year  = new Date().getFullYear();
       const label = document.createElement('p');
@@ -2154,6 +2456,7 @@
         // Save to conversation history for follow-up context
         conversationHistory.push({ role: 'user',      content: q      });
         conversationHistory.push({ role: 'assistant', content: answer });
+        saveOracleHistory(); // persist to localStorage
 
         // Parse any classical citations into the Wisdom Vault
         const parsed = parseCitationFromMessage(answer);
@@ -2172,6 +2475,10 @@
         input.focus();
       }
     });
+
+    // ── Load history for the current profile on startup ───────────
+    const saved = loadOracleHistory();
+    if (saved.length > 0) restoreHistory(saved);
   }
 
   // ─── Wisdom Vault ────────────────────────────────────────────────
@@ -2314,8 +2621,7 @@
       saveAdditions(additions);
     }
 
-    const active = document.querySelector('.wisdom-vault-tab.active');
-    if (document.getElementById('wisdom-vault-list')) renderWisdomVault(active ? active.getAttribute('data-tradition') : 'all');
+    if (document.getElementById('wisdom-vault-list')) renderWisdomVault(vaultFilterType, vaultFilterValue);
     return true;
   }
 
@@ -2334,43 +2640,217 @@
       .replace(/"/g, '&quot;');
   }
 
-  function renderWisdomVault(filter) {
+  // ── Theme display names ──────────────────────────────────────────
+  const THEME_LABELS = {
+    healing:   'Healing & Renewal',
+    courage:   'Courage & Strength',
+    clarity:   'Clarity & Truth',
+    love:      'Love & Belonging',
+    purpose:   'Purpose & Calling',
+    stillness: 'Stillness & Peace',
+    resilience:'Resilience & Endurance',
+    change:    'Change & Letting Go',
+  };
+
+  // ── Save / unsave classical vault quotes ─────────────────────────
+  function _vaultKey(item) {
+    return (item.source || '') + '|' + (item.text || '').slice(0, 60);
+  }
+  function isVaultQuoteSaved(item) {
+    return getStoredAdditions().some(a => a.isCitation && a._vaultKey === _vaultKey(item));
+  }
+  function saveVaultQuote(item) {
+    if (isVaultQuoteSaved(item)) return;
+    const additions = getStoredAdditions();
+    additions.push({ ...item, tradition: 'saved', isCitation: true, _vaultKey: _vaultKey(item), _savedFrom: item.tradition, savedAt: Date.now() });
+    saveAdditions(additions);
+  }
+  function unsaveVaultQuote(item) {
+    const key = _vaultKey(item);
+    saveAdditions(getStoredAdditions().filter(a => !(a.isCitation && a._vaultKey === key)));
+  }
+
+  // ── Vault current filter state ───────────────────────────────────
+  let vaultFilterType  = 'theme';
+  let vaultFilterValue = 'all';
+
+  function renderWisdomVault(filterType, filterValue) {
+    vaultFilterType  = filterType  || 'theme';
+    vaultFilterValue = filterValue || 'all';
+
     const list  = document.getElementById('wisdom-vault-list');
+    if (!list) return;
     const vault = getWisdomVault();
     let items;
-    if (filter === 'all') {
+
+    if (vaultFilterType === 'theme' && vaultFilterValue === 'all') {
       items = curateForYou(vault, state.chart || null);
+    } else if (vaultFilterType === 'theme') {
+      items = vault.filter(x => x.theme === vaultFilterValue && x.tradition !== 'saved');
     } else {
-      items = vault.filter(x => x.tradition === filter);
+      // tradition filter (including 'saved')
+      items = vault.filter(x => x.tradition === vaultFilterValue);
     }
-    list.innerHTML = items.map(x => {
-      if (x.tradition === 'saved') {
-        return `<div class="wisdom-vault-item wisdom-vault-item--saved">
-          <span class="tradition">saved</span>
-          <h4 class="oracle-saved-question">${escapeHtml(x.author)}</h4>
+
+    list.innerHTML = items.map((x, idx) => {
+      // ── Saved Oracle responses ───────────────────────────────────
+      if (x.tradition === 'saved' && !x.isCitation) {
+        return `<div class="vault-card vault-card--oracle">
+          <div class="vault-card-header">
+            <span class="vault-badge vault-badge--tradition">saved</span>
+          </div>
+          <p class="vault-card-question">${escapeHtml(x.author || '')}</p>
           <div class="oracle-saved-body">${renderMarkdown(x.text)}</div>
         </div>`;
       }
-      const title  = x.source + (x.author ? ' — ' + x.author : '');
-      const whyHtml = x._why
-        ? `<div class="vault-why">${escapeHtml(x._why)}</div>`
-        : '';
-      return `<div class="wisdom-vault-item">
-        <span class="tradition">${escapeHtml(x.tradition)}</span>
-        <h4>${escapeHtml(title)}</h4>
-        <p>${escapeHtml(x.text)}</p>
+
+      // ── Saved classical citations ────────────────────────────────
+      const tradition = x.isCitation ? (x._savedFrom || 'saved') : x.tradition;
+      const theme     = x.theme || '';
+      const saved     = isVaultQuoteSaved(x);
+      const whyHtml   = x._why ? `<div class="vault-why">${escapeHtml(x._why)}</div>` : '';
+      const themeLabel = theme ? `<span class="vault-badge vault-badge--theme">${escapeHtml(THEME_LABELS[theme] || theme)}</span>` : '';
+
+      return `<div class="vault-card" data-vault-idx="${idx}" role="button" tabindex="0">
+        <div class="vault-card-header">
+          <span class="vault-badge vault-badge--tradition">${escapeHtml(tradition)}</span>
+          ${themeLabel}
+          <button class="vault-save-btn ${saved ? 'vault-save-btn--saved' : ''}" data-vault-idx="${idx}" aria-label="${saved ? 'Unsave quote' : 'Save quote'}" title="${saved ? 'Remove from saved' : 'Save quote'}">
+            ${saved ? '&#9993;' : '&#9993;'}
+          </button>
+        </div>
+        <p class="vault-card-text">${escapeHtml(x.text)}</p>
+        <div class="vault-card-source">${escapeHtml(x.source)}${x.author ? ' — ' + escapeHtml(x.author) : ''}</div>
         ${whyHtml}
       </div>`;
-    }).join('');
+    }).join('') || `<p class="vault-empty">No entries yet in this category.</p>`;
+
+    // store rendered items for modal access
+    list._vaultItems = items;
+
+    // wire up card clicks → modal
+    list.querySelectorAll('.vault-card[data-vault-idx]').forEach(card => {
+      card.addEventListener('click', e => {
+        if (e.target.closest('.vault-save-btn')) return; // don't open modal on save btn click
+        const idx = parseInt(card.dataset.vaultIdx, 10);
+        openVaultModal(items[idx]);
+      });
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+      });
+    });
+
+    // wire up save buttons
+    list.querySelectorAll('.vault-save-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const idx  = parseInt(btn.dataset.vaultIdx, 10);
+        const item = items[idx];
+        if (isVaultQuoteSaved(item)) {
+          unsaveVaultQuote(item);
+          btn.classList.remove('vault-save-btn--saved');
+          btn.setAttribute('aria-label', 'Save quote');
+          btn.setAttribute('title', 'Save quote');
+        } else {
+          saveVaultQuote(item);
+          btn.classList.add('vault-save-btn--saved');
+          btn.setAttribute('aria-label', 'Remove from saved');
+          btn.setAttribute('title', 'Remove from saved');
+          // brief pulse animation
+          btn.classList.add('vault-save-btn--pulse');
+          setTimeout(() => btn.classList.remove('vault-save-btn--pulse'), 400);
+        }
+      });
+    });
+  }
+
+  // ── Modal ────────────────────────────────────────────────────────
+  let _modalItem = null;
+
+  function openVaultModal(item) {
+    _modalItem = item;
+    const modal     = document.getElementById('vault-modal');
+    const tradition = item.isCitation ? (item._savedFrom || 'saved') : (item.tradition || '');
+    const theme     = item.theme || '';
+
+    document.getElementById('vm-tradition').textContent = tradition;
+    document.getElementById('vm-theme').textContent     = THEME_LABELS[theme] || theme;
+    document.getElementById('vm-quote').textContent     = item.text || '';
+    document.getElementById('vm-source').textContent    = (item.source || '') + (item.author ? ' — ' + item.author : '');
+
+    const whyEl = document.getElementById('vm-why');
+    if (item._why) { whyEl.textContent = item._why; whyEl.hidden = false; }
+    else           { whyEl.textContent = ''; whyEl.hidden = true; }
+
+    // Sync save button state
+    const saveBtn = document.getElementById('vm-save');
+    _updateModalSaveBtn(saveBtn, item);
+
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    modal.querySelector('.vault-modal-close').focus();
+  }
+
+  function closeVaultModal() {
+    const modal = document.getElementById('vault-modal');
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    _modalItem = null;
+  }
+
+  function _updateModalSaveBtn(btn, item) {
+    const saved = isVaultQuoteSaved(item);
+    btn.textContent = saved ? '✓ Saved' : '🔖 Save';
+    btn.classList.toggle('vault-modal-save--saved', saved);
+  }
+
+  function initVaultModal() {
+    const modal   = document.getElementById('vault-modal');
+    const closeBtn = document.getElementById('vault-modal') && document.querySelector('.vault-modal-close');
+    if (!modal) return;
+
+    modal.addEventListener('click', e => { if (e.target === modal) closeVaultModal(); });
+    document.querySelector('.vault-modal-close').addEventListener('click', closeVaultModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) closeVaultModal(); });
+
+    document.getElementById('vm-save').addEventListener('click', () => {
+      if (!_modalItem) return;
+      if (isVaultQuoteSaved(_modalItem)) unsaveVaultQuote(_modalItem);
+      else saveVaultQuote(_modalItem);
+      _updateModalSaveBtn(document.getElementById('vm-save'), _modalItem);
+      // refresh save button in card list
+      renderWisdomVault(vaultFilterType, vaultFilterValue);
+    });
+
+    document.getElementById('vm-copy').addEventListener('click', () => {
+      if (!_modalItem) return;
+      const text = `"${_modalItem.text}" — ${_modalItem.source || ''}`;
+      navigator.clipboard.writeText(text).catch(() => {});
+      const btn = document.getElementById('vm-copy');
+      btn.textContent = '✓ Copied';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+    });
   }
 
   function initWisdomVault() {
-    renderWisdomVault('all');
-    document.querySelectorAll('.wisdom-vault-tab').forEach(btn => {
+    renderWisdomVault('theme', 'all');
+    initVaultModal();
+
+    document.querySelectorAll('.vault-filter-btn').forEach(btn => {
       btn.addEventListener('click', function () {
-        document.querySelectorAll('.wisdom-vault-tab').forEach(b => b.classList.remove('active'));
+        const type  = this.dataset.filterType;
+        const value = this.dataset.filterValue;
+
+        // Update active state — theme and tradition rows are independent
+        if (type === 'theme') {
+          document.querySelectorAll('.vault-filter-themes .vault-filter-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.vault-filter-traditions .vault-filter-btn').forEach(b => b.classList.remove('active'));
+        } else {
+          document.querySelectorAll('.vault-filter-traditions .vault-filter-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.vault-filter-themes .vault-filter-btn').forEach(b => b.classList.remove('active'));
+        }
         this.classList.add('active');
-        renderWisdomVault(this.getAttribute('data-tradition'));
+        renderWisdomVault(type, value);
       });
     });
   }
@@ -2390,13 +2870,54 @@
   ];
 
   function initSpark() {
-    const today = new Date();
-    const seed  = today.getDate() + today.getMonth() * 31;
-    const vault = getWisdomVault();
-    const q     = vault[seed % vault.length];
-    document.getElementById('spark-date').textContent    = today.toDateString();
-    document.getElementById('spark-text').innerHTML      = `<strong>${q.source}${q.author ? ' — ' + q.author : ''}</strong><p style="margin-top:0.5rem;opacity:0.85">${q.text}</p>`;
-    document.getElementById('spark-prompt').textContent  = SPARK_PROMPTS[seed % SPARK_PROMPTS.length];
+    const today  = new Date();
+    const seed   = today.getDate() + today.getMonth() * 31;
+    const vault  = getWisdomVault();
+
+    // ── Day-matched BaZi personalization ─────────────────────────
+    const todayDay    = getTodayBaZiDay();
+    const todayStemEl = STEM_EL_NAME[todayDay.stemIdx];
+    const stemChar    = STEMS[todayDay.stemIdx];
+    const branchChar  = BRANCHES[todayDay.branchIdx];
+    const pillarStr   = stemChar + branchChar;
+
+    // Date line: "Mon Feb 26 2026 · 丙午"
+    document.getElementById('spark-date').textContent = today.toDateString() + ' · ' + pillarStr;
+
+    // Affinity line — only if chart is loaded
+    const affinityEl = document.getElementById('spark-affinity');
+    if (affinityEl) {
+      if (state.chart && todayStemEl) {
+        const useful  = state.chart.usefulGods  || [];
+        const harmful = state.chart.harmfulGods || [];
+        let msg = '';
+        if (useful.includes(todayStemEl)) {
+          msg = `Today's ${ELEMENT_NAMES[todayStemEl]} energy is favorable for you — act with confidence.`;
+        } else if (harmful.includes(todayStemEl)) {
+          msg = `Today's ${ELEMENT_NAMES[todayStemEl]} energy runs counter to your chart — conserve and observe.`;
+        } else {
+          msg = `Today's energy is neutral — a good day for steady, deliberate work.`;
+        }
+        affinityEl.textContent = msg;
+        affinityEl.style.display = '';
+      } else {
+        affinityEl.style.display = 'none';
+      }
+    }
+
+    // Quote: prefer tradition matched to today's stem element; fall back to seed
+    let q = null;
+    if (todayStemEl) {
+      const targetTradition = ELEMENT_TRADITION[todayStemEl];
+      const matched = vault.filter(e => e.tradition === targetTradition);
+      if (matched.length > 0) q = matched[seed % matched.length];
+    }
+    if (!q) q = vault[seed % vault.length];
+
+    document.getElementById('spark-text').innerHTML =
+      `<strong>${q.source}${q.author ? ' — ' + q.author : ''}</strong>` +
+      `<p style="margin-top:0.5rem;opacity:0.85">${q.text}</p>`;
+    document.getElementById('spark-prompt').textContent   = SPARK_PROMPTS[seed % SPARK_PROMPTS.length];
     document.getElementById('spark-practice').textContent = SPARK_PRACTICES[seed % SPARK_PRACTICES.length];
     try {
       const saved = localStorage.getItem('soulmap_streak');

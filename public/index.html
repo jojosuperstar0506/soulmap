@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260226e" />
+  <link rel="stylesheet" href="styles.css?v=20260226f" />
 </head>
 <body>
 
@@ -166,6 +166,9 @@
           <blockquote id="detail-tagline" class="blueprint-tagline">—</blockquote>
         </div>
 
+        <!-- Dominant Ten God Badge -->
+        <div id="dominant-ten-god-badge" class="dominant-ten-god-badge"></div>
+
         <!-- Four Pillars / 四柱 -->
         <div class="divider-labeled">
           <span class="divider-label-text">四柱 · Four Pillars</span>
@@ -266,6 +269,19 @@
           </p>
         </div>
 
+        <!-- Annual Arc / 流年 This Year -->
+        <div class="divider-labeled">
+          <span class="divider-label-text">流年 · This Year</span>
+        </div>
+        <div id="annual-arc" class="annual-arc">
+          <div class="annual-arc-header">
+            <span class="annual-arc-pillar" id="annual-pillar-chars">—</span>
+            <span class="annual-arc-year"></span>
+          </div>
+          <div id="annual-scores-row" class="annual-scores-row"></div>
+          <p id="annual-theme" class="annual-theme">—</p>
+        </div>
+
         <!-- Life Seasons / 大运 -->
         <div class="divider-labeled">
           <span class="divider-label-text">大运 · Life Seasons</span>
@@ -313,22 +329,36 @@
       <!-- TAB 3: Wisdom Vault -->
       <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-wisdom-vault" class="tab-pane">
-        <div class="wisdom-vault-nav">
-          <button type="button" class="wisdom-vault-tab active" data-tradition="all">For You</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="daoism">Daoism</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="confucianism">Confucianism</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="buddhism">Buddhism</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="chinese">I Ching</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="stoicism">Stoicism</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="greek">Greek</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="sufi">Sufi</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="vedic">Vedic</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="christianity">Christian</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="islam">Islam</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="judaism">Judaism</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="uncategorized">Other</button>
-          <button type="button" class="wisdom-vault-tab" data-tradition="saved">Saved</button>
+
+        <!-- Theme filters (primary) -->
+        <div class="vault-filter-row vault-filter-themes">
+          <button type="button" class="vault-filter-btn active" data-filter-type="theme" data-filter-value="all">✦ For You</button>
+          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="healing">Healing &amp; Renewal</button>
+          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="courage">Courage &amp; Strength</button>
+          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="clarity">Clarity &amp; Truth</button>
+          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="love">Love &amp; Belonging</button>
+          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="purpose">Purpose &amp; Calling</button>
+          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="stillness">Stillness &amp; Peace</button>
+          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="resilience">Resilience &amp; Endurance</button>
+          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="change">Change &amp; Letting Go</button>
         </div>
+
+        <!-- Tradition filters (secondary) -->
+        <div class="vault-filter-row vault-filter-traditions">
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="daoism">Daoism</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="buddhism">Buddhism</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="stoicism">Stoicism</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="christianity">Christianity</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="judaism">Judaism</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="islam">Islam</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="confucianism">Confucianism</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="sufi">Sufi</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="greek">Greek</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="vedic">Vedic</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="chinese">I Ching</button>
+          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="saved">Saved</button>
+        </div>
+
         <div class="wisdom-vault-list" id="wisdom-vault-list"></div>
       </div>
 
@@ -340,6 +370,7 @@
         <div class="spark-card">
           <h3>Today's Spark</h3>
           <p class="spark-date" id="spark-date">—</p>
+          <p class="spark-affinity" id="spark-affinity" style="display:none"></p>
           <div class="spark-text" id="spark-text"></div>
           <div class="spark-prompt" id="spark-prompt"></div>
           <div class="spark-practice" id="spark-practice"></div>
@@ -398,8 +429,28 @@
     </div>
   </div>
 
-  <script src="content/wisdom-vault.js?v=5"></script>
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- WISDOM VAULT — Quote detail modal                               -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div id="vault-modal" class="vault-modal-overlay" hidden aria-modal="true" role="dialog" aria-labelledby="vm-quote">
+    <div class="vault-modal-card">
+      <button class="vault-modal-close" aria-label="Close">&times;</button>
+      <div class="vault-modal-badges">
+        <span class="vault-badge vault-badge--tradition" id="vm-tradition"></span>
+        <span class="vault-badge vault-badge--theme" id="vm-theme"></span>
+      </div>
+      <blockquote class="vault-modal-quote" id="vm-quote"></blockquote>
+      <cite class="vault-modal-source" id="vm-source"></cite>
+      <div class="vault-modal-why" id="vm-why"></div>
+      <div class="vault-modal-actions">
+        <button class="vault-modal-save btn btn-ghost btn-sm" id="vm-save">&#9993; Save</button>
+        <button class="vault-modal-copy btn btn-ghost btn-sm" id="vm-copy">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="content/wisdom-vault.js?v=6"></script>
   <script src="content/classical-bazi-excerpts.js?v=1"></script>
-  <script src="app.js?v=20260226c"></script>
+  <script src="app.js?v=20260226f"></script>
 </body>
 </html>
