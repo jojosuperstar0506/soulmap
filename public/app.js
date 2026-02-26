@@ -242,6 +242,115 @@
     'var(--color-magenta)'
   ];
 
+  // ─── Lifetime Arc scoring engine constants ────────────────────────
+
+  // Element name by stem index (0=甲...9=癸)
+  const STEM_EL_NAME = ['wood','wood','fire','fire','earth','earth','metal','metal','water','water'];
+
+  // Production cycle (generates): wood→fire→earth→metal→water→wood
+  const PRODUCTION_CYCLE = { wood:'fire', fire:'earth', earth:'metal', metal:'water', water:'wood' };
+  // Control cycle: wood→earth→earth→water→water→fire→fire→metal→metal→wood
+  const CONTROL_CYCLE    = { wood:'earth', earth:'water', water:'fire', fire:'metal', metal:'wood' };
+
+  // Ten God score names (index 0–9 matches existing getTenGod() return)
+  // 0=比肩 1=劫财 2=食神 3=伤官 4=偏财 5=正财 6=七杀 7=正官 8=偏印 9=正印
+  const TEN_GOD_SCORE_NAMES = [
+    'mirror','shadow','muse','maverick','windfall','harvest','challenger','architect','mystic','guardian'
+  ];
+
+  /** Return scoring Ten God name string for targetStem relative to dayStem */
+  function getScoreTenGod(dayStem, targetStem) {
+    return TEN_GOD_SCORE_NAMES[getTenGod(dayStem, targetStem)];
+  }
+
+  // Hidden stems with role metadata (by branch index 0=子...11=亥)
+  // s = stem index, r = role ('main'|'secondary'|'residual')
+  const HIDDEN_STEMS_ROLES = [
+    [{ s:9,  r:'main' }],                                             // 子: 癸
+    [{ s:5,  r:'main' }, { s:9, r:'secondary' }, { s:7, r:'residual' }], // 丑: 己癸辛
+    [{ s:0,  r:'main' }, { s:2, r:'secondary' }, { s:4, r:'residual' }], // 寅: 甲丙戊
+    [{ s:1,  r:'main' }],                                             // 卯: 乙
+    [{ s:4,  r:'main' }, { s:1, r:'secondary' }, { s:9, r:'residual' }], // 辰: 戊乙癸
+    [{ s:2,  r:'main' }, { s:6, r:'secondary' }, { s:4, r:'residual' }], // 巳: 丙庚戊
+    [{ s:3,  r:'main' }, { s:5, r:'secondary' }],                    // 午: 丁己
+    [{ s:5,  r:'main' }, { s:3, r:'secondary' }, { s:1, r:'residual' }], // 未: 己丁乙
+    [{ s:6,  r:'main' }, { s:8, r:'secondary' }, { s:4, r:'residual' }], // 申: 庚壬戊
+    [{ s:7,  r:'main' }],                                             // 酉: 辛
+    [{ s:4,  r:'main' }, { s:7, r:'secondary' }, { s:3, r:'residual' }], // 戌: 戊辛丁
+    [{ s:8,  r:'main' }, { s:0, r:'secondary' }],                    // 亥: 壬甲
+  ];
+
+  // Correct birth branch for each stem (长生 position) — for all 10 stems
+  // Yang stems: 甲→亥(11) 丙→寅(2) 戊→寅(2) 庚→巳(5) 壬→申(8)
+  // Yin stems:  乙→午(6)  丁→酉(9) 己→酉(9) 辛→子(0) 癸→卯(3)
+  const STEM_BIRTH_BRANCH = [11, 6, 2, 9, 2, 9, 5, 0, 8, 3];
+
+  // English twelve-stage names in cycle order (长生=0 … 养=11)
+  const STAGE_EN = [
+    'awakening','initiation','rising','ascension','zenith','waning',
+    'retreat','stillness','vault','void','conception','nurture'
+  ];
+
+  /** Return English twelve-stage name for stem in given branch (correct for both yang/yin) */
+  function getTwelveStageEn(stemIdx, branchIdx) {
+    const isYang = stemIdx % 2 === 0;
+    const start  = STEM_BIRTH_BRANCH[stemIdx];
+    const dist   = isYang
+      ? (branchIdx - start + 12) % 12
+      : (start - branchIdx + 12) % 12;
+    return STAGE_EN[dist];
+  }
+
+  // Six Clashes: pairs of branch indices (子午 丑未 寅申 卯酉 辰戌 巳亥)
+  const SIX_CLASHES_IDX = [[0,6],[1,7],[2,8],[3,9],[4,10],[5,11]];
+
+  // Six Harms: pairs (子未 丑午 寅巳 卯辰 申亥 酉戌)
+  const SIX_HARMS_IDX = [[0,7],[1,6],[2,5],[3,4],[8,11],[9,10]];
+
+  // Six Combos: [branchA, branchB, resultElement] (子丑→土 寅亥→木 卯戌→火 辰酉→金 巳申→水 午未→火)
+  const SIX_COMBOS_IDX = [
+    [0,1,'earth'], [2,11,'wood'], [3,10,'fire'],
+    [4,9,'metal'], [5,8,'water'], [6,7,'fire'],
+  ];
+
+  /** Find branch interactions (clash/harm/combo) between a luck cycle branch and the natal chart */
+  function findBranchInteractions(cycleBr, chart) {
+    const results = [];
+    const pillars = [
+      { name:'year',  br: chart.yearPillar.branch },
+      { name:'month', br: chart.monthPillar.branch },
+      { name:'day',   br: chart.dayPillar.branch },
+      { name:'hour',  br: chart.hourPillar.branch },
+    ];
+    for (const p of pillars) {
+      for (const [a, b] of SIX_CLASHES_IDX) {
+        if ((cycleBr===a && p.br===b) || (cycleBr===b && p.br===a))
+          results.push({ type:'clash', withPillar: p.name, withBranch: p.br });
+      }
+      for (const [a, b] of SIX_HARMS_IDX) {
+        if ((cycleBr===a && p.br===b) || (cycleBr===b && p.br===a))
+          results.push({ type:'harm', withPillar: p.name, withBranch: p.br });
+      }
+      for (const [a, b, el] of SIX_COMBOS_IDX) {
+        if ((cycleBr===a && p.br===b) || (cycleBr===b && p.br===a))
+          results.push({ type:'combo', withPillar: p.name, withBranch: p.br, resultElement: el });
+      }
+    }
+    return results;
+  }
+
+  // Monthly elemental strength table (旺相休囚死 mapped 4-0)
+  // Rows = element, Cols = branch index (子0 … 亥11)
+  // 4=flourishing 3=prosperous 2=resting 1=imprisoned 0=dead
+  const MONTHLY_STRENGTH = {
+    //        子  丑  寅  卯  辰  巳  午  未  申  酉  戌  亥
+    wood:   [  2,  1,  4,  4,  3,  2,  1,  0,  1,  0,  1,  3 ],
+    fire:   [  0,  1,  3,  3,  2,  4,  4,  3,  0,  0,  1,  0 ],
+    earth:  [  0,  4,  0,  0,  4,  2,  2,  4,  2,  2,  4,  0 ],
+    metal:  [  2,  3,  0,  0,  1,  0,  0,  1,  4,  4,  3,  1 ],
+    water:  [  4,  3,  1,  1,  0,  0,  0,  1,  3,  3,  1,  4 ],
+  };
+
   const SOUL_TYPES = [
     { name:'The Pioneer',   slug:'jia',  sub:'甲木 · Jiǎ Wood',  element:'wood',  emoji:'🌳', tagline:'Tall tree — growth, ambition, upward drive. You build and lead with clarity.' },
     { name:'The Weaver',    slug:'yi',   sub:'乙木 · Yǐ Wood',   element:'wood',  emoji:'🪴', tagline:'Vine and flower — flexible, graceful, adaptive. You connect and nurture.' },
@@ -349,6 +458,13 @@
     if (!state.birthDate || !state.profileId) return;
     const profiles = loadProfiles();
     const idx = profiles.findIndex(p => p.id === state.profileId);
+    // Persist per-cycle narratives keyed by pillar label (e.g. "甲寅")
+    const daYunNarratives = {};
+    if (state.chart && state.chart.daYun) {
+      state.chart.daYun.forEach(d => {
+        if (d.narrative) daYunNarratives[d.label] = d.narrative;
+      });
+    }
     const profileData = {
       id:               state.profileId,
       name:             state.profileName || 'My Chart',
@@ -362,7 +478,8 @@
       narrativeFromAPI:    state.narrativeFromAPI || null,
       narrativePillarsStr: (state.narrativeFromAPI && state.chart)
                              ? (state.chart.pillarsStr || null)
-                             : null
+                             : null,
+      daYunNarratives:     Object.keys(daYunNarratives).length ? daYunNarratives : null,
     };
     if (idx >= 0) { profiles[idx] = profileData; } else { profiles.push(profileData); }
     saveProfiles(profiles);
@@ -372,11 +489,17 @@
   /** Load a profile object into state and re-render the app */
   function activateProfile(p) {
     const chart = calculateBaZi(p.birthDate, p.shichen);
-    chart.daYun = calculateDaYun(chart, p.birthDate, p.gender || 'male');
+    chart.daYun = calculateDaYun(chart, p.birthDate, p.gender || 'female');
+    // Restore persisted cycle narratives
+    if (p.daYunNarratives && chart.daYun) {
+      chart.daYun.forEach(d => {
+        if (p.daYunNarratives[d.label]) d.narrative = p.daYunNarratives[d.label];
+      });
+    }
     setState({
       birthDate:      p.birthDate,
       shichen:        p.shichen,
-      gender:         p.gender || 'male',
+      gender:         p.gender || 'female',
       occupation:     p.occupation || '',
       relationship:   p.relationship || '',
       currentConcern: p.currentConcern || '',
@@ -531,6 +654,79 @@
       : ([...allJDNs].reverse().find(t => t < birthJDN) ?? birthJDN - 30);
   }
 
+  // ─── Day Master Strength Assessment ──────────────────────────────
+
+  /**
+   * Assess day master strength using month branch vitality + stem/branch support.
+   * Returns 'extreme_strong'|'strong'|'balanced'|'weak'|'extreme_weak'.
+   * chart must have yearPillar, monthPillar, dayPillar, hourPillar.
+   */
+  function assessDayMasterStrength(chart) {
+    const dmIdx = chart.dayPillar.stem;
+    const dmEl  = STEM_EL_NAME[dmIdx];
+    let score   = 0;
+
+    // 1. Month branch (月令) — most important factor, weight ×3
+    const monthBr       = chart.monthPillar.branch;
+    const monthStrength = MONTHLY_STRENGTH[dmEl][monthBr];
+    score += (monthStrength - 2) * 3; // 旺→+6 相→+3 休→0 囚→-3 死→-6
+
+    // 2. Other stems (year, month, hour — not day itself)
+    for (const pillar of [chart.yearPillar, chart.monthPillar, chart.hourPillar]) {
+      const el = STEM_EL_NAME[pillar.stem];
+      if (el === dmEl)                       score += 1.0;  // same element supports
+      else if (PRODUCTION_CYCLE[el] === dmEl) score += 0.8;  // produces DM
+      else if (PRODUCTION_CYCLE[dmEl] === el) score -= 0.4;  // DM produces (leaks)
+      else if (CONTROL_CYCLE[el] === dmEl)    score -= 0.8;  // controls DM
+    }
+
+    // 3. Hidden stems in all four branches (通根 — root strength)
+    for (const pillar of [chart.yearPillar, chart.monthPillar, chart.dayPillar, chart.hourPillar]) {
+      for (const hs of (HIDDEN_STEMS_ROLES[pillar.branch] || [])) {
+        const hsEl = STEM_EL_NAME[hs.s];
+        const w    = hs.r === 'main' ? 0.8 : hs.r === 'secondary' ? 0.5 : 0.3;
+        if (hsEl === dmEl)                         score += w;
+        else if (PRODUCTION_CYCLE[hsEl] === dmEl)  score += w * 0.5;
+        else if (CONTROL_CYCLE[hsEl] === dmEl)     score -= w * 0.5;
+      }
+    }
+
+    if (score >= 5)  return 'extreme_strong';
+    if (score >= 2)  return 'strong';
+    if (score >= -1) return 'balanced';
+    if (score >= -4) return 'weak';
+    return 'extreme_weak';
+  }
+
+  /**
+   * Derive useful/harmful gods based on day master element and strength.
+   * Returns { usefulGods: string[], harmfulGods: string[] }
+   */
+  function deriveUsefulGods(dmEl, strength) {
+    const isWeak = strength === 'weak' || strength === 'extreme_weak';
+    // What DM produces (output), what DM controls (wealth), what produces DM (resource), what controls DM (pressure)
+    const outputEl   = PRODUCTION_CYCLE[dmEl];
+    const wealthEl   = CONTROL_CYCLE[dmEl];
+    const resourceEl = Object.keys(PRODUCTION_CYCLE).find(k => PRODUCTION_CYCLE[k] === dmEl);
+    const pressureEl = Object.keys(CONTROL_CYCLE).find(k => CONTROL_CYCLE[k] === dmEl);
+
+    if (isWeak) {
+      // Weak DM needs: same element (比劫) + resource/印星 to survive
+      // Harmful: wealth (财), output (食伤), pressure/官杀
+      return {
+        usefulGods:  [resourceEl, dmEl],
+        harmfulGods: [wealthEl, outputEl, pressureEl],
+      };
+    } else {
+      // Strong DM channels energy into: output (食伤), wealth (财), pressure/官杀
+      // Harmful: more same element, more resource (overflow)
+      return {
+        usefulGods:  [outputEl, wealthEl, pressureEl],
+        harmfulGods: [dmEl, resourceEl],
+      };
+    }
+  }
+
   // ─── BaZi Calculation ────────────────────────────────────────────
   function calculateBaZi(birthDateStr, shichenIndex) {
     const [y, m, d] = birthDateStr.split('-').map(Number);
@@ -610,6 +806,17 @@
       nayin: getNayin(annualStem, annualBranch)
     };
 
+    // ── Arc strength & useful/harmful gods (for Lifetime Arc scoring) ─
+    const arcChart = {
+      yearPillar:  { stem: yearStem,  branch: yearBranch  },
+      monthPillar: { stem: monthStem, branch: monthBranch },
+      dayPillar:   { stem: dayStem,   branch: dayBranch   },
+      hourPillar:  { stem: hourStem,  branch: hourBranch  },
+    };
+    const arcStrength = assessDayMasterStrength(arcChart);
+    const dmElStr     = dayEl; // already computed above as dayEl
+    const { usefulGods, harmfulGods } = deriveUsefulGods(dmElStr, arcStrength);
+
     return {
       yearPillar:  { stem: yearStem,  branch: yearBranch  },
       monthPillar: { stem: monthStem, branch: monthBranch },
@@ -621,7 +828,12 @@
       unfavorableElements,
       elementBalance: balance,
       annualPillar,
-      pillarsStr: `${STEMS[yearStem]}${BRANCHES[yearBranch]} ${STEMS[monthStem]}${BRANCHES[monthBranch]} ${STEMS[dayStem]}${BRANCHES[dayBranch]} ${STEMS[hourStem]}${BRANCHES[hourBranch]}`
+      pillarsStr: `${STEMS[yearStem]}${BRANCHES[yearBranch]} ${STEMS[monthStem]}${BRANCHES[monthBranch]} ${STEMS[dayStem]}${BRANCHES[dayBranch]} ${STEMS[hourStem]}${BRANCHES[hourBranch]}`,
+      // ── Lifetime Arc fields ──
+      dayMasterEl: dmElStr,
+      arcStrength,
+      usefulGods,
+      harmfulGods,
     };
   }
 
@@ -658,7 +870,7 @@
       const decadeStart = startAge + i * 10;
       const decadeEnd   = decadeStart + 9;
 
-      decades.push({
+      const decade = {
         stemIndex, branchIndex,
         stemChar:   STEMS[stemIndex],
         branchChar: BRANCHES[branchIndex],
@@ -667,9 +879,153 @@
         isCurrent: currentAge >= decadeStart && currentAge <= decadeEnd,
         isPast:    currentAge > decadeEnd,
         label:     STEMS[stemIndex] + BRANCHES[branchIndex]
-      });
+      };
+
+      // ── Score this decade using the BaZi scoring engine ──────────
+      const scores = scoreCycle(decade, chart, gender);
+      Object.assign(decade, scores);
+
+      // Season classification from average score
+      const avg = (scores.wealth + scores.love + scores.career + scores.health) / 4;
+      decade.seasonType  = avg >= 75 ? 'golden' : avg >= 58 ? 'growth' : avg >= 45 ? 'stable' : avg >= 32 ? 'testing' : 'storm';
+      decade.seasonEmoji = { golden:'🌟', growth:'🌱', stable:'⚖️', testing:'🔥', storm:'⛈️' }[decade.seasonType];
+
+      decades.push(decade);
     }
     return decades;
+  }
+
+  // ─── Lifetime Arc Scoring Engine ─────────────────────────────────
+  /**
+   * Compute Wealth, Love, Career, Health scores (0-100) for a 大运 decade.
+   * Uses Ten Gods, Twelve Stage, branch interactions, and Day Master strength.
+   */
+  function scoreCycle(decade, chart, gender) {
+    const dm      = chart.dayPillar.stem;
+    const dmEl    = chart.dayMasterEl || STEM_EL_NAME[dm];
+    const useful  = chart.usefulGods  || [];
+    const harmful = chart.harmfulGods || [];
+    const isWeak   = chart.arcStrength === 'weak' || chart.arcStrength === 'extreme_weak';
+    const isStrong = chart.arcStrength === 'strong' || chart.arcStrength === 'extreme_strong';
+
+    const stemTenGod  = getScoreTenGod(dm, decade.stemIndex);
+    const stemEl      = STEM_EL_NAME[decade.stemIndex];
+    const hiddenStems = (HIDDEN_STEMS_ROLES[decade.branchIndex] || []).map(h => ({
+      ...h,
+      element: STEM_EL_NAME[h.s],
+      tenGod:  getScoreTenGod(dm, h.s),
+    }));
+    const mainHS       = hiddenStems[0] || { element: stemEl, tenGod: stemTenGod, r: 'main' };
+    const twelveStage  = getTwelveStageEn(dm, decade.branchIndex);
+    const interactions = findBranchInteractions(decade.branchIndex, chart);
+    const dayBrInts    = interactions.filter(i => i.withPillar === 'day');
+    const monBrInts    = interactions.filter(i => i.withPillar === 'month');
+
+    // ── WEALTH ────────────────────────────────────────────────────
+    let wealth = 50;
+    if (stemTenGod === 'harvest' || stemTenGod === 'windfall') wealth += 12;
+    if (stemTenGod === 'muse')     wealth += 8;
+    if (stemTenGod === 'maverick') wealth += 6;
+    if (useful.includes(stemEl))   wealth += 8;
+    if (harmful.includes(stemEl))  wealth -= 8;
+    for (const hs of hiddenStems) {
+      const w = hs.r === 'main' ? 6 : hs.r === 'secondary' ? 4 : 2;
+      if (hs.tenGod === 'harvest' || hs.tenGod === 'windfall') wealth += w;
+      if (hs.tenGod === 'muse')    wealth += Math.floor(w * 0.7);
+      if (useful.includes(hs.element))  wealth += Math.floor(w * 0.5);
+      if (harmful.includes(hs.element)) wealth -= Math.floor(w * 0.5);
+    }
+    if (isWeak) {
+      const hasSupport = stemTenGod === 'guardian' || stemTenGod === 'mystic'
+        || stemTenGod === 'mirror' || stemTenGod === 'shadow'
+        || hiddenStems.some(h => ['guardian','mystic','mirror','shadow'].includes(h.tenGod));
+      if (!hasSupport) {
+        if (stemTenGod === 'harvest' || stemTenGod === 'windfall') wealth -= 15;
+        wealth -= 8;
+      }
+    }
+    if (stemTenGod === 'shadow') wealth -= 12;
+    if (mainHS.tenGod === 'shadow') wealth -= 6;
+    const wVit = { zenith:8, ascension:6, rising:4, awakening:2, waning:0, initiation:-2,
+                   nurture:-2, conception:-4, retreat:-4, stillness:-6, vault:-6, void:-8 };
+    wealth += wVit[twelveStage] ?? 0;
+    if (monBrInts.some(i => i.type === 'clash')) wealth -= 8;
+    wealth = Math.max(5, Math.min(95, Math.round(wealth)));
+
+    // ── LOVE (= Relationships) ────────────────────────────────────
+    let love = 50;
+    const lBonus = { guardian:12, muse:10, architect:8, harvest:8, mirror:6,
+                     mystic:-4, maverick:-10, challenger:-6, shadow:-4, windfall:2 };
+    love += lBonus[stemTenGod] ?? 0;
+    for (const int of dayBrInts) {
+      if (int.type === 'clash') love -= 18;
+      else if (int.type === 'harm') love -= 12;
+      else if (int.type === 'combo') {
+        love += (int.resultElement && useful.includes(int.resultElement)) ? 10
+               : (int.resultElement && harmful.includes(int.resultElement)) ? 2 : 6;
+      }
+    }
+    // Gender-specific spouse star
+    if (gender === 'female') {
+      if (stemTenGod === 'architect') love += 6;
+      if (hiddenStems.some(h => h.tenGod === 'architect')) love += 3;
+    } else {
+      if (stemTenGod === 'harvest') love += 6;
+      if (hiddenStems.some(h => h.tenGod === 'harvest')) love += 3;
+    }
+    const lVit = { zenith:6, ascension:4, rising:4, awakening:6, waning:0, initiation:-2,
+                   nurture:2, conception:0, retreat:-4, stillness:-6, vault:-4, void:-8 };
+    love += lVit[twelveStage] ?? 0;
+    if (stemTenGod === 'guardian' || mainHS.tenGod === 'guardian') love += 4;
+    love = Math.max(5, Math.min(95, Math.round(love)));
+
+    // ── CAREER ───────────────────────────────────────────────────
+    let career = 50;
+    const cBonus = { architect:12, challenger:8, muse:8, maverick:5, windfall:4,
+                     harvest:3, mirror:0, shadow:-8, guardian:2, mystic:4 };
+    career += cBonus[stemTenGod] ?? 0;
+    if (useful.includes(stemEl))  career += 8;
+    if (harmful.includes(stemEl)) career -= 6;
+    for (const hs of hiddenStems) {
+      const w = hs.r === 'main' ? 4 : hs.r === 'secondary' ? 2 : 1;
+      career += (cBonus[hs.tenGod] ?? 0) * (w / 4);
+      if (useful.includes(hs.element))  career += w;
+      if (harmful.includes(hs.element)) career -= w;
+    }
+    if (stemTenGod === 'challenger' && isWeak) {
+      const hasGuardian = hiddenStems.some(h => h.tenGod === 'guardian' || h.tenGod === 'mystic');
+      if (!hasGuardian) career -= 12;
+    }
+    const cVit = { zenith:8, ascension:6, rising:4, awakening:2, waning:0, initiation:-2,
+                   nurture:-2, conception:-4, retreat:-4, stillness:-6, vault:-6, void:-8 };
+    career += cVit[twelveStage] ?? 0;
+    if (monBrInts.some(i => i.type === 'clash')) career -= 10;
+    career = Math.max(5, Math.min(95, Math.round(career)));
+
+    // ── HEALTH ───────────────────────────────────────────────────
+    let health = 50;
+    const hVit = { zenith:30, ascension:24, rising:18, awakening:14, waning:4, nurture:6,
+                   initiation:-4, conception:-2, retreat:-10, stillness:-14, vault:-16, void:-20 };
+    health += hVit[twelveStage] ?? 0;
+    if (useful.includes(stemEl))  health += 8;
+    if (harmful.includes(stemEl)) health -= 6;
+    if (useful.includes(mainHS.element))  health += 6;
+    if (harmful.includes(mainHS.element)) health -= 4;
+    if (stemTenGod === 'guardian') health += 10;
+    if (stemTenGod === 'mystic')   health += 6;
+    if (mainHS.tenGod === 'guardian' || mainHS.tenGod === 'mystic') health += 4;
+    if (stemTenGod === 'mirror' || stemTenGod === 'shadow') health += 6;
+    if (stemTenGod === 'challenger') {
+      const hasGuardian = hiddenStems.some(h => h.tenGod === 'guardian' || h.tenGod === 'mystic');
+      health += hasGuardian ? -2 : -10;
+    }
+    const clashCount = interactions.filter(i => i.type === 'clash').length;
+    health -= clashCount * 4;
+    if (isWeak   && health < 50) health -= 5;
+    if (isStrong && health < 50) health += 3;
+    health = Math.max(5, Math.min(95, Math.round(health)));
+
+    return { wealth, love, career, health, stemTenGod, twelveStage, interactions };
   }
 
   // ─── View Management ─────────────────────────────────────────────
@@ -1012,6 +1368,7 @@
             <span class="dayun-age">${decade.startAge}–${decade.endAge} yrs</span>
             <span class="dayun-years">${decade.startYear}–${decade.endYear}</span>
             ${decade.isCurrent ? '<span class="badge-current" style="display:inline-block;margin-top:6px">NOW</span>' : ''}
+          ${decade.seasonEmoji ? `<span class="badge-season" style="margin-left:4px">${decade.seasonEmoji}</span>` : ''}
           </div>
           <div class="dayun-row">
             <span class="dayun-row-label">天干 · 地支</span>
@@ -1043,147 +1400,371 @@
     thumb.style.transform = `translateX(${ratio * (trackW - thumbW)}px)`;
   }
 
-  // ─── Energy Aspect Charts (SVG dot-dash) ─────────────────────────
-  const ENERGY_ASPECTS = [
-    { key:'love',   labelEn:'Love & Relationships', labelCn:'感情', aspectIdx:0 },
-    { key:'wealth', labelEn:'Wealth',               labelCn:'财运', aspectIdx:1 },
-    { key:'career', labelEn:'Career',               labelCn:'事业', aspectIdx:2 },
-    { key:'health', labelEn:'Health',               labelCn:'健康', aspectIdx:3 }
+  // ─── Lifetime Arc Combined Chart ─────────────────────────────────
+
+  // Track definition: key = property on decade object, label, color hex
+  const ARC_TRACKS = [
+    { key:'love',   label:'Love',   cn:'感情', color:'#E87C7C' },
+    { key:'wealth', label:'Wealth', cn:'财运', color:'#D4AF37' },
+    { key:'career', label:'Career', cn:'事业', color:'#5B8CDB' },
+    { key:'health', label:'Health', cn:'健康', color:'#3A7D44' },
   ];
 
-  /** Seeded pseudo-random energy value 1–10 per aspect/decade combination */
-  function getEnergyValue(aspectIdx, stemIndex, branchIndex) {
-    return ((stemIndex * 7 + branchIndex * 11 + aspectIdx * 13 + stemIndex * branchIndex) % 8) + 2; // 2–9
+  // Compute insight summary from daYun array
+  function computeArcInsights(daYun) {
+    const peak = daYun.reduce((best, d) => {
+      const avg  = (d.wealth + d.love + d.career + d.health) / 4;
+      const bAvg = (best.wealth + best.love + best.career + best.health) / 4;
+      return avg > bAvg ? d : best;
+    });
+    const currentIdx = daYun.findIndex(d => d.isCurrent);
+    let turningPoint = null;
+    if (currentIdx >= 0) {
+      for (let i = currentIdx + 1; i < daYun.length; i++) {
+        const prev = daYun[i - 1];
+        if (daYun[i].wealth > prev.wealth && daYun[i].love > prev.love
+            && daYun[i].career > prev.career && daYun[i].health > prev.health) {
+          turningPoint = daYun[i];
+          break;
+        }
+      }
+    }
+    return { peak, turningPoint, currentIdx };
   }
 
   function renderEnergyCharts() {
     const section = document.getElementById('energy-charts-section');
     if (!section || !state.chart || !state.chart.daYun) return;
 
-    section.innerHTML = ENERGY_ASPECTS.map(a =>
-      `<div class="energy-chart-wrap">
-        <div class="energy-chart-header">
-          <span class="energy-chart-title">${a.labelEn}</span>
-          <span class="energy-chart-cn">${a.labelCn}</span>
-        </div>
-        <div class="energy-chart-svg-wrap" id="energy-svg-${a.key}"></div>
-      </div>`
+    const daYun   = state.chart.daYun;
+    const n       = daYun.length;
+    const insights = computeArcInsights(daYun);
+
+    // ── Legend ──────────────────────────────────────────────────
+    const legendHtml = ARC_TRACKS.map(t =>
+      `<span class="arc-legend-item">
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <circle cx="6" cy="6" r="4" fill="${t.color}"/>
+        </svg>
+        ${t.label} <span class="arc-legend-cn">${t.cn}</span>
+      </span>`
     ).join('');
 
-    ENERGY_ASPECTS.forEach(a => drawEnergyChart(a));
-  }
-
-  function drawEnergyChart(aspect) {
-    const container = document.getElementById('energy-svg-' + aspect.key);
-    if (!container) return;
-
-    const decades = state.chart.daYun;
-    const n       = decades.length;
-    const values  = decades.map(d => getEnergyValue(aspect.aspectIdx, d.stemIndex, d.branchIndex));
-
-    const VW = 400, VH = 90;
-    const PL = 10, PR = 10, PT = 18, PB = 20;
+    // ── SVG chart ───────────────────────────────────────────────
+    const VW = 500, VH = 200;
+    const PL = 28, PR = 12, PT = 16, PB = 38;
     const CW = VW - PL - PR, CH = VH - PT - PB;
-
     const xOf = i => PL + (n > 1 ? (i / (n - 1)) * CW : CW / 2);
-    const yOf = v => PT + CH - ((v - 1) / 8) * CH; // 1–9 scale
+    const yOf = v => PT + CH - ((v - 5) / 90) * CH; // 5–95 → full height
 
-    const ns  = 'http://www.w3.org/2000/svg';
+    const ns = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(ns, 'svg');
     svg.setAttribute('viewBox', `0 0 ${VW} ${VH}`);
     svg.setAttribute('width', '100%');
     svg.setAttribute('height', VH);
+    svg.setAttribute('class', 'arc-chart-svg');
 
-    const currentIdx = decades.findIndex(d => d.isCurrent);
-
-    // ── Past polyline (solid cobalt)
-    const pastEnd = currentIdx >= 0 ? currentIdx + 1 : decades.filter(d => d.isPast).length;
-    if (pastEnd > 1) {
-      const pts = decades.slice(0, pastEnd).map((_, i) => `${xOf(i)},${yOf(values[i])}`).join(' ');
-      const pl  = document.createElementNS(ns, 'polyline');
-      pl.setAttribute('points', pts);
-      pl.setAttribute('fill', 'none');
-      pl.setAttribute('stroke', '#2B4CE0');
-      pl.setAttribute('stroke-opacity', '0.65');
-      pl.setAttribute('stroke-width', '1.5');
-      svg.appendChild(pl);
+    // Y-axis grid lines + labels (20 / 50 / 80)
+    for (const [val, lbl] of [[20,'Low'],[50,'Mid'],[80,'High']]) {
+      const gy = yOf(val);
+      const gl = document.createElementNS(ns, 'line');
+      gl.setAttribute('x1', PL); gl.setAttribute('x2', VW - PR);
+      gl.setAttribute('y1', gy); gl.setAttribute('y2', gy);
+      gl.setAttribute('stroke', '#D4C9B4'); gl.setAttribute('stroke-width', '0.5');
+      gl.setAttribute('stroke-dasharray', '3,3');
+      svg.appendChild(gl);
+      const gt = document.createElementNS(ns, 'text');
+      gt.setAttribute('x', PL - 4); gt.setAttribute('y', gy + 3.5);
+      gt.setAttribute('text-anchor', 'end'); gt.setAttribute('font-size', '8');
+      gt.setAttribute('fill', '#999'); gt.setAttribute('font-family', 'DM Sans,system-ui');
+      gt.textContent = lbl;
+      svg.appendChild(gt);
     }
 
-    // ── Future polyline (dashed ghost)
-    const futureStart = Math.max(0, currentIdx >= 0 ? currentIdx : pastEnd - 1);
-    if (n - futureStart > 1) {
-      const pts = decades.slice(futureStart).map((_, i) => `${xOf(futureStart + i)},${yOf(values[futureStart + i])}`).join(' ');
-      const fl  = document.createElementNS(ns, 'polyline');
-      fl.setAttribute('points', pts);
-      fl.setAttribute('fill', 'none');
-      fl.setAttribute('stroke', '#444444');
-      fl.setAttribute('stroke-width', '1');
-      fl.setAttribute('stroke-dasharray', '4,3');
-      svg.appendChild(fl);
+    // Current decade vertical reference line
+    const currentIdx = daYun.findIndex(d => d.isCurrent);
+    if (currentIdx >= 0) {
+      const cx = xOf(currentIdx);
+      const vl = document.createElementNS(ns, 'line');
+      vl.setAttribute('x1', cx); vl.setAttribute('x2', cx);
+      vl.setAttribute('y1', PT); vl.setAttribute('y2', VH - PB);
+      vl.setAttribute('stroke', '#E8372A'); vl.setAttribute('stroke-width', '1');
+      vl.setAttribute('stroke-dasharray', '4,3'); vl.setAttribute('opacity', '0.5');
+      svg.appendChild(vl);
     }
 
-    // ── Dots
-    decades.forEach((d, i) => {
-      const x = xOf(i), y = yOf(values[i]);
+    // Draw each track: polyline (past solid, future dashed) + dots
+    for (const track of ARC_TRACKS) {
+      const values = daYun.map(d => d[track.key] ?? 50);
+      const pEnd   = currentIdx >= 0 ? currentIdx + 1 : daYun.filter(d => d.isPast).length;
+      const fStart = Math.max(0, currentIdx >= 0 ? currentIdx : pEnd - 1);
 
-      if (d.isCurrent) {
-        // Outer pulse ring
-        const ring = document.createElementNS(ns, 'circle');
-        ring.setAttribute('cx', x); ring.setAttribute('cy', y);
-        ring.setAttribute('r', '9');
-        ring.setAttribute('fill', 'none');
-        ring.setAttribute('stroke', '#E8372A');
-        ring.setAttribute('stroke-opacity', '0.25');
-        ring.setAttribute('stroke-width', '1.5');
-        svg.appendChild(ring);
-        // Filled vermillion dot
-        const dot = document.createElementNS(ns, 'circle');
-        dot.setAttribute('cx', x); dot.setAttribute('cy', y);
-        dot.setAttribute('r', '5');
-        dot.setAttribute('fill', '#E8372A');
-        svg.appendChild(dot);
-        // "now" label
-        const lbl = document.createElementNS(ns, 'text');
-        lbl.setAttribute('x', x); lbl.setAttribute('y', y - 11);
-        lbl.setAttribute('text-anchor', 'middle');
-        lbl.setAttribute('font-size', '7');
-        lbl.setAttribute('fill', '#E8372A');
-        lbl.setAttribute('font-family', 'DM Sans, system-ui');
-        lbl.setAttribute('font-weight', '700');
-        lbl.setAttribute('letter-spacing', '0.05em');
-        lbl.textContent = 'NOW';
-        svg.appendChild(lbl);
-      } else if (d.isPast) {
-        const dot = document.createElementNS(ns, 'circle');
-        dot.setAttribute('cx', x); dot.setAttribute('cy', y);
-        dot.setAttribute('r', '4');
-        dot.setAttribute('fill', '#2B4CE0');
-        dot.setAttribute('opacity', '0.7');
-        svg.appendChild(dot);
-      } else {
-        // Future: hollow
-        const dot = document.createElementNS(ns, 'circle');
-        dot.setAttribute('cx', x); dot.setAttribute('cy', y);
-        dot.setAttribute('r', '3.5');
-        dot.setAttribute('fill', 'none');
-        dot.setAttribute('stroke', '#444444');
-        dot.setAttribute('stroke-width', '1.5');
-        svg.appendChild(dot);
+      // Past polyline
+      if (pEnd > 1) {
+        const pts = daYun.slice(0, pEnd).map((_, i) => `${xOf(i)},${yOf(values[i])}`).join(' ');
+        const pl  = document.createElementNS(ns, 'polyline');
+        pl.setAttribute('points', pts); pl.setAttribute('fill', 'none');
+        pl.setAttribute('stroke', track.color); pl.setAttribute('stroke-width', '2');
+        svg.appendChild(pl);
+      }
+      // Future polyline (dashed + lower opacity)
+      if (n - fStart > 1) {
+        const pts = daYun.slice(fStart).map((_, i) => `${xOf(fStart + i)},${yOf(values[fStart + i])}`).join(' ');
+        const fl  = document.createElementNS(ns, 'polyline');
+        fl.setAttribute('points', pts); fl.setAttribute('fill', 'none');
+        fl.setAttribute('stroke', track.color); fl.setAttribute('stroke-width', '1.5');
+        fl.setAttribute('stroke-dasharray', '5,3'); fl.setAttribute('opacity', '0.5');
+        svg.appendChild(fl);
       }
 
-      // X-axis label (decade chars)
-      const xLbl = document.createElementNS(ns, 'text');
-      xLbl.setAttribute('x', x); xLbl.setAttribute('y', VH - 3);
-      xLbl.setAttribute('text-anchor', 'middle');
-      xLbl.setAttribute('font-size', '10');
-      xLbl.setAttribute('fill', d.isCurrent ? '#E8372A' : '#444444');
-      xLbl.setAttribute('font-family', 'Noto Serif SC, serif');
-      xLbl.textContent = d.stemChar + d.branchChar;
-      svg.appendChild(xLbl);
+      // Dots
+      daYun.forEach((d, i) => {
+        const x = xOf(i), y = yOf(values[i]);
+        const dot = document.createElementNS(ns, 'circle');
+        dot.setAttribute('cx', x); dot.setAttribute('cy', y);
+        if (d.isCurrent) {
+          dot.setAttribute('r', '5'); dot.setAttribute('fill', track.color);
+          dot.setAttribute('stroke', '#fff'); dot.setAttribute('stroke-width', '2');
+        } else if (d.isPast) {
+          dot.setAttribute('r', '4'); dot.setAttribute('fill', track.color);
+          dot.setAttribute('opacity', '0.85');
+        } else {
+          dot.setAttribute('r', '3'); dot.setAttribute('fill', 'none');
+          dot.setAttribute('stroke', track.color); dot.setAttribute('stroke-width', '1.5');
+          dot.setAttribute('opacity', '0.5');
+        }
+        // Click to show detail
+        dot.style.cursor = 'pointer';
+        dot.setAttribute('data-decade-idx', i);
+        dot.setAttribute('data-track', track.key);
+        svg.appendChild(dot);
+      });
+    }
+
+    // X-axis labels (decade chars + emoji badge) + click targets
+    daYun.forEach((d, i) => {
+      const x = xOf(i);
+
+      // Season emoji badge
+      const emojiT = document.createElementNS(ns, 'text');
+      emojiT.setAttribute('x', x); emojiT.setAttribute('y', VH - PB + 13);
+      emojiT.setAttribute('text-anchor', 'middle'); emojiT.setAttribute('font-size', '10');
+      emojiT.textContent = d.seasonEmoji || '⚖️';
+      svg.appendChild(emojiT);
+
+      // Decade chars
+      const lbl = document.createElementNS(ns, 'text');
+      lbl.setAttribute('x', x); lbl.setAttribute('y', VH - PB + 26);
+      lbl.setAttribute('text-anchor', 'middle'); lbl.setAttribute('font-size', '10');
+      lbl.setAttribute('fill', d.isCurrent ? '#E8372A' : '#555');
+      lbl.setAttribute('font-family', 'Noto Serif SC, serif');
+      lbl.setAttribute('font-weight', d.isCurrent ? '700' : '400');
+      lbl.textContent = d.stemChar + d.branchChar;
+      svg.appendChild(lbl);
+
+      // Age label
+      const age = document.createElementNS(ns, 'text');
+      age.setAttribute('x', x); age.setAttribute('y', VH - 2);
+      age.setAttribute('text-anchor', 'middle'); age.setAttribute('font-size', '8');
+      age.setAttribute('fill', '#999'); age.setAttribute('font-family', 'DM Sans,system-ui');
+      age.textContent = d.startAge + '–' + d.endAge;
+      svg.appendChild(age);
+
+      // Invisible click area for entire column
+      const hitRect = document.createElementNS(ns, 'rect');
+      const colW = n > 1 ? CW / (n - 1) : CW;
+      hitRect.setAttribute('x', x - colW / 2); hitRect.setAttribute('y', PT);
+      hitRect.setAttribute('width', colW); hitRect.setAttribute('height', CH + PB);
+      hitRect.setAttribute('fill', 'transparent'); hitRect.style.cursor = 'pointer';
+      hitRect.setAttribute('data-decade-idx', i);
+      hitRect.addEventListener('click', () => showCycleDetail(i));
+      svg.appendChild(hitRect);
     });
 
-    container.appendChild(svg);
+    // ── Insight cards ────────────────────────────────────────────
+    const { peak, turningPoint, currentIdx: ci } = insights;
+    const current = ci >= 0 ? daYun[ci] : null;
+    const peakAvg = peak ? Math.round((peak.wealth + peak.love + peak.career + peak.health) / 4) : 0;
+
+    const insightHtml = `<div class="arc-insights">
+      ${current && (current.seasonType === 'testing' || current.seasonType === 'storm') ? `
+        <div class="arc-insight-card arc-insight-now">
+          <div class="arc-insight-emoji">${current.seasonEmoji}</div>
+          <div>
+            <div class="arc-insight-label">Current Season</div>
+            <div class="arc-insight-value">${current.stemChar}${current.branchChar} · Age ${current.startAge}–${current.endAge}</div>
+            <div class="arc-insight-sub">${DAYUN_STEM_DESC[current.stemIndex] || ''}</div>
+          </div>
+        </div>` : current ? `
+        <div class="arc-insight-card arc-insight-now">
+          <div class="arc-insight-emoji">${current.seasonEmoji}</div>
+          <div>
+            <div class="arc-insight-label">Current Season</div>
+            <div class="arc-insight-value">${current.stemChar}${current.branchChar} · Age ${current.startAge}–${current.endAge}</div>
+            <div class="arc-insight-sub">${DAYUN_STEM_DESC[current.stemIndex] || ''}</div>
+          </div>
+        </div>` : ''}
+      ${turningPoint ? `
+        <div class="arc-insight-card arc-insight-turn">
+          <div class="arc-insight-emoji">↑</div>
+          <div>
+            <div class="arc-insight-label">Turning Point</div>
+            <div class="arc-insight-value">Age ${turningPoint.startAge} · ${turningPoint.stemChar}${turningPoint.branchChar}</div>
+            <div class="arc-insight-sub">All tracks rise here</div>
+          </div>
+        </div>` : ''}
+      <div class="arc-insight-card arc-insight-peak">
+        <div class="arc-insight-emoji">🌟</div>
+        <div>
+          <div class="arc-insight-label">Lifetime Peak</div>
+          <div class="arc-insight-value">${peak.stemChar}${peak.branchChar} · Age ${peak.startAge}–${peak.endAge}</div>
+          <div class="arc-insight-sub">Average score ${peakAvg}/100</div>
+        </div>
+      </div>
+    </div>`;
+
+    // ── Assemble into section ────────────────────────────────────
+    section.innerHTML = `
+      <div class="arc-chart-header">
+        <div class="arc-legend">${legendHtml}</div>
+      </div>
+      <div class="arc-chart-container" id="arc-svg-wrap"></div>
+      ${insightHtml}
+      <div id="cycle-detail-panel" class="cycle-detail-panel" style="display:none"></div>
+    `;
+    document.getElementById('arc-svg-wrap').appendChild(svg);
   }
+
+  // ─── Cycle Detail Panel ───────────────────────────────────────────
+  function showCycleDetail(idx) {
+    const panel = document.getElementById('cycle-detail-panel');
+    if (!panel || !state.chart || !state.chart.daYun) return;
+    const decade = state.chart.daYun[idx];
+    if (!decade) return;
+
+    // Scores bar HTML
+    const scoreBar = (label, value, color) => `
+      <div class="cycle-score-row">
+        <span class="cycle-score-label">${label}</span>
+        <div class="cycle-score-bar-wrap">
+          <div class="cycle-score-bar" style="width:${value}%;background:${color}"></div>
+        </div>
+        <span class="cycle-score-num">${value}</span>
+      </div>`;
+
+    const stageLabel = decade.twelveStage
+      ? decade.twelveStage.charAt(0).toUpperCase() + decade.twelveStage.slice(1)
+      : '—';
+    const tenGodLabel = decade.stemTenGod
+      ? decade.stemTenGod.charAt(0).toUpperCase() + decade.stemTenGod.slice(1)
+      : '—';
+
+    // Check if narrative already loaded
+    const narrative = decade.narrative;
+    const narrativeHtml = narrative
+      ? `<div class="cycle-narrative">
+          <p class="cycle-theme">"${narrative.theme}"</p>
+          <p>${narrative.summary}</p>
+          <div class="cycle-narrative-domains">
+            <div><strong>💰 Wealth</strong><p>${narrative.wealthNote}</p></div>
+            <div><strong>❤️ Love</strong><p>${narrative.relationshipsNote}</p></div>
+            <div><strong>💼 Career</strong><p>${narrative.wealthNote}</p></div>
+            <div><strong>💪 Health</strong><p>${narrative.healthNote}</p></div>
+          </div>
+          <div class="cycle-lesson">
+            <p><strong>Life Lesson:</strong> ${narrative.lifeLessonThisSeason}</p>
+          </div>
+        </div>`
+      : `<div class="cycle-narrative-loading">
+          <button class="btn-refresh btn-cycle-narrative" onclick="fetchCycleNarrative(${idx})">
+            ✦ Generate Reading for this Season
+          </button>
+          <p class="cycle-narrative-hint">Takes ~10 seconds · Saved to profile</p>
+        </div>`;
+
+    panel.style.display = '';
+    panel.innerHTML = `
+      <div class="cycle-detail-inner">
+        <div class="cycle-detail-header">
+          <span class="cycle-detail-emoji">${decade.seasonEmoji || '⚖️'}</span>
+          <div>
+            <div class="cycle-detail-pillar">${decade.stemChar}${decade.branchChar}</div>
+            <div class="cycle-detail-age">Age ${decade.startAge}–${decade.endAge} · ${decade.startYear}–${decade.endYear}</div>
+            <div class="cycle-detail-meta">${tenGodLabel} Season · ${stageLabel} Stage</div>
+          </div>
+          <button class="cycle-detail-close" onclick="document.getElementById('cycle-detail-panel').style.display='none'">✕</button>
+        </div>
+        <div class="cycle-scores">
+          ${scoreBar('Love',   decade.love,   '#E87C7C')}
+          ${scoreBar('Wealth', decade.wealth, '#D4AF37')}
+          ${scoreBar('Career', decade.career, '#5B8CDB')}
+          ${scoreBar('Health', decade.health, '#3A7D44')}
+        </div>
+        <div class="cycle-season-desc">${DAYUN_STEM_DESC[decade.stemIndex] || ''}</div>
+        ${narrativeHtml}
+      </div>`;
+
+    // Scroll into view
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  /** Fetch AI narrative for a specific decade cycle (lazy, on click) */
+  async function fetchCycleNarrative(idx) {
+    const decade = state.chart && state.chart.daYun && state.chart.daYun[idx];
+    if (!decade) return;
+
+    const btn = document.querySelector('.btn-cycle-narrative');
+    if (btn) { btn.disabled = true; btn.textContent = '✦ Generating…'; }
+
+    try {
+      const chart = state.chart;
+      const payload = {
+        chart: {
+          dayMaster:    STEMS[chart.dayMaster],
+          dayMasterEl:  chart.dayMasterEl,
+          strength:     chart.arcStrength || 'balanced',
+          usefulGods:   chart.usefulGods  || [],
+          harmfulGods:  chart.harmfulGods || [],
+          gender:       state.gender || 'female',
+          dayBranch:    BRANCHES[chart.dayPillar.branch],
+          monthBranch:  BRANCHES[chart.monthPillar.branch],
+        },
+        cycle: {
+          pillar:       decade.stemChar + decade.branchChar,
+          stemTenGod:   decade.stemTenGod || '—',
+          twelveStage:  decade.twelveStage || '—',
+          ageRange:     decade.startAge + '-' + decade.endAge,
+          years:        decade.startYear + '-' + decade.endYear,
+          wealth:       decade.wealth,
+          love:         decade.love,
+          career:       decade.career,
+          health:       decade.health,
+          interactions: (decade.interactions || []).map(i => i.type + ' with ' + i.withPillar + ' pillar'),
+        },
+      };
+
+      const res = await fetch('/api/cycle-narrative', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error('API error ' + res.status);
+      const data = await res.json();
+      decade.narrative = data;
+
+      // Persist to profile
+      saveCurrentProfile();
+
+      // Re-render panel
+      showCycleDetail(idx);
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = '✦ Try Again'; }
+      console.error('fetchCycleNarrative error:', err);
+    }
+  }
+  // Expose for inline onclick
+  window.fetchCycleNarrative = fetchCycleNarrative;
 
   // ─── Main Blueprint Renderer ─────────────────────────────────────
   function renderAppBlueprint() {
@@ -1502,7 +2083,7 @@
     const norm  = t => String(t).trim().toLowerCase().replace(/\s+/g, ' ');
     if (vault.some(e => norm(e.text) === norm(citation.text))) return false;
     const additions = getStoredAdditions();
-    additions.push({ tradition: categorizeCitation(citation), source: (citation.source || 'Unknown').trim(), author: (citation.author || 'Unknown').trim(), text: citation.text.trim() });
+    additions.push({ tradition: citation.tradition || categorizeCitation(citation), source: (citation.source || 'Unknown').trim(), author: (citation.author || 'Unknown').trim(), text: citation.text.trim() });
     saveAdditions(additions);
     const active = document.querySelector('.library-tab.active');
     if (document.getElementById('library-list')) renderLibrary(active ? active.getAttribute('data-tradition') : 'all');
@@ -1533,7 +2114,7 @@
         return `<div class="library-item library-item--saved">
           <span class="tradition">saved</span>
           <h4 class="oracle-saved-question">${escapeHtml(x.author)}</h4>
-          <p>${escapeHtml(x.text)}</p>
+          <div class="oracle-saved-body">${renderMarkdown(x.text)}</div>
         </div>`;
       }
       const title = x.source + (x.author ? ' — ' + x.author : '');

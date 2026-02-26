@@ -2,6 +2,18 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/app.js',
+        headers: [{ key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }],
+      },
+      {
+        source: '/styles.css',
+        headers: [{ key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }],
+      },
+    ];
+  },
   // Anchor the workspace root to this project directory.
   // Without this, Next.js can pick up a stray package-lock.json in a parent
   // directory and treat that as the root — causing .env.local to be missed and

@@ -7,10 +7,12 @@
 ## Aesthetic Brief
 
 **Style:** Neo-Risograph Eastern Mythology UI — "ancient wisdom transmitted through an analog signal."
-**Mood:** Warm, grounded, slightly analog/print-like. Not digital-glassy. Not harsh dark-mode.
-**Background:** Warm parchment (`#F4EFE4`), not white.
+**Mood:** Cool, cosmic, slightly analog/print-like. Not digital-glassy. Like an independent artist's mystical zine.
+**Background:** Pale cosmic lavender (`#F0EEF8`), not white or warm parchment.
+**Text:** Deep indigo purple (`#1E1535`) — not black or warm ink.
+**Brand token:** Psychic purple (`#7B3FF2`) for the SoulMap wordmark and active UI states.
 **Borders/corners:** Almost no rounding — `border-radius: 2px` globally. Sharp, print-like.
-**Grain texture:** SVG noise overlay at 12% opacity for the analog feel.
+**Grain texture:** SVG noise overlay at 12% opacity for the cosmic analog feel.
 **Layout:** Portrait-first (portrait card max-width 360px), app container max-width ~640px.
 **No dark mode** (currently; may add later).
 
@@ -23,22 +25,23 @@ All values live as CSS custom properties in `:root` (`public/styles.css`).
 ### Background & Surface
 | Token | Hex | Use |
 |-------|-----|-----|
-| `--color-void` | `#F4EFE4` | Primary background — warm parchment |
-| `--color-ground` | `#EAE4D4` | Card / section background |
-| `--color-surface-raised` | `#DED8C8` | Elevated panels |
-| `--color-border` | `#C5BCA8` | Subtle borders, dividers |
-| `--color-border-active` | `#E8372A` | Active/selected state — vermillion |
+| `--color-void` | `#F0EEF8` | Primary background — pale cosmic lavender |
+| `--color-ground` | `#E6E3F4` | Card / section background |
+| `--color-surface-raised` | `#DAD6EE` | Elevated panels, grid header rows |
+| `--color-border` | `#C0BAE0` | Subtle borders, dividers |
+| `--color-border-active` | `#7B3FF2` | Active/selected state — psychic purple |
 
 ### Text
 | Token | Hex | Use |
 |-------|-----|-----|
-| `--color-white-bone` | `#1A1510` | Primary text — dark warm ink |
-| `--color-ash` | `#5C5448` | Secondary text |
-| `--color-ghost` | `#9C8E7C` | Disabled / tertiary |
+| `--color-white-bone` | `#1E1535` | Primary text — deep indigo purple |
+| `--color-ash` | `#5A4E8A` | Secondary text — mid purple |
+| `--color-ghost` | `#9087C0` | Disabled / tertiary — muted lavender |
 
 ### Brand Accents
 | Token | Hex | Name | Notes |
 |-------|-----|------|-------|
+| `--color-psychic` | `#7B3FF2` | Psychic purple | **Brand token** — SoulMap wordmark + active states |
 | `--color-vermillion` | `#E8372A` | Vermillion | Fire element; primary action/accent |
 | `--color-gold` | `#D4AF37` | Burnished gold | Metal element |
 | `--color-cobalt` | `#3A7D44` | Forest green | Wood element (despite name "cobalt") |
@@ -139,8 +142,11 @@ The canonical element color mapping — used in Four Pillars chars, element bala
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| Feb 2025 | Light mode (warm parchment) | Dark background not reading-friendly |
+| Feb 2025 | Light mode (warm parchment → now cosmic lavender) | Dark background not reading-friendly |
 | Feb 2025 | Metal color = gold `#D4AF37` (not silver/gray) | Gray looked weak; gold = precious metal ✓ |
 | Feb 2025 | Element colors shifted to traditional associations | Cobalt blue for Wood was confusing (read as Water) |
 | Feb 2025 | Four Pillars max-width 520px | Wide desktop columns looked sparse/unintentional |
 | Feb 2025 | Core/ref row hierarchy in grid | Reduces visual noise; focuses attention on main pillars |
+| Feb 2026 | **Cosmic Lavender** palette — replaced warm parchment | Warm parchment felt academic/generic; cosmic lavender reads as indie artist + mystical. Pairs with deep indigo-purple text hierarchy. |
+| Feb 2026 | `--color-psychic: #7B3FF2` brand token added | Vivid psychic purple reserved exclusively for SoulMap wordmark + active UI states; 4.7:1 contrast on lavender (WCAG AA ✓) |
+| Feb 2026 | Row striping changed from `rgba(0,0,0,X)` → `rgba(30,21,53,X)` | Black overlay cast cold grey on lavender; indigo-tint overlay reads naturally with new background |
