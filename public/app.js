@@ -520,6 +520,12 @@
     if (nameEl) nameEl.textContent = p.name || 'My Chart';
     const typeEl = document.getElementById('app-user-type');
     if (typeEl) typeEl.textContent = SOUL_TYPES[chart.dayMaster].name;
+    // Re-curate "For You" now that state.chart is populated
+    if (document.getElementById('wisdom-vault-list')) {
+      const activeTab = document.querySelector('.wisdom-vault-tab.active');
+      const currentFilter = activeTab ? activeTab.getAttribute('data-tradition') : 'all';
+      if (currentFilter === 'all') renderWisdomVault('all');
+    }
   }
 
   /** One-time migration: move any 'saved' items from the global vault key
@@ -1923,6 +1929,48 @@
   }
 
   // ─── Oracle ───────────────────────────────────────────────────────
+
+  // Pre-built deep-dive reading templates.
+  // {year} is replaced at render-time with the current calendar year.
+  const ORACLE_TEMPLATES = [
+    {
+      icon:     '⚡',
+      title:    'Career Crossroads',
+      desc:     'Work aligned with your fundamental nature',
+      question: 'Looking at my Day Master, current life season (大运), and element balance — what kind of work environment, role, or path is most aligned with who I fundamentally am? What am I built for, and what tends to drain me professionally?',
+    },
+    {
+      icon:     '◎',
+      title:    'Relationship Lens',
+      desc:     'Love patterns and what you attract',
+      question: 'Based on my BaZi chart, what are my natural patterns in love and close relationships? What does my chart reveal about what I genuinely need in a partner, and what challenges do I tend to create or attract?',
+    },
+    {
+      icon:     '◉',
+      title:    '{year} Reading',
+      desc:     'What this year activates in your chart',
+      question: 'How does {year}\'s energy interact with my natal chart and current life season? What themes, opportunities, or friction points should I be most aware of this year — and what would you counsel me to prioritize?',
+    },
+    {
+      icon:     '◐',
+      title:    'Shadow Patterns',
+      desc:     'Recurring blind spots working against you',
+      question: 'What patterns does my BaZi chart reveal that may be quietly working against me — recurring challenges, blind spots, or self-sabotage tendencies I might not see clearly? Be direct with me.',
+    },
+    {
+      icon:     '⚖',
+      title:    'Timing a Leap',
+      desc:     'Is this season right for a bold change?',
+      question: 'I\'m considering a significant life change. Looking at my current life season (大运), this year\'s energy (流年), and my element balance — is this a period for bold action, patient groundwork, or strategic consolidation? What does the timing tell you?',
+    },
+    {
+      icon:     '✦',
+      title:    'Health & Vitality',
+      desc:     'Your constitution and energy rhythms',
+      question: 'What does my element balance and Day Master reveal about my physical constitution and energy rhythms? What should I protect, and what tends to deplete me at a deep level?',
+    },
+  ];
+
   function buildOracleChartContext() {
     if (!state.chart) return null;
     const c = state.chart;
@@ -1996,9 +2044,37 @@
     // Conversation history for multi-turn context (role/content pairs)
     const conversationHistory = [];
 
-    document.querySelectorAll('.oracle-suggestion').forEach(btn => {
-      btn.addEventListener('click', () => { input.value = btn.getAttribute('data-q'); input.focus(); });
-    });
+    // ── Render deep-dive template cards ───────────────────────────
+    const templatesEl = document.getElementById('oracle-templates');
+    if (templatesEl) {
+      const year  = new Date().getFullYear();
+      const label = document.createElement('p');
+      label.className = 'oracle-templates-label';
+      label.textContent = 'Deep-Dive Readings';
+      templatesEl.appendChild(label);
+
+      const grid = document.createElement('div');
+      grid.className = 'oracle-templates-grid';
+
+      ORACLE_TEMPLATES.forEach(t => {
+        const btn   = document.createElement('button');
+        btn.type    = 'button';
+        btn.className = 'oracle-template-card';
+        const title    = t.title.replace('{year}', year);
+        const question = t.question.replace(/\{year\}/g, year);
+        btn.innerHTML =
+          '<span class="oracle-template-icon">'  + t.icon  + '</span>' +
+          '<span class="oracle-template-title">' + title   + '</span>' +
+          '<span class="oracle-template-desc">'  + t.desc  + '</span>';
+        btn.addEventListener('click', () => {
+          input.value = question;
+          form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        });
+        grid.appendChild(btn);
+      });
+
+      templatesEl.appendChild(grid);
+    }
 
     // Dismiss leave-warning banner (one-time)
     document.getElementById('btn-dismiss-oracle-warning')?.addEventListener('click', () => {
@@ -2010,6 +2086,9 @@
       e.preventDefault();
       const q = input.value.trim();
       if (!q) return;
+
+      // Collapse template cards once conversation begins
+      if (templatesEl) templatesEl.style.display = 'none';
 
       if (placeholder) placeholder.style.display = 'none';
 

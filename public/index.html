@@ -8,7 +8,7 @@
   <title>SoulMap — Your Cosmic Personality Blueprint</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=20260226d" />
 </head>
 <body>
@@ -20,6 +20,7 @@
     <div class="landing-bg"></div>
     <div class="landing-content">
       <h1 class="logo">SoulMap</h1>
+      <p class="tagline">Ancient Wisdom Meets Modern Navigation</p>
 
       <div class="landing-stats">
         <div class="landing-stat">
@@ -290,13 +291,7 @@
       <!-- TAB 2: Life Oracle -->
       <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-oracle" class="tab-pane">
-        <div class="oracle-suggestions">
-          <p>Suggested questions:</p>
-          <button type="button" class="oracle-suggestion" data-q="What career paths suit my chart?">What career paths suit my chart?</button>
-          <button type="button" class="oracle-suggestion" data-q="Is this a good year for big changes?">Is this a good year for big changes?</button>
-          <button type="button" class="oracle-suggestion" data-q="What should I know about my love life?">What should I know about my love life?</button>
-          <button type="button" class="oracle-suggestion" data-q="How do I handle my current stress?">How do I handle my current stress?</button>
-        </div>
+        <div id="oracle-templates" class="oracle-templates"></div>
         <div class="oracle-chat" id="oracle-chat">
           <div class="oracle-placeholder" id="oracle-placeholder">
             <p>Life Oracle combines your BaZi chart with classical wisdom. Ask anything about career, timing, relationships, or growth.</p>
@@ -405,6 +400,6 @@
 
   <script src="content/wisdom-vault.js?v=5"></script>
   <script src="content/classical-bazi-excerpts.js?v=1"></script>
-  <script src="app.js?v=20260226b"></script>
+  <script src="app.js?v=20260226c"></script>
 </body>
 </html>
