@@ -359,7 +359,10 @@
       relationship:     state.relationship || '',
       currentConcern:   state.currentConcern || '',
       createdAt:        idx >= 0 ? profiles[idx].createdAt : Date.now(),
-      narrativeFromAPI: state.narrativeFromAPI || null
+      narrativeFromAPI:    state.narrativeFromAPI || null,
+      narrativePillarsStr: (state.narrativeFromAPI && state.chart)
+                             ? (state.chart.pillarsStr || null)
+                             : null
     };
     if (idx >= 0) { profiles[idx] = profileData; } else { profiles.push(profileData); }
     saveProfiles(profiles);
@@ -381,7 +384,9 @@
       soulTypeIndex:  chart.dayMaster,
       profileId:        p.id,
       profileName:      p.name || 'My Chart',
-      narrativeFromAPI: p.narrativeFromAPI || null
+      narrativeFromAPI: (p.narrativeFromAPI && p.narrativePillarsStr && chart.pillarsStr === p.narrativePillarsStr)
+                          ? p.narrativeFromAPI
+                          : null
     });
     setActiveProfileId(p.id);
     // Update header labels
