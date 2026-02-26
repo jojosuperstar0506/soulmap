@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: '/index.html',
+        headers: [{ key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }],
+      },
+      {
         source: '/app.js',
         headers: [{ key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }],
       },

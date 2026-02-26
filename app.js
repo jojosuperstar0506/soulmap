@@ -492,7 +492,8 @@
     narrativeFromAPI: null,
     profileId: null,          // ID of the active profile
     profileName: '',          // display name of the active profile
-    savedOracleItems: [],     // per-profile Oracle saves (not shared across profiles)
+    savedOracleItems: [],      // per-profile Oracle saves (not shared across profiles)
+    savedVaultCitations: [],   // per-profile vault bookmark saves (not shared across profiles)
   };
 
   function setState(partial) { state = { ...state, ...partial }; }
@@ -545,6 +546,7 @@
                              : null,
       daYunNarratives:     Object.keys(daYunNarratives).length ? daYunNarratives : null,
       savedOracleItems:    state.savedOracleItems || [],
+      savedVaultCitations: state.savedVaultCitations || [],
     };
     if (idx >= 0) { profiles[idx] = profileData; } else { profiles.push(profileData); }
     saveProfiles(profiles);
@@ -576,6 +578,7 @@
                           ? p.narrativeFromAPI
                           : null,
       savedOracleItems: p.savedOracleItems || [],
+      savedVaultCitations: p.savedVaultCitations || [],
     });
     setActiveProfileId(p.id);
     // Update header labels
@@ -599,13 +602,27 @@
       const raw = localStorage.getItem(WISDOM_VAULT_STORAGE_KEY);
       if (!raw) return;
       const all = JSON.parse(raw);
-      const orphans = all.filter(e => e.tradition === 'saved');
-      if (!orphans.length) return;
-      // Attribute orphaned saves to whichever profile is currently active
-      state.savedOracleItems = (state.savedOracleItems || []).concat(orphans);
-      saveCurrentProfile();
-      // Remove 'saved' entries from the global key — classical citations stay
-      saveAdditions(all.filter(e => e.tradition !== 'saved'));
+
+      // Migrate orphaned Oracle saves (tradition='saved', no isCitation flag) → savedOracleItems
+      const oracleOrphans = all.filter(e => e.tradition === 'saved' && !e.isCitation);
+      if (oracleOrphans.length) {
+        state.savedOracleItems = (state.savedOracleItems || []).concat(oracleOrphans);
+      }
+
+      // Migrate orphaned vault bookmark saves (isCitation=true) → per-profile savedVaultCitations
+      const vaultOrphans = all.filter(e => e.isCitation);
+      if (vaultOrphans.length) {
+        const existing = state.savedVaultCitations || [];
+        const existingKeys = new Set(existing.map(a => a._vaultKey));
+        const newOnes = vaultOrphans.filter(a => !existingKeys.has(a._vaultKey));
+        state.savedVaultCitations = existing.concat(newOnes);
+      }
+
+      if (oracleOrphans.length || vaultOrphans.length) {
+        saveCurrentProfile();
+        // Purge all profile-specific entries from the global key — leave only oracle-extracted citations
+        saveAdditions(all.filter(e => e.tradition !== 'saved' && !e.isCitation));
+      }
     } catch (_) {}
   }
 
@@ -2495,8 +2512,9 @@
   function saveAdditions(arr) { try { localStorage.setItem(WISDOM_VAULT_STORAGE_KEY, JSON.stringify(arr)); } catch (_) {} }
   function getWisdomVault()   {
     return WISDOM_VAULT_BASE
-      .concat(getStoredAdditions())           // global classical citations
-      .concat(state.savedOracleItems || []);  // profile-scoped Oracle saves
+      .concat(getStoredAdditions())                  // oracle-extracted classical citations (global)
+      .concat(state.savedVaultCitations || [])       // per-profile vault bookmark saves
+      .concat(state.savedOracleItems || []);          // per-profile Oracle saves
   }
 
   // ── "For You" smart curation ─────────────────────────────────────
@@ -2657,17 +2675,20 @@
     return (item.source || '') + '|' + (item.text || '').slice(0, 60);
   }
   function isVaultQuoteSaved(item) {
-    return getStoredAdditions().some(a => a.isCitation && a._vaultKey === _vaultKey(item));
+    const key = _vaultKey(item);
+    return (state.savedVaultCitations || []).some(a => a._vaultKey === key);
   }
   function saveVaultQuote(item) {
     if (isVaultQuoteSaved(item)) return;
-    const additions = getStoredAdditions();
-    additions.push({ ...item, tradition: 'saved', isCitation: true, _vaultKey: _vaultKey(item), _savedFrom: item.tradition, savedAt: Date.now() });
-    saveAdditions(additions);
+    const citations = [...(state.savedVaultCitations || [])];
+    citations.push({ ...item, tradition: 'saved', isCitation: true, _vaultKey: _vaultKey(item), _savedFrom: item.tradition, savedAt: Date.now() });
+    state.savedVaultCitations = citations;
+    saveCurrentProfile();
   }
   function unsaveVaultQuote(item) {
     const key = _vaultKey(item);
-    saveAdditions(getStoredAdditions().filter(a => !(a.isCitation && a._vaultKey === key)));
+    state.savedVaultCitations = (state.savedVaultCitations || []).filter(a => a._vaultKey !== key);
+    saveCurrentProfile();
   }
 
   // ── Vault current filter state ───────────────────────────────────
