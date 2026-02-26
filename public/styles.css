@@ -16,10 +16,19 @@
   /* ─── Brand Accents (one per section, never all at once) ─── */
   --color-vermillion: #E8372A;     /* Fire — vermillion red */
   --color-cyan: #1A4DB5;           /* Water — deep sapphire */
-  --color-magenta: #C8357A;        /* UI accent — magenta */
   --color-gold: #D4AF37;           /* Metal — burnished gold */
   --color-cobalt: #3A7D44;         /* Wood — forest green */
   --color-amber: #9B5523;          /* Earth — terracotta/sienna */
+
+  /* ─── Content ink token ─── */
+  --color-ink: #0A0814;            /* Solid near-black — content text on light card */
+  --color-deep: var(--color-void); /* Alias for void — used in vault modal */
+
+  /* ─── Lifetime Arc track colors (mapped to Five Elements palette) ─── */
+  --arc-love:   var(--color-vermillion); /* Fire red — passion/love */
+  --arc-wealth: var(--color-gold);       /* Gold — wealth/abundance */
+  --arc-career: var(--color-cyan);       /* Sapphire — direction/career */
+  --arc-health: var(--color-cobalt);     /* Forest green — vitality/health */
 
   /* ─── Text ─── */
   --color-white-bone: #EDEBF5;     /* Primary text — near-white, faint lavender */
@@ -305,12 +314,12 @@ blockquote {
 }
 
 /* Psychic: landing CTA — matches SoulMap logo */
-.btn-gold {
+.btn-cta {
   background: var(--color-psychic);
   color: #ffffff;
 }
 
-.btn-gold:hover {
+.btn-cta:hover {
   background: #8a1ad0;
 }
 
@@ -364,13 +373,13 @@ blockquote {
   overflow: hidden;
 }
 
-/* Card accent line — single colored top edge */
+/* Card accent line — psychic purple top edge (2-plate ink system) */
 .card-base::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: var(--card-accent, var(--color-vermillion));
+  background: var(--color-psychic);
 }
 
 .card-base:hover {
@@ -380,7 +389,7 @@ blockquote {
 /* Active / selected card */
 .card-active {
   background: var(--color-ground);
-  border: 1px solid var(--color-vermillion);
+  border: 1px solid var(--color-psychic);
   box-shadow: inset 0 0 40px rgba(160, 32, 240, 0.22);
 }
 
@@ -679,7 +688,7 @@ blockquote {
   text-align: center;
   position: relative;
   overflow: hidden;
-  --card-accent: var(--color-cobalt);
+  --card-accent: var(--color-psychic);
 }
 
 /* Card top accent line */
@@ -1171,7 +1180,7 @@ blockquote {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-ghost);
+  color: var(--color-ash); /* AA-legible on void dark */
   background: none;
   border: none;
   cursor: pointer;
@@ -1181,7 +1190,7 @@ blockquote {
 }
 
 .tab-btn:hover {
-  color: var(--color-ash);
+  color: var(--color-white-bone);
 }
 
 .tab-btn.active {
@@ -1225,7 +1234,7 @@ blockquote {
   border: 1px solid var(--color-border);
   position: relative;
   overflow: hidden;
-  --card-accent: var(--color-vermillion);
+  --card-accent: var(--color-psychic);
 }
 
 .blueprint-detail-card::before {
@@ -1531,7 +1540,7 @@ blockquote {
   border: 1px solid var(--color-border);
   position: relative;
   overflow: hidden;
-  --card-accent: var(--color-cyan);
+  --card-accent: var(--color-psychic);
 }
 
 .oracle-chat::before {
@@ -1773,7 +1782,7 @@ blockquote {
   position: relative;
   overflow: hidden;
   transition: border-color 0.2s ease;
-  --card-accent: var(--color-cobalt);
+  --card-accent: var(--color-psychic);
 }
 
 .wisdom-vault-item::before {
@@ -2208,7 +2217,7 @@ blockquote {
   border: 1px solid var(--color-border);
   position: relative;
   overflow: hidden;
-  --card-accent: var(--color-amber);
+  --card-accent: var(--color-psychic);
 }
 
 .spark-card::before {
@@ -2289,7 +2298,7 @@ blockquote {
   position: relative;
   overflow: hidden;
   transition: border-color 0.2s ease;
-  --card-accent: var(--color-magenta);
+  --card-accent: var(--color-psychic);
 }
 
 .meditation-item::before {
@@ -2432,22 +2441,21 @@ blockquote {
   overflow: hidden;
   scroll-snap-align: start;
   position: relative;
-  --card-accent: var(--color-vermillion);
   transition: border-color 0.2s ease;
 }
 
-/* Colored top accent line */
+/* Psychic purple top accent line — unified structural chrome */
 .dayun-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: var(--card-accent);
+  background: var(--color-psychic);
 }
 
-/* Active (current) card gets accent border */
+/* Active (current) card gets psychic purple border */
 .dayun-card-active {
-  border-color: var(--card-accent);
+  border-color: var(--color-psychic);
 }
 
 /* ─── Row system inside each card ─── */
@@ -2500,7 +2508,7 @@ blockquote {
   font-family: var(--font-chinese);
   font-size: 1.6rem;
   line-height: 1;
-  color: var(--card-accent);
+  color: var(--color-psychic); /* overridden by inline element color from ELEMENT_HEX */
 }
 
 .dayun-branch {
@@ -3135,11 +3143,11 @@ blockquote {
 .onboard-form input[type="date"],
 .onboard-form select,
 .onboard-form textarea {
-  --color-white-bone: #0A0814; /* Solid near-black on light card */
-  --color-ash:        #0A0814; /* Solid near-black */
-  --color-ghost:      #0A0814; /* Solid near-black */
+  --color-white-bone: var(--color-ink); /* Solid near-black on light card */
+  --color-ash:        var(--color-ink); /* Solid near-black */
+  --color-ghost:      var(--color-ink); /* Solid near-black */
   --color-border:     rgba(18,16,30,0.12); /* Crisp lines on light surface */
-  color: #0A0814;
+  color: var(--color-ink);
 }
 
 /* App header border stays dark/visible against the void */

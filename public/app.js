@@ -293,14 +293,7 @@
     return result;
   }
 
-  // Accent colors cycling for 大运 cards
-  const DAYUN_ACCENT_COLORS = [
-    'var(--color-vermillion)',
-    'var(--color-cobalt)',
-    'var(--color-amber)',
-    'var(--color-cyan)',
-    'var(--color-magenta)'
-  ];
+  // (DAYUN_ACCENT_COLORS removed — dayun card borders now uniformly psychic purple per 2-plate ink system)
 
   // ─── Lifetime Arc scoring engine constants ────────────────────────
 
@@ -1516,11 +1509,10 @@
     strip.innerHTML = state.chart.daYun.map((decade, i) => {
       const stemEl   = dyElKeys[STEM_ELEMENT[decade.stemIndex]];
       const branchEl = dyElKeys[BRANCH_EL_IDX[decade.branchIndex]];
-      const accent   = ELEMENT_COLORS[stemEl];
       const desc     = DAYUN_STEM_DESC[decade.stemIndex];
       const classes  = ['dayun-card', decade.isCurrent ? 'dayun-card-active' : ''].filter(Boolean).join(' ');
       return `
-        <div class="${classes}" style="--card-accent:${accent}">
+        <div class="${classes}">
           <div class="dayun-row">
             <span class="dayun-row-label">Age · Year</span>
             <span class="dayun-age">${decade.startAge}–${decade.endAge} yrs</span>
@@ -1562,10 +1554,10 @@
 
   // Track definition: key = property on decade object, label, color hex
   const ARC_TRACKS = [
-    { key:'love',   label:'Love',   cn:'感情', color:'#E87C7C' },
-    { key:'wealth', label:'Wealth', cn:'财运', color:'#D4AF37' },
-    { key:'career', label:'Career', cn:'事业', color:'#5B8CDB' },
-    { key:'health', label:'Health', cn:'健康', color:'#3A7D44' },
+    { key:'love',   label:'Love',   cn:'感情', color:'#E8372A' }, /* --arc-love: var(--color-vermillion) */
+    { key:'wealth', label:'Wealth', cn:'财运', color:'#D4AF37' }, /* --arc-wealth: var(--color-gold) */
+    { key:'career', label:'Career', cn:'事业', color:'#1A4DB5' }, /* --arc-career: var(--color-cyan) */
+    { key:'health', label:'Health', cn:'健康', color:'#3A7D44' }, /* --arc-health: var(--color-cobalt) */
   ];
 
   // Compute insight summary from daYun array
@@ -1853,9 +1845,9 @@
           <button class="cycle-detail-close" onclick="document.getElementById('cycle-detail-panel').style.display='none'">✕</button>
         </div>
         <div class="cycle-scores">
-          ${scoreBar('Love',   decade.love,   '#E87C7C')}
+          ${scoreBar('Love',   decade.love,   '#E8372A')}
           ${scoreBar('Wealth', decade.wealth, '#D4AF37')}
-          ${scoreBar('Career', decade.career, '#5B8CDB')}
+          ${scoreBar('Career', decade.career, '#1A4DB5')}
           ${scoreBar('Health', decade.health, '#3A7D44')}
         </div>
         <div class="cycle-season-desc">${DAYUN_STEM_DESC[decade.stemIndex] || ''}</div>

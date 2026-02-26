@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-26 (Neo-Risograph visual overhaul: light card surfaces, 2-plate risograph text, comprehensive dark-text readability fix — commits 134c4df, 7cdee40, eba254e)
+> Last updated: 2026-02-26 (Color system consolidation: removed magenta, unified card accents to psychic purple, ARC_TRACKS → palette, --color-ink token, tab contrast fix)
 
 ---
 
@@ -120,6 +120,17 @@
   - Element badge opacity 0.22 → 0.13 for white bg; row striping flipped to dark-on-light tint
   - Portrait fade gradient: dark `rgba(20,18,30,0.92)` → light `rgba(240,238,248,0.97)`
   - DESIGN.md updated: Aesthetic Brief, palette tables, Decisions Log
+- [x] **Color system consolidation (2026-02-26)** — reduced visual noise (too many colors → intuitive 2-plate system):
+  - Removed `--color-magenta` (orphaned to Still Point only) → replaced with `var(--color-psychic)`
+  - All card top-accent lines (`::before` 2px bars) unified to `var(--color-psychic)` — element colors NO longer in structural chrome
+  - ARC_TRACKS palette-anchored: love `#E87C7C`→vermillion, career `#5B8CDB`→sapphire
+  - `--arc-love/wealth/career/health` tokens added to `:root`, mapping to existing Five Elements vars
+  - `--color-ink: #0A0814` + `--color-deep` alias added to `:root` (fixes `--color-ink` undefined bug in arc/insight, `--color-deep` undefined in vault modal)
+  - Dark-text context block updated: hardcoded `#0A0814` → `var(--color-ink)`
+  - Tab bar inactive: `var(--color-ghost)` → `var(--color-ash)` for AA contrast
+  - `.btn-gold` renamed `.btn-cta` (was purple, name was misleading)
+  - DaYun `DAYUN_ACCENT_COLORS` removed (unused); `--card-accent` inline removed from template
+  - DESIGN.md: palette table updated, 2 new Decisions Log entries
 - [ ] WCAG 2.1 AA accessibility audit — Phase 2
 
 ---

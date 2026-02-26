@@ -53,13 +53,22 @@ All values live as CSS custom properties in `:root` (`public/styles.css`).
 ### Brand Accents
 | Token | Hex | Name | Notes |
 |-------|-----|------|-------|
-| `--color-psychic` | `#A020F0` | Psychic purple | **Brand token** — SoulMap wordmark + active states |
-| `--color-vermillion` | `#E8372A` | Vermillion | Fire element; primary action/accent |
-| `--color-gold` | `#D4AF37` | Burnished gold | Metal element |
-| `--color-cobalt` | `#3A7D44` | Forest green | Wood element (despite name "cobalt") |
+| `--color-psychic` | `#A020F0` | Psychic purple | **Brand token** — SoulMap wordmark + active states + ALL card top-accent lines |
+| `--color-vermillion` | `#E8372A` | Vermillion | Fire element; also `--arc-love` |
+| `--color-gold` | `#D4AF37` | Burnished gold | Metal element; also `--arc-wealth` |
+| `--color-cobalt` | `#3A7D44` | Forest green | Wood element (despite name); also `--arc-health` |
 | `--color-amber` | `#9B5523` | Terracotta/sienna | Earth element (despite name "amber") |
-| `--color-cyan` | `#1A4DB5` | Deep sapphire | Water element (despite name "cyan") |
-| `--color-magenta` | `#C8357A` | Magenta | General UI accent; not an element color |
+| `--color-cyan` | `#1A4DB5` | Deep sapphire | Water element (despite name); also `--arc-career` |
+| `--color-ink` | `#0A0814` | Near-black ink | Content text on light card; named token for consistency |
+| `--color-deep` | alias for `--color-void` | Deep void alias | Vault modal background — keeps `:root` token canonical |
+
+### Lifetime Arc Track Colors
+| Token | Value | Use |
+|-------|-------|-----|
+| `--arc-love` | `var(--color-vermillion)` | Love track — fire red |
+| `--arc-wealth` | `var(--color-gold)` | Wealth track — burnished gold |
+| `--arc-career` | `var(--color-cyan)` | Career track — deep sapphire |
+| `--arc-health` | `var(--color-cobalt)` | Health track — forest green |
 
 ---
 
@@ -172,3 +181,5 @@ The canonical element color mapping — used in Four Pillars chars, element bala
 | Feb 2026 | **2-plate risograph text system** | Black content ink (`#0A0814`) + electric purple structural ink (`#A020F0`) on off-white paper. No grey intermediates. Content text (Ten Gods, sub-stars, body text) = solid near-black. Structural labels (row/col headers, section titles, meta labels) = psychic purple via explicit override rule. |
 | Feb 2026 | **Comprehensive dark-text context** | Replaced narrow 8-selector dark-text block with a comprehensive 20-selector list covering every light-background surface in the app. Single block to edit for any new card component going forward. |
 | Feb 2026 | **On-card text flattened to solid near-black** | All three on-card vars (`--color-white-bone`, `--color-ash`, `--color-ghost`) set to `#0A0814`. User requirement: "no grey, solid black or solid psychic purple." Hierarchy achieved through color (black vs. purple) not lightness gradation. |
+| Feb 2026 | **Color system consolidation pass** | Audit found 14+ simultaneous colors — too many, not intuitive. Fixes: (1) `--color-magenta` removed — was orphaned to Still Point cards only; (2) All card top-accent lines unified to `var(--color-psychic)` — element colors no longer appear in structural chrome; (3) ARC_TRACKS colors mapped to existing palette (`#E87C7C`→vermillion, `#5B8CDB`→cyan); (4) `--color-ink: #0A0814` + `--color-deep` alias added to `:root`; (5) Tab bar inactive bumped from ghost→ash for AA contrast; (6) `.btn-gold` renamed `.btn-cta`. |
+| Feb 2026 | **2-plate ink rule enforced** | Element colors (wood/fire/earth/metal/water) now appear ONLY in semantic BaZi content: characters, balance bars. All structural chrome (card borders, top-accent lines, active states) uses psychic purple exclusively. |
