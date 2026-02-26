@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260226b" />
+  <link rel="stylesheet" href="styles.css?v=20260226c" />
 </head>
 <body>
 
@@ -30,6 +30,7 @@
   <!-- ONBOARDING — Single unified page -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <section id="view-onboard" class="view">
+    <div class="onboard-inner">
     <header class="onboard-header">
       <h2>Tell us about you</h2>
       <p>Unlike horoscopes, BaZi is anchored to your exact solar birth timestamp — refined across 40+ classical texts over 1,200 years, and precise enough to map your life in decade-long phases.</p>
@@ -109,7 +110,7 @@
       <!-- ─ Optional ─ -->
       <label>
         <span>What's on your mind? <small>Optional</small></span>
-        <textarea name="currentConcern" rows="2" placeholder="e.g. career change, a big decision, relationship stress…"></textarea>
+        <textarea name="currentConcern" rows="2" placeholder="e.g. Am I dating the right person? Will I get rich in this life? Where do I find meaning?"></textarea>
       </label>
 
       <div class="form-actions">
@@ -117,6 +118,7 @@
         <button type="submit" class="btn btn-primary">Generate My Blueprint →</button>
       </div>
     </form>
+    </div><!-- /.onboard-inner -->
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -314,6 +316,9 @@
           <button type="button" class="wisdom-vault-tab" data-tradition="greek">Greek</button>
           <button type="button" class="wisdom-vault-tab" data-tradition="sufi">Sufi</button>
           <button type="button" class="wisdom-vault-tab" data-tradition="vedic">Vedic</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="christianity">Christian</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="islam">Islam</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="judaism">Judaism</button>
           <button type="button" class="wisdom-vault-tab" data-tradition="uncategorized">Other</button>
           <button type="button" class="wisdom-vault-tab" data-tradition="saved">Saved</button>
         </div>
@@ -386,7 +391,7 @@
     </div>
   </div>
 
-  <script src="content/wisdom-vault.js?v=4"></script>
+  <script src="content/wisdom-vault.js?v=5"></script>
   <script src="content/classical-bazi-excerpts.js?v=1"></script>
   <script src="app.js?v=20260226b"></script>
 </body>

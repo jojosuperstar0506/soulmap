@@ -8,9 +8,9 @@
 :root {
   /* ─── Background & Surface ─── */
   --color-void: #0D0B14;           /* Primary background — deep space dark */
-  --color-ground: #14121E;         /* Card / surface background */
-  --color-surface-raised: #1C1A28; /* Elevated panels */
-  --color-border: #2D2A3E;         /* Subtle borders */
+  --color-ground: #F0EEF8;         /* Card / surface background — off-white lavender paper */
+  --color-surface-raised: #E4E1F5; /* Elevated panels — light lavender */
+  --color-border: #CCC8E4;         /* Subtle borders — light lavender */
   --color-border-active: #A020F0;  /* Active/selected — psychic purple */
 
   /* ─── Brand Accents (one per section, never all at once) ─── */
@@ -67,7 +67,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
@@ -700,7 +700,7 @@ blockquote {
   left: 0;
   right: 0;
   padding: 1rem 1rem 0.875rem;
-  background: linear-gradient(transparent, rgba(20, 18, 30, 0.92) 40%);
+  background: linear-gradient(transparent, rgba(240, 238, 248, 0.97) 40%);
 }
 
 .soul-portrait-name {
@@ -1059,8 +1059,8 @@ blockquote {
   display: flex;
   justify-content: space-around;
   padding: 0;
-  background: var(--color-ground);
-  border-top: 1px solid var(--color-border);
+  background: var(--color-void);        /* Stays cosmic dark — nav chrome, not content */
+  border-top: 1px solid #2D2A3E;
   z-index: 100;
 }
 
@@ -1281,7 +1281,7 @@ blockquote {
 .narrative-pillar {
   padding: 0.65rem 0.9rem;
   border-left: 2px solid;
-  background: rgba(237,235,245,0.04);
+  background: rgba(18,16,30,0.04);
   border-radius: 0 2px 2px 0;
 }
 
@@ -2134,11 +2134,11 @@ blockquote {
   border-radius: 1px;
 }
 
-.bazi-elem-wood  { color: var(--color-cobalt);     background: rgba(58,125,68,0.22); }
-.bazi-elem-fire  { color: var(--color-vermillion); background: rgba(232,55,42,0.20); }
-.bazi-elem-earth { color: var(--color-amber);      background: rgba(155,85,35,0.22); }
-.bazi-elem-metal { color: var(--color-gold);       background: rgba(212,175,55,0.22); }
-.bazi-elem-water { color: var(--color-cyan);       background: rgba(26,77,181,0.22); }
+.bazi-elem-wood  { color: var(--color-cobalt);     background: rgba(58,125,68,0.13); }
+.bazi-elem-fire  { color: var(--color-vermillion); background: rgba(232,55,42,0.11); }
+.bazi-elem-earth { color: var(--color-amber);      background: rgba(155,85,35,0.13); }
+.bazi-elem-metal { color: var(--color-gold);       background: rgba(212,175,55,0.13); }
+.bazi-elem-water { color: var(--color-cyan);       background: rgba(26,77,181,0.13); }
 
 /* Romanization text above Chinese char in stem/branch cells */
 .bazi-romanization {
@@ -2565,4 +2565,32 @@ blockquote {
   .arc-insights {
     flex-direction: column;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* LIGHT CARD SURFACES — dark text context                        */
+/* Card surfaces (#F0EEF8 / #E4E1F5) are off-white lavender.      */
+/* Override text tokens locally so descendants auto-resolve dark. */
+/* Void-level elements (landing, header, nav) are NOT in scope    */
+/* and naturally keep light-on-dark text.                         */
+/* ═══════════════════════════════════════════════════════════════ */
+
+.bazi-grid,
+.card-base,
+.blueprint-meta-item,
+.profile-btn,
+.onboard-form input[type="text"],
+.onboard-form input[type="date"],
+.onboard-form select,
+.onboard-form textarea {
+  --color-white-bone: #12101E; /* Near-black primary on light card */
+  --color-ash:        #3D3A54; /* Dark purple-grey secondary */
+  --color-ghost:      #6B6882; /* Mid dark purple-grey tertiary */
+  --color-border:     rgba(18,16,30,0.12); /* Crisp cell lines on light surface */
+  color: #12101E;
+}
+
+/* App header border stays dark/visible against the void */
+.app-header {
+  border-bottom-color: #2D2A3E;
 }
