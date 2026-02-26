@@ -8,8 +8,8 @@
 
 **Style:** Neo-Risograph Eastern Mythology UI — "ancient wisdom transmitted through an analog signal."
 **Mood:** Cool, cosmic, slightly analog/print-like. Not digital-glassy. Like an independent artist's mystical zine.
-**Background:** Cool white (`#F5F5F7`) — near-pure white with a very faint cool/blue undertone. Crisp paper stock, clearly not parchment.
-**Text:** Near-black primary (`#0F0014`) + cool grey-purple secondary (`#58566A`). Electric purple (`#A020F0`) is accent-only — wordmark, active states, section bars, chips.
+**Background:** Deep space dark (`#0D0B14`) — near-black with a faint cosmic purple undertone. Element blobs glow as colored auras.
+**Text:** Near-white primary (`#EDEBF5`) + mid lavender-grey secondary (`#A8A4BE`). Electric purple (`#A020F0`) is accent-only — wordmark, active states, section bars, chips.
 **Brand token:** Electric psychic purple (`#A020F0`) for the SoulMap wordmark and active UI states.
 **Borders/corners:** Almost no rounding — `border-radius: 2px` globally. Sharp, print-like.
 **Grain texture:** SVG noise overlay at 12% opacity for the cosmic analog feel.
@@ -25,18 +25,18 @@ All values live as CSS custom properties in `:root` (`public/styles.css`).
 ### Background & Surface
 | Token | Hex | Use |
 |-------|-----|-----|
-| `--color-void` | `#F5F5F7` | Primary background — cool white |
-| `--color-ground` | `#EEEFF2` | Card / section background |
-| `--color-surface-raised` | `#E5E6EA` | Elevated panels, grid header rows |
-| `--color-border` | `#CCCDD5` | Subtle borders, dividers |
+| `--color-void` | `#0D0B14` | Primary background — deep space dark |
+| `--color-ground` | `#14121E` | Card / section background |
+| `--color-surface-raised` | `#1C1A28` | Elevated panels, grid header rows |
+| `--color-border` | `#2D2A3E` | Subtle borders, dividers |
 | `--color-border-active` | `#A020F0` | Active/selected state — psychic purple |
 
 ### Text
 | Token | Hex | Use |
 |-------|-----|-----|
-| `--color-white-bone` | `#0F0014` | Primary text — near-black (barely perceptible purple DNA) |
-| `--color-ash` | `#58566A` | Secondary text — cool grey-purple |
-| `--color-ghost` | `#8C8A9A` | Disabled / tertiary — light cool grey |
+| `--color-white-bone` | `#EDEBF5` | Primary text — near-white, faint lavender |
+| `--color-ash` | `#A8A4BE` | Secondary text — mid lavender-grey |
+| `--color-ghost` | `#625E78` | Disabled / tertiary — muted purple-grey |
 
 ### Brand Accents
 | Token | Hex | Name | Notes |
@@ -147,9 +147,9 @@ The canonical element color mapping — used in Four Pillars chars, element bala
 | Feb 2025 | Element colors shifted to traditional associations | Cobalt blue for Wood was confusing (read as Water) |
 | Feb 2025 | Four Pillars max-width 520px | Wide desktop columns looked sparse/unintentional |
 | Feb 2025 | Core/ref row hierarchy in grid | Reduces visual noise; focuses attention on main pillars |
-| Feb 2026 | Background settled on **cool white** `#F5F5F7` | Faint cool/blue undertone — clearly not parchment. Element colors and electric purple text pop maximally. |
+| Feb 2026 | **Dark mode** — deep space `#0D0B14` background | Near-black with cosmic purple undertone. Element blobs glow as colored auras. Five element colors and electric purple accent pop maximally on dark. |
 | Feb 2026 | 色块 blobs made **dynamic from BaZi elements** | Background blobs now reflect user's top 3 dominant elements. `renderAppBlueprint()` in `app.js` sets `--blob-elem-1/2/3` via `setProperty()`. CSS fallbacks: psychic/gold/vermillion pre-load. |
 | Feb 2026 | Section label `::before` color bars added | 3px psychic purple bar above each `.detail-sections h3` — editorial section marker. Soul type sub-label gets tinted chip background `rgba(160,32,240,0.07)`. |
-| Feb 2026 | **NEO pop** text hierarchy — near-black body + accent-only purple | Body text `#0F0014` (near-black, barely perceptible purple); secondary `#58566A` (grey-purple); `#A020F0` accent-only. Electric purple pops because it's not competing with body text. |
+| Feb 2026 | **NEO pop** text hierarchy — near-white body + accent-only purple | Body text `#EDEBF5` (near-white, faint lavender); secondary `#A8A4BE` (mid lavender-grey); `#A020F0` accent-only. Electric purple pops because it's not competing with body text. |
 | Feb 2026 | `--color-psychic: #A020F0` — electric psychic purple | Upgraded from #7B3FF2; #A020F0 is a true saturated psychic purple, reserved for SoulMap wordmark + active UI states |
 | Feb 2026 | Row striping changed from `rgba(0,0,0,X)` → `rgba(30,21,53,X)` | Black overlay cast cold grey on lavender; indigo-tint overlay reads naturally with new background |
