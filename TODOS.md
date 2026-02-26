@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B + Oracle AI + 10 soul portraits complete; BaZi engine rebuilt with solar term accuracy; Phase 2 engagement layer in progress)
+> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B + Oracle AI + 10 soul portraits complete; BaZi engine rebuilt with solar term accuracy; visual polish pass complete — light mode, element colors, Four Pillars redesign, DESIGN.md created)
 
 ---
 
@@ -86,7 +86,20 @@
 - [x] Session persistence (localStorage restore skips onboarding)
 - [x] Tab navigation (Blueprint / Oracle / Library / Spark / Still Point)
 - [x] Dark mode design system (Neo-Risograph Eastern Mythology)
-- [ ] Light mode option — Phase 2
+- [x] **Light mode** — warm parchment (#F4EFE4) background, dark ink text; full palette redesigned ← **completed 2026-02-25**
+- [x] **Visual polish — Four Pillars chart (2026-02-25)**
+  - Grid max-width capped at 520px + centered (was stretching full-width on desktop)
+  - All English font sizes increased: romanization 0.42→0.65rem, TenGod 0.38→0.54rem, col headers 0.45→0.62rem, row labels 0.38→0.48rem, element badges 0.45→0.58rem
+  - Core/reference row hierarchy: header/TenGod/Stems/Branches visually separated from detail rows by 2px border
+  - Spirits (神煞) row conditionally hidden when no sha data
+  - Cell centering fixed (`flex: 1` on `.bazi-cell`)
+- [x] **Five Element color palette redesigned to traditional associations (2026-02-25)**
+  - Wood: cobalt blue `#2B4CE0` → forest green `#3A7D44`
+  - Earth: orange `#FF6B1A` → terracotta/sienna `#9B5523`
+  - Water: cyan `#00C5CD` → deep sapphire `#1A4DB5`
+  - Fire (vermillion) + Metal (gold) unchanged
+  - Applied across: Four Pillars chars, element balance bars, element badge backgrounds, 大运 card accents
+- [x] **`DESIGN.md` created** — canonical visual design reference for all future sessions (palette, typography, spacing, component inventory, decisions log)
 - [ ] WCAG 2.1 AA accessibility audit — Phase 2
 
 ---
@@ -213,7 +226,7 @@
 - [ ] Multi-language: Mandarin Chinese (priority)
 - [ ] Zi Wei Dou Shu (紫微斗数) secondary chart system
 - [ ] True solar time (birth location → longitude correction)
-- [ ] Light mode
+- [x] Light mode ← completed 2026-02-25 (see UX/Polish above)
 - [ ] WCAG 2.1 AA compliance audit
 
 ---
