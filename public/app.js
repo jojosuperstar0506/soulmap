@@ -899,72 +899,74 @@
       return `<div class="bazi-cell bazi-cell-sha">${d.sha.map(s => `<span class="bazi-sha-tag">${s}</span>`).join('')}</div>`;
     }
 
+    const hasSha = pData.some(d => d.sha && d.sha.length > 0);
+
     const rows = [
       // Row 0 — header
-      `<div class="bazi-row bazi-row-header">
+      `<div class="bazi-row bazi-row-header bazi-row-core">
         <div class="bazi-label"><span>日期</span><span class="bazi-label-en">Pillar</span></div>
         ${PILLAR_LABELS_CN.map((cn, i) => `<div class="bazi-col-head${i===2?' bazi-day-head':''}">${cn}<span class="bazi-col-en">${PILLAR_LABELS_EN[i]}</span></div>`).join('')}
       </div>`,
 
       // Row 1 — 主星 Ten God
-      `<div class="bazi-row">
+      `<div class="bazi-row bazi-row-core">
         <div class="bazi-label"><span>主星</span><span class="bazi-label-en">10 Gods</span></div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-tengod${i===2?' bazi-day':''}">${TEN_GOD_NAMES[d.tg]}<span class="bazi-tg-en">${TEN_GOD_EN[d.tg]}</span></div>`).join('')}
       </div>`,
 
       // Row 2 — 天干 Heavenly Stems
-      `<div class="bazi-row">
+      `<div class="bazi-row bazi-row-core">
         <div class="bazi-label"><span>天干</span><span class="bazi-label-en">Stems</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${stemCell(d).replace('<div class="bazi-cell">','<div class="bazi-cell">')}</div>`).join('')}
       </div>`,
 
       // Row 3 — 地支 Earthly Branches
-      `<div class="bazi-row">
+      `<div class="bazi-row bazi-row-core">
         <div class="bazi-label"><span>地支</span><span class="bazi-label-en">Branches</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${branchCell(d)}</div>`).join('')}
       </div>`,
 
-      // Row 4 — 藏干 Hidden Stems
-      `<div class="bazi-row">
+      // Row 4 — 藏干 Hidden Stems (first reference row — thick top border)
+      `<div class="bazi-row bazi-row-ref bazi-row-ref-first">
         <div class="bazi-label"><span>藏干</span><span class="bazi-label-en">Hidden</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${hiddenCell(d)}</div>`).join('')}
       </div>`,
 
       // Row 5 — 副星 Sub Stars (ten gods of hidden stems)
-      `<div class="bazi-row">
+      `<div class="bazi-row bazi-row-ref">
         <div class="bazi-label"><span>副星</span><span class="bazi-label-en">Sub Stars</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${subStarCell(d)}</div>`).join('')}
       </div>`,
 
       // Row 6 — 星运 12 Growth Stage (stem in its branch)
-      `<div class="bazi-row">
+      `<div class="bazi-row bazi-row-ref">
         <div class="bazi-label"><span>星运</span><span class="bazi-label-en">Stage</span></div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.stage}</div>`).join('')}
       </div>`,
 
       // Row 7 — 自坐 Self-seat (day master in each branch)
-      `<div class="bazi-row">
+      `<div class="bazi-row bazi-row-ref">
         <div class="bazi-label"><span>自坐</span><span class="bazi-label-en">Self</span></div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.selfSeat}</div>`).join('')}
       </div>`,
 
       // Row 8 — 空亡 Empty/Void
-      `<div class="bazi-row">
+      `<div class="bazi-row bazi-row-ref">
         <div class="bazi-label"><span>空亡</span><span class="bazi-label-en">Void</span></div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.kongwang}</div>`).join('')}
       </div>`,
 
-      // Row 9 — 纳音 Nayin
-      `<div class="bazi-row">
+      // Row 9 — 纳音 Nayin (last row when no spirits)
+      `<div class="bazi-row bazi-row-ref${hasSha ? '' : ' bazi-row-last'}">
         <div class="bazi-label"><span>纳音</span><span class="bazi-label-en">Nayin</span></div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.nayin}</div>`).join('')}
       </div>`,
 
-      // Row 10 — 神煞 Spirit Killers
-      `<div class="bazi-row bazi-row-last">
+      // Row 10 — 神煞 Spirit Killers (only shown when at least one pillar has sha)
+      ...(hasSha ? [`<div class="bazi-row bazi-row-ref bazi-row-last">
         <div class="bazi-label"><span>神煞</span><span class="bazi-label-en">Spirits</span></div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${shaCell(d)}</div>`).join('')}
-      </div>`
+      </div>`] : [])
     ];
 
     el.innerHTML = `<div class="bazi-grid">${rows.join('')}</div>`;
