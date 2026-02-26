@@ -921,6 +921,18 @@
     const dayBrInts    = interactions.filter(i => i.withPillar === 'day');
     const monBrInts    = interactions.filter(i => i.withPillar === 'month');
 
+    // Direction-aware month-branch clash:
+    // Clashing a HARMFUL natal month branch → removes obstacle → positive score.
+    // Clashing a USEFUL natal month branch  → removes support  → negative score.
+    const monBrMainEl = HIDDEN_STEMS_ROLES[chart.monthPillar.branch]?.[0]
+      ? STEM_EL_NAME[HIDDEN_STEMS_ROLES[chart.monthPillar.branch][0].s]
+      : null;
+    const hasMonClash = monBrInts.some(i => i.type === 'clash');
+    const monClashDir = !hasMonClash ? 0
+      : (monBrMainEl && harmful.includes(monBrMainEl)) ?  1   // removing harm = good
+      : (monBrMainEl && useful.includes(monBrMainEl))  ? -1   // removing support = bad
+      : 0;                                                     // neutral element = no change
+
     // ── WEALTH ────────────────────────────────────────────────────
     let wealth = 50;
     if (stemTenGod === 'harvest' || stemTenGod === 'windfall') wealth += 12;
@@ -949,7 +961,7 @@
     const wVit = { zenith:8, ascension:6, rising:4, awakening:2, waning:0, initiation:-2,
                    nurture:-2, conception:-4, retreat:-4, stillness:-6, vault:-6, void:-8 };
     wealth += wVit[twelveStage] ?? 0;
-    if (monBrInts.some(i => i.type === 'clash')) wealth -= 8;
+    wealth += monClashDir > 0 ? 8 : monClashDir < 0 ? -8 : 0;
     wealth = Math.max(5, Math.min(95, Math.round(wealth)));
 
     // ── LOVE (= Relationships) ────────────────────────────────────
@@ -977,6 +989,7 @@
                    nurture:2, conception:0, retreat:-4, stillness:-6, vault:-4, void:-8 };
     love += lVit[twelveStage] ?? 0;
     if (stemTenGod === 'guardian' || mainHS.tenGod === 'guardian') love += 4;
+    love += monClashDir > 0 ? 6 : monClashDir < 0 ? -8 : 0;
     love = Math.max(5, Math.min(95, Math.round(love)));
 
     // ── CAREER ───────────────────────────────────────────────────
@@ -999,7 +1012,7 @@
     const cVit = { zenith:8, ascension:6, rising:4, awakening:2, waning:0, initiation:-2,
                    nurture:-2, conception:-4, retreat:-4, stillness:-6, vault:-6, void:-8 };
     career += cVit[twelveStage] ?? 0;
-    if (monBrInts.some(i => i.type === 'clash')) career -= 10;
+    career += monClashDir > 0 ? 8 : monClashDir < 0 ? -10 : 0;
     career = Math.max(5, Math.min(95, Math.round(career)));
 
     // ── HEALTH ───────────────────────────────────────────────────

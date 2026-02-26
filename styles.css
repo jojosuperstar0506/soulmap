@@ -1650,6 +1650,29 @@ blockquote {
   margin-bottom: 6px;
 }
 
+/* Saved Oracle body — mirrors .msg.assistant markdown rendering */
+.oracle-saved-body { font-size: 0.85rem; line-height: 1.7; }
+.oracle-saved-body p { margin: 0 0 0.6rem; }
+.oracle-saved-body p:last-child { margin-bottom: 0; }
+.oracle-saved-body strong { font-weight: 700; }
+.oracle-saved-body em { font-style: italic; color: var(--color-ash); }
+.oracle-saved-body h2.oracle-h2 {
+  font-family: var(--font-display);
+  font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--color-ash); margin: 1rem 0 0.35rem;
+}
+.oracle-saved-body h2.oracle-h2:first-child { margin-top: 0; }
+.oracle-saved-body h3.oracle-h3 {
+  font-family: var(--font-display);
+  font-size: 0.76rem; font-weight: 600; font-style: italic;
+  color: var(--color-cobalt); margin: 0.85rem 0 0.25rem;
+}
+.oracle-saved-body h3.oracle-h3:first-child { margin-top: 0; }
+.oracle-saved-body hr.oracle-hr {
+  border: none; border-top: 1px solid var(--color-border); margin: 0.9rem 0;
+}
+
 /* ═══════════════════════════════════════════════════════════════ */
 /* DAILY SPARK TAB                                                 */
 /* ═══════════════════════════════════════════════════════════════ */

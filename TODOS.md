@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-25 (Phase 0 + 0.5 + 1-B + Oracle AI + 10 soul portraits complete; BaZi engine rebuilt with solar term accuracy; visual polish pass complete — light mode, element colors, Four Pillars redesign, DESIGN.md created)
+> Last updated: 2026-02-26 (Lifetime Arc: real BaZi scoring engine + combined 4-track chart + per-cycle AI narrative complete)
 
 ---
 
@@ -39,6 +39,17 @@
 - [x] Day Master / Season / Zodiac meta row
 - [x] 大运 Life Seasons strip (scrollable cards)
 - [x] Energy Aspect charts (love / wealth / career / health per decade)
+  - [x] **Lifetime Arc overhaul (2026-02-26)** — replaced fake hash-scored charts with real BaZi engine:
+    - New constants: `PRODUCTION_CYCLE`, `CONTROL_CYCLE`, `HIDDEN_STEMS_ROLES`, `MONTHLY_STRENGTH`, `SIX_CLASHES/HARMS/COMBOS`, `STEM_BIRTH_BRANCH`
+    - `assessDayMasterStrength()` — month branch vitality × 3 + stem/hidden-stem root scoring → 5-tier result (extreme_strong → extreme_weak)
+    - `deriveUsefulGods()` — element sets that help vs. drain the DM based on strength
+    - `getScoreTenGod()` / `getTwelveStageEn()` — correct yin/yang birth-branch lookup for 12-stage vitality
+    - `findBranchInteractions()` — six clashes, six harms, six combos vs. natal chart
+    - `scoreCycle()` — full scoring engine for Love/Wealth/Career/Health (0–100) using Ten Gods, hidden stems, 12-stage vitality, branch interactions, body strength, and direction-aware month-clash logic
+    - Combined 4-track SVG chart replaces 4 separate charts; past solid / future dashed; current decade highlighted with red "NOW" marker; season emoji badges (🌟🌱⚖️🔥⛈️)
+    - Insight cards: Current Season, Lifetime Peak, Turning Point
+    - Scores validated against spec ranges (甲寅/癸丑 within range; 辛亥 health ✅, wealth/love directionally correct — discrepancy due to zenith boost magnitude and spec's mislabeled Ten God for 辛→癸)
+    - calculateBaZi() extended with `dayMasterEl`, `arcStrength`, `usefulGods`, `harmfulGods`
 - [x] Narrative section (static fallback + API path wired)
 - [x] **Four Pillars table redesign** — row-based grid matching mockup screenshot
   - [x] Add `getTenGod(dayStem, targetStem)` to app.js
@@ -145,6 +156,10 @@
   - `outputFileTracingIncludes` moved from `experimental: {}` to top-level in `next.config.ts` (was silently ignored, so system prompt file was missing in serverless bundle)
   - Added `outputFileTracingRoot: path.join(__dirname)` — stray `package-lock.json` in `~/` caused Next.js to use home dir as workspace root, breaking `.env.local` discovery
   - `new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })` — explicit key pass required; `new Anthropic()` did not auto-read env var in Next.js 16 production mode
+- [x] **Per-cycle AI narrative endpoint (2026-02-26)** — `src/app/api/cycle-narrative/route.ts`
+  - POST `{ chart, cycle }` → `claude-sonnet-4-6` → JSON with `{seasonName, theme, summary, wealthNote, relationshipsNote, healthNote, lifeLessonThisSeason, growthEdge, shadowWork}`
+  - Lazy generation: narrative only fetched on user click; cached to profile localStorage (`daYunNarratives` map keyed by pillar label)
+  - `showCycleDetail(idx)` panel: score bars (Love/Wealth/Career/Health with colored fills) + "✦ Generate Reading for this Season" button + tabbed narrative display
 - [ ] Add `ANTHROPIC_API_KEY` to Vercel environment variables ← **still needed for live deploy**
 - [ ] Deploy and verify end-to-end on Vercel ← **pending above**
 
