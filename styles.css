@@ -23,8 +23,8 @@
 
   /* ─── Text ─── */
   --color-white-bone: #EDEBF5;     /* Primary text — near-white, faint lavender */
-  --color-ash: #A8A4BE;            /* Secondary text — mid lavender-grey */
-  --color-ghost: #625E78;          /* Disabled / tertiary — muted purple-grey */
+  --color-ash: #C4C0D8;            /* Secondary text — light lavender-grey */
+  --color-ghost: #9490AA;          /* Disabled / tertiary — mid purple-grey */
   --color-psychic: #A020F0;        /* Brand token — electric psychic purple (wordmark) */
 
   /* ─── Typography ─── */
@@ -80,17 +80,7 @@ body {
 
 /* ─── Global grain overlay ─── */
 body::before {
-  content: '';
-  position: fixed;
-  pointer-events: none;
-  z-index: 0;
-  width: 55vw;
-  height: 55vw;
-  border-radius: 50%;
-  background: var(--blob-elem-3, var(--color-vermillion));
-  opacity: 0.10;
-  bottom: -20vw;
-  right: -15vw;
+  display: none; /* 色块 disabled */
 }
 
 body::after {
@@ -194,27 +184,11 @@ blockquote {
 }
 
 .landing-bg::before {
-  content: '';
-  position: absolute;
-  width: 45vw;
-  height: 45vw;
-  border-radius: 50%;
-  background: var(--blob-elem-2, var(--color-gold));
-  opacity: 0.16;
-  bottom: -12vw;
-  left: -10vw;
+  display: none; /* 色块 disabled */
 }
 
 .landing-bg::after {
-  content: '';
-  position: absolute;
-  width: 70vw;
-  height: 70vw;
-  border-radius: 50%;
-  background: var(--blob-elem-1, var(--color-psychic));
-  opacity: 0.13;
-  top: -20vw;
-  right: -20vw;
+  display: none; /* 色块 disabled */
 }
 
 .landing-content {
@@ -1633,10 +1607,15 @@ blockquote {
 
 .wisdom-vault-nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.35rem;
+  overflow-x: auto;
+  scrollbar-width: none;        /* Firefox */
+  padding-bottom: 0.25rem;
   margin-bottom: 1.25rem;
+  -webkit-overflow-scrolling: touch;
 }
+.wisdom-vault-nav::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
 .wisdom-vault-tab {
   padding: 0.3rem 0.7rem;
@@ -1711,6 +1690,17 @@ blockquote {
   font-size: 0.85rem;
   color: var(--color-ash);
   line-height: 1.6;
+}
+
+/* "Why this speaks to you" — elemental resonance caption on For You cards */
+.vault-why {
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--color-gold);
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--color-ghost);
+  line-height: 1.5;
 }
 
 /* Saved Oracle entries */

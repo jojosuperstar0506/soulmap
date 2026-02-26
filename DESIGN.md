@@ -8,13 +8,13 @@
 
 **Style:** Neo-Risograph Eastern Mythology UI — "ancient wisdom transmitted through an analog signal."
 **Mood:** Cool, cosmic, slightly analog/print-like. Not digital-glassy. Like an independent artist's mystical zine.
-**Background:** Deep space dark (`#0D0B14`) — near-black with a faint cosmic purple undertone. Element blobs glow as colored auras.
-**Text:** Near-white primary (`#EDEBF5`) + mid lavender-grey secondary (`#A8A4BE`). Electric purple (`#A020F0`) is accent-only — wordmark, active states, section bars, chips.
+**Background:** Deep space dark (`#0D0B14`) — near-black with a faint cosmic purple undertone. Clean, no decorative blobs.
+**Text:** Near-white primary (`#EDEBF5`) + light lavender-grey secondary (`#C4C0D8`) + mid purple-grey tertiary (`#9490AA`). Electric purple (`#A020F0`) is accent-only — wordmark, active states, section bars, chips.
 **Brand token:** Electric psychic purple (`#A020F0`) for the SoulMap wordmark and active UI states.
 **Borders/corners:** Almost no rounding — `border-radius: 2px` globally. Sharp, print-like.
 **Grain texture:** SVG noise overlay at 12% opacity for the cosmic analog feel.
 **Layout:** Portrait-first (portrait card max-width 360px), app container max-width ~640px.
-**No dark mode** (currently; may add later).
+**Dark mode** — deep space `#0D0B14` background (default and only mode).
 
 ---
 
@@ -35,8 +35,8 @@ All values live as CSS custom properties in `:root` (`public/styles.css`).
 | Token | Hex | Use |
 |-------|-----|-----|
 | `--color-white-bone` | `#EDEBF5` | Primary text — near-white, faint lavender |
-| `--color-ash` | `#A8A4BE` | Secondary text — mid lavender-grey |
-| `--color-ghost` | `#625E78` | Disabled / tertiary — muted purple-grey |
+| `--color-ash` | `#C4C0D8` | Secondary text — light lavender-grey (brightened for dark bg readability) |
+| `--color-ghost` | `#9490AA` | Disabled / tertiary — mid purple-grey (brightened for dark bg readability) |
 
 ### Brand Accents
 | Token | Hex | Name | Notes |
@@ -153,3 +153,5 @@ The canonical element color mapping — used in Four Pillars chars, element bala
 | Feb 2026 | **NEO pop** text hierarchy — near-white body + accent-only purple | Body text `#EDEBF5` (near-white, faint lavender); secondary `#A8A4BE` (mid lavender-grey); `#A020F0` accent-only. Electric purple pops because it's not competing with body text. |
 | Feb 2026 | `--color-psychic: #A020F0` — electric psychic purple | Upgraded from #7B3FF2; #A020F0 is a true saturated psychic purple, reserved for SoulMap wordmark + active UI states |
 | Feb 2026 | Row striping changed from `rgba(0,0,0,X)` → `rgba(30,21,53,X)` | Black overlay cast cold grey on lavender; indigo-tint overlay reads naturally with new background |
+| Feb 2026 | **Background 色块 blobs disabled** | `body::before`, `.landing-bg::before`, `.landing-bg::after` set to `display: none`. Code preserved for easy re-enable. Dynamic blob JS (`--blob-elem-1/2/3`) remains in `renderAppBlueprint()`. Clean deep-space dark background is more focused and editorial. |
+| Feb 2026 | **Text tokens brightened for dark bg readability** | `--color-ash: #A8A4BE → #C4C0D8` (~20% brighter); `--color-ghost: #625E78 → #9490AA` (~45% brighter). Secondary and tertiary labels now clearly legible on `#0D0B14`. `--color-white-bone: #EDEBF5` unchanged. |

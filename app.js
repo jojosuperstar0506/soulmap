@@ -2113,6 +2113,82 @@
       .concat(state.savedOracleItems || []);  // profile-scoped Oracle saves
   }
 
+  // ── "For You" smart curation ─────────────────────────────────────
+  // Traditions that resonate with each element's archetypal energy
+  const ELEMENT_TRADITION_AFFINITY = {
+    water:  ['daoism', 'sufi', 'buddhism'],         // flow, depth, surrender
+    wood:   ['buddhism', 'confucianism', 'vedic'],   // growth, cultivation, dharma
+    fire:   ['stoicism', 'greek', 'christianity'],   // courage, reason, love
+    earth:  ['confucianism', 'judaism', 'vedic'],    // stability, duty, rootedness
+    metal:  ['chinese', 'stoicism', 'islam'],         // precision, discipline, refinement
+  };
+
+  // One-line caption explaining why a quote speaks to the user's elemental chart
+  const WHY_CAPTIONS = {
+    water: {
+      daoism:       'Water is scarce in your chart — Daoism teaches yielding as strength.',
+      sufi:         'The Sufi poets speak to Water\'s longing: love that dissolves the self.',
+      buddhism:     'Buddhism\'s teaching on impermanence mirrors the flow of Water.',
+    },
+    wood: {
+      buddhism:     'Your Wood nature grows through conscious unfolding — Buddhism shows the path.',
+      confucianism: 'Wood seeks upward cultivation — Confucius teaches the discipline of character.',
+      vedic:        'The Vedic tradition speaks to Wood\'s dharma: purposeful, devoted action.',
+    },
+    fire: {
+      stoicism:     'Stoicism channels Fire\'s intensity into practical wisdom under pressure.',
+      greek:        'Greek philosophy asks Fire\'s question: how to live a life worth living.',
+      christianity: 'The Christian tradition speaks to Fire\'s warmth — love as the highest virtue.',
+    },
+    earth: {
+      confucianism: 'Earth energy needs roots — Confucianism builds the stable ground of virtue.',
+      judaism:      'Jewish wisdom speaks to Earth\'s covenant: showing up faithfully, day after day.',
+      vedic:        'The Vedic path of karma yoga speaks to Earth\'s gift: steady, devoted action.',
+    },
+    metal: {
+      chinese:      'The I Ching speaks to Metal\'s discernment — timing and precision over force.',
+      stoicism:     'Metal resonates with Stoic refinement: cutting away what is not essential.',
+      islam:        'Islamic teaching on discipline speaks to Metal\'s path of purification.',
+    },
+  };
+
+  function curateForYou(vault, chart) {
+    const nonSaved = vault.filter(x => x.tradition !== 'saved');
+    if (!chart || !chart.elementBalance) return nonSaved.slice(0, 18);
+
+    const elNames = ['wood','fire','earth','metal','water'];
+    const balance = chart.elementBalance; // { wood, fire, earth, metal, water } percentages
+    const sorted  = elNames.slice().sort((a, b) => (balance[a] || 0) - (balance[b] || 0));
+    const weakest    = sorted[0];
+    const secondWeak = sorted[1];
+    const dmEl       = (chart.dayMasterEl || '').toLowerCase();
+
+    // Score each item by how well its tradition resonates with the user's element profile
+    const scored = nonSaved.map(item => {
+      let score = 0;
+      if (ELEMENT_TRADITION_AFFINITY[weakest]?.includes(item.tradition))    score += 3;
+      if (ELEMENT_TRADITION_AFFINITY[secondWeak]?.includes(item.tradition)) score += 2;
+      if (ELEMENT_TRADITION_AFFINITY[dmEl]?.includes(item.tradition))       score += 1;
+      const why = WHY_CAPTIONS[weakest]?.[item.tradition]
+               || WHY_CAPTIONS[dmEl]?.[item.tradition]
+               || null;
+      return { ...item, _score: score, _why: why };
+    }).sort((a, b) => b._score - a._score);
+
+    // Shuffle within each score tier so the feed feels fresh on each visit
+    const tiers = {};
+    for (const item of scored) {
+      (tiers[item._score] = tiers[item._score] || []).push(item);
+    }
+    const result = [];
+    for (const score of Object.keys(tiers).sort((a, b) => b - a)) {
+      const shuffled = tiers[score].sort(() => Math.random() - 0.5);
+      result.push(...shuffled);
+      if (result.length >= 18) break;
+    }
+    return result.slice(0, 18);
+  }
+
   function categorizeCitation(citation) {
     const combined = ((citation.source || '') + ' ' + (citation.author || '')).toLowerCase();
     if (/\b(tao te ching|lao tzu|zhuangzi|dao)\b/.test(combined))                     return 'daoism';
@@ -2121,8 +2197,11 @@
     if (/\b(i ching|yijing)\b/.test(combined))                                          return 'chinese';
     if (/\b(meditations|marcus aurelius|seneca|epictetus|stoic)\b/.test(combined))      return 'stoicism';
     if (/\b(plato|aristotle|heraclitus|republic|ethics|greek)\b/.test(combined))        return 'greek';
-    if (/\b(rumi|masnavi|sufi)\b/.test(combined))                                       return 'sufi';
-    if (/\b(bhagavad gita|veda|vedic)\b/.test(combined))                                return 'vedic';
+    if (/\b(rumi|masnavi|hafiz|ibn arabi|sufi|sa.di)\b/.test(combined))                  return 'sufi';
+    if (/\b(bhagavad gita|veda|vedic|upanishad)\b/.test(combined))                      return 'vedic';
+    if (/\b(bible|psalm|proverb|matthew|gospel|augustine|kempis|christian|corinthian)\b/.test(combined)) return 'christianity';
+    if (/\b(quran|hadith|al-ghazali|ghazali|islamic|prophet|muhammad|bukhari|muslim)\b/.test(combined))  return 'islam';
+    if (/\b(talmud|torah|rabbi|pirkei|maimonides|jewish|hebrew|hillel|mishneh)\b/.test(combined))        return 'judaism';
     return 'uncategorized';
   }
 
@@ -2179,7 +2258,12 @@
   function renderWisdomVault(filter) {
     const list  = document.getElementById('wisdom-vault-list');
     const vault = getWisdomVault();
-    const items = filter === 'all' ? vault : vault.filter(x => x.tradition === filter);
+    let items;
+    if (filter === 'all') {
+      items = curateForYou(vault, state.chart || null);
+    } else {
+      items = vault.filter(x => x.tradition === filter);
+    }
     list.innerHTML = items.map(x => {
       if (x.tradition === 'saved') {
         return `<div class="wisdom-vault-item wisdom-vault-item--saved">
@@ -2188,8 +2272,16 @@
           <div class="oracle-saved-body">${renderMarkdown(x.text)}</div>
         </div>`;
       }
-      const title = x.source + (x.author ? ' — ' + x.author : '');
-      return `<div class="wisdom-vault-item"><span class="tradition">${x.tradition}</span><h4>${title}</h4><p>${x.text}</p></div>`;
+      const title  = x.source + (x.author ? ' — ' + x.author : '');
+      const whyHtml = x._why
+        ? `<div class="vault-why">${escapeHtml(x._why)}</div>`
+        : '';
+      return `<div class="wisdom-vault-item">
+        <span class="tradition">${escapeHtml(x.tradition)}</span>
+        <h4>${escapeHtml(title)}</h4>
+        <p>${escapeHtml(x.text)}</p>
+        ${whyHtml}
+      </div>`;
     }).join('');
   }
 
