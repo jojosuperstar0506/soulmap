@@ -7,10 +7,10 @@
 
 :root {
   /* ─── Background & Surface ─── */
-  --color-void: #F5F0E8;           /* Primary background — warm cream paper */
-  --color-ground: #EDE8DC;         /* Card / surface background */
-  --color-surface-raised: #E4DDD2; /* Elevated panels */
-  --color-border: #CEC7BA;         /* Subtle borders */
+  --color-void: #FAF8F4;           /* Primary background — rice white */
+  --color-ground: #F2F0EB;         /* Card / surface background */
+  --color-surface-raised: #E9E6E0; /* Elevated panels */
+  --color-border: #D8D3C8;         /* Subtle borders */
   --color-border-active: #A020F0;  /* Active/selected — psychic purple */
 
   /* ─── Brand Accents (one per section, never all at once) ─── */
@@ -22,9 +22,9 @@
   --color-amber: #9B5523;          /* Earth — terracotta/sienna */
 
   /* ─── Text ─── */
-  --color-white-bone: #1E1535;     /* Primary text — deep indigo purple */
-  --color-ash: #5A4E8A;            /* Secondary text — mid purple */
-  --color-ghost: #9087C0;          /* Disabled / tertiary — muted lavender */
+  --color-white-bone: #1A0035;     /* Primary text — darkest electric purple */
+  --color-ash: #7020C0;            /* Secondary text — mid electric purple */
+  --color-ghost: #B060E0;          /* Disabled / tertiary — light electric purple */
   --color-psychic: #A020F0;        /* Brand token — electric psychic purple (wordmark) */
 
   /* ─── Typography ─── */
@@ -668,7 +668,7 @@ blockquote {
   left: 0;
   right: 0;
   padding: 1rem 1rem 0.875rem;
-  background: linear-gradient(transparent, rgba(237, 232, 220, 0.92) 40%);
+  background: linear-gradient(transparent, rgba(242, 240, 235, 0.92) 40%);
 }
 
 .soul-portrait-name {
@@ -1235,7 +1235,7 @@ blockquote {
 .narrative-pillar {
   padding: 0.65rem 0.9rem;
   border-left: 2px solid;
-  background: rgba(30,21,53,0.04);
+  background: rgba(26,0,53,0.04);
   border-radius: 0 2px 2px 0;
 }
 
@@ -2154,7 +2154,7 @@ blockquote {
 
 /* Alternate row shading for readability */
 .bazi-row:nth-child(odd):not(.bazi-row-header) {
-  background: rgba(30,21,53,0.04);
+  background: rgba(26,0,53,0.04);
 }
 
 /* ─── Row hierarchy: core (header + main chars) vs reference (details) ─── */
@@ -2430,7 +2430,7 @@ blockquote {
 }
 
 .cycle-narrative-domains > div {
-  background: rgba(30,21,53,0.03);
+  background: rgba(26,0,53,0.03);
   border-radius: 2px;
   padding: 0.6rem 0.75rem;
 }

@@ -8,8 +8,8 @@
 
 **Style:** Neo-Risograph Eastern Mythology UI — "ancient wisdom transmitted through an analog signal."
 **Mood:** Cool, cosmic, slightly analog/print-like. Not digital-glassy. Like an independent artist's mystical zine.
-**Background:** Warm cream (`#F5F0E8`) — light, slightly warm paper stock. Sits on the opposite thermal axis from purple so they pop each other.
-**Text:** Deep indigo purple (`#1E1535`) — not black or warm ink.
+**Background:** Rice white (`#FAF8F4`) — near-pure white with the faintest warm tint. Clean paper stock feel.
+**Text:** Electric purple hierarchy — primary `#1A0035` (darkest), secondary `#7020C0` (mid), tertiary `#B060E0` (light). All on the same `#A020F0` hue axis.
 **Brand token:** Electric psychic purple (`#A020F0`) for the SoulMap wordmark and active UI states.
 **Borders/corners:** Almost no rounding — `border-radius: 2px` globally. Sharp, print-like.
 **Grain texture:** SVG noise overlay at 12% opacity for the cosmic analog feel.
@@ -25,18 +25,18 @@ All values live as CSS custom properties in `:root` (`public/styles.css`).
 ### Background & Surface
 | Token | Hex | Use |
 |-------|-----|-----|
-| `--color-void` | `#F5F0E8` | Primary background — warm cream paper |
-| `--color-ground` | `#EDE8DC` | Card / section background |
-| `--color-surface-raised` | `#E4DDD2` | Elevated panels, grid header rows |
-| `--color-border` | `#CEC7BA` | Subtle borders, dividers |
+| `--color-void` | `#FAF8F4` | Primary background — rice white |
+| `--color-ground` | `#F2F0EB` | Card / section background |
+| `--color-surface-raised` | `#E9E6E0` | Elevated panels, grid header rows |
+| `--color-border` | `#D8D3C8` | Subtle borders, dividers |
 | `--color-border-active` | `#A020F0` | Active/selected state — psychic purple |
 
 ### Text
 | Token | Hex | Use |
 |-------|-----|-----|
-| `--color-white-bone` | `#1E1535` | Primary text — deep indigo purple |
-| `--color-ash` | `#5A4E8A` | Secondary text — mid purple |
-| `--color-ghost` | `#9087C0` | Disabled / tertiary — muted lavender |
+| `--color-white-bone` | `#1A0035` | Primary text — darkest electric purple |
+| `--color-ash` | `#7020C0` | Secondary text — mid electric purple |
+| `--color-ghost` | `#B060E0` | Disabled / tertiary — light electric purple |
 
 ### Brand Accents
 | Token | Hex | Name | Notes |
@@ -147,6 +147,7 @@ The canonical element color mapping — used in Four Pillars chars, element bala
 | Feb 2025 | Element colors shifted to traditional associations | Cobalt blue for Wood was confusing (read as Water) |
 | Feb 2025 | Four Pillars max-width 520px | Wide desktop columns looked sparse/unintentional |
 | Feb 2025 | Core/ref row hierarchy in grid | Reduces visual noise; focuses attention on main pillars |
-| Feb 2026 | Background settled on **warm cream** `#F5F0E8` | Lavender = soft digital; grey = mashes with purple. Warm cream sits on opposite thermal axis from purple — they pop each other. Classic Risograph zine paper feel. |
+| Feb 2026 | Background settled on **rice white** `#FAF8F4` | Clean near-white, faintest warm tint. Neutral paper stock — element colors and electric purple text pop maximally against it. |
+| Feb 2026 | Text hierarchy unified on `#A020F0` hue axis | All text shades (primary `#1A0035`, secondary `#7020C0`, tertiary `#B060E0`) derived from same electric purple hue. Coherent, editorial, distinctly SoulMap. |
 | Feb 2026 | `--color-psychic: #A020F0` — electric psychic purple | Upgraded from #7B3FF2; #A020F0 is a true saturated psychic purple, reserved for SoulMap wordmark + active UI states |
 | Feb 2026 | Row striping changed from `rgba(0,0,0,X)` → `rgba(30,21,53,X)` | Black overlay cast cold grey on lavender; indigo-tint overlay reads naturally with new background |
