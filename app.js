@@ -427,8 +427,9 @@
     occupation: '', relationship: '', currentConcern: '',
     chart: null, soulTypeIndex: 0, streak: 0,
     narrativeFromAPI: null,
-    profileId: null,     // ID of the active profile
-    profileName: ''      // display name of the active profile
+    profileId: null,          // ID of the active profile
+    profileName: '',          // display name of the active profile
+    savedOracleItems: [],     // per-profile Oracle saves (not shared across profiles)
   };
 
   function setState(partial) { state = { ...state, ...partial }; }
@@ -480,6 +481,7 @@
                              ? (state.chart.pillarsStr || null)
                              : null,
       daYunNarratives:     Object.keys(daYunNarratives).length ? daYunNarratives : null,
+      savedOracleItems:    state.savedOracleItems || [],
     };
     if (idx >= 0) { profiles[idx] = profileData; } else { profiles.push(profileData); }
     saveProfiles(profiles);
@@ -497,19 +499,20 @@
       });
     }
     setState({
-      birthDate:      p.birthDate,
-      shichen:        p.shichen,
-      gender:         p.gender || 'female',
-      occupation:     p.occupation || '',
-      relationship:   p.relationship || '',
-      currentConcern: p.currentConcern || '',
+      birthDate:        p.birthDate,
+      shichen:          p.shichen,
+      gender:           p.gender || 'female',
+      occupation:       p.occupation || '',
+      relationship:     p.relationship || '',
+      currentConcern:   p.currentConcern || '',
       chart,
-      soulTypeIndex:  chart.dayMaster,
+      soulTypeIndex:    chart.dayMaster,
       profileId:        p.id,
       profileName:      p.name || 'My Chart',
       narrativeFromAPI: (p.narrativeFromAPI && p.narrativePillarsStr && chart.pillarsStr === p.narrativePillarsStr)
                           ? p.narrativeFromAPI
-                          : null
+                          : null,
+      savedOracleItems: p.savedOracleItems || [],
     });
     setActiveProfileId(p.id);
     // Update header labels
@@ -517,6 +520,24 @@
     if (nameEl) nameEl.textContent = p.name || 'My Chart';
     const typeEl = document.getElementById('app-user-type');
     if (typeEl) typeEl.textContent = SOUL_TYPES[chart.dayMaster].name;
+  }
+
+  /** One-time migration: move any 'saved' items from the global vault key
+   *  into the active profile's savedOracleItems array.
+   *  Runs once per browser; safe to call repeatedly (no-ops if nothing to migrate). */
+  function migrateOrphanedSaves() {
+    try {
+      const raw = localStorage.getItem(WISDOM_VAULT_STORAGE_KEY);
+      if (!raw) return;
+      const all = JSON.parse(raw);
+      const orphans = all.filter(e => e.tradition === 'saved');
+      if (!orphans.length) return;
+      // Attribute orphaned saves to whichever profile is currently active
+      state.savedOracleItems = (state.savedOracleItems || []).concat(orphans);
+      saveCurrentProfile();
+      // Remove 'saved' entries from the global key — classical citations stay
+      saveAdditions(all.filter(e => e.tradition !== 'saved'));
+    } catch (_) {}
   }
 
   /** One-time migration: convert old soulmap_session → first named profile */
@@ -863,7 +884,7 @@
     const mBranch = chart.monthPillar.branch;
 
     const decades = [];
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 9; i++) {
       const step        = forward ? (i + 1) : -(i + 1);
       const stemIndex   = ((mStem   + step) % 10 + 10) % 10;
       const branchIndex = ((mBranch + step) % 12 + 12) % 12;
@@ -2075,7 +2096,11 @@
     try { const raw = localStorage.getItem(WISDOM_VAULT_STORAGE_KEY); return raw ? JSON.parse(raw) : []; } catch (_) { return []; }
   }
   function saveAdditions(arr) { try { localStorage.setItem(WISDOM_VAULT_STORAGE_KEY, JSON.stringify(arr)); } catch (_) {} }
-  function getWisdomVault()   { return WISDOM_VAULT_BASE.concat(getStoredAdditions()); }
+  function getWisdomVault()   {
+    return WISDOM_VAULT_BASE
+      .concat(getStoredAdditions())           // global classical citations
+      .concat(state.savedOracleItems || []);  // profile-scoped Oracle saves
+  }
 
   function categorizeCitation(citation) {
     const combined = ((citation.source || '') + ' ' + (citation.author || '')).toLowerCase();
@@ -2095,9 +2120,31 @@
     const vault = getWisdomVault();
     const norm  = t => String(t).trim().toLowerCase().replace(/\s+/g, ' ');
     if (vault.some(e => norm(e.text) === norm(citation.text))) return false;
-    const additions = getStoredAdditions();
-    additions.push({ tradition: citation.tradition || categorizeCitation(citation), source: (citation.source || 'Unknown').trim(), author: (citation.author || 'Unknown').trim(), text: citation.text.trim() });
-    saveAdditions(additions);
+
+    if (citation.tradition === 'saved') {
+      // Profile-scoped: store inside the profile object so saves never bleed across profiles
+      const items = state.savedOracleItems || [];
+      items.push({
+        tradition: 'saved',
+        source:    (citation.source || 'SoulMap Oracle').trim(),
+        author:    (citation.author || '').trim(),
+        text:      citation.text.trim(),
+        savedAt:   citation.savedAt || Date.now(),
+      });
+      state.savedOracleItems = items;
+      saveCurrentProfile();
+    } else {
+      // Global: classical citations are not profile-specific
+      const additions = getStoredAdditions();
+      additions.push({
+        tradition: citation.tradition || categorizeCitation(citation),
+        source:    (citation.source || 'Unknown').trim(),
+        author:    (citation.author || 'Unknown').trim(),
+        text:      citation.text.trim(),
+      });
+      saveAdditions(additions);
+    }
+
     const active = document.querySelector('.library-tab.active');
     if (document.getElementById('library-list')) renderLibrary(active ? active.getAttribute('data-tradition') : 'all');
     return true;
@@ -2358,6 +2405,7 @@
       const activeId  = getActiveProfileId();
       const profile   = profiles.find(p => p.id === activeId) || profiles[0];
       activateProfile(profile);
+      migrateOrphanedSaves(); // one-time: move global 'saved' items into this profile
       renderAppBlueprint();
       showView('view-app');
       switchTab('blueprint');
