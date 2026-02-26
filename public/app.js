@@ -884,7 +884,7 @@
     const mBranch = chart.monthPillar.branch;
 
     const decades = [];
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 10; i++) {
       const step        = forward ? (i + 1) : -(i + 1);
       const stemIndex   = ((mStem   + step) % 10 + 10) % 10;
       const branchIndex = ((mBranch + step) % 12 + 12) % 12;
