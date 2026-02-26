@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-26 (Engine v2: 神煞 scoring, 流年 arc, dominant TenGod, Spark personalization, Oracle persistence, archetype-first narrative — commit 8debffb)
+> Last updated: 2026-02-26 (Neo-Risograph visual overhaul: light card surfaces, 2-plate risograph text, comprehensive dark-text readability fix — commits 134c4df, 7cdee40, eba254e)
 
 ---
 
@@ -111,6 +111,15 @@
   - Fire (vermillion) + Metal (gold) unchanged
   - Applied across: Four Pillars chars, element balance bars, element badge backgrounds, 大运 card accents
 - [x] **`DESIGN.md` created** — canonical visual design reference for all future sessions (palette, typography, spacing, component inventory, decisions log)
+- [x] **Neo-Risograph visual overhaul (2026-02-26)** — full light-card-on-dark-void aesthetic (commits `134c4df`, `7cdee40`, `eba254e`):
+  - `--color-ground: #F0EEF8` (off-white lavender paper), `--color-surface-raised: #E4E1F5`
+  - Tab bar / header chrome locked to `--color-void` (dark); content cards float as printed paper
+  - `.bazi-grid` gets `background: var(--color-ground)` — full chart surface is light paper
+  - 2-plate risograph text: solid near-black `#0A0814` for content, `#A020F0` for structural labels
+  - Comprehensive dark-text context covers all 20 card surface selectors (single source of truth in `public/styles.css`)
+  - Element badge opacity 0.22 → 0.13 for white bg; row striping flipped to dark-on-light tint
+  - Portrait fade gradient: dark `rgba(20,18,30,0.92)` → light `rgba(240,238,248,0.97)`
+  - DESIGN.md updated: Aesthetic Brief, palette tables, Decisions Log
 - [ ] WCAG 2.1 AA accessibility audit — Phase 2
 
 ---

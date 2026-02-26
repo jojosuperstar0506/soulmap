@@ -10,7 +10,7 @@
 **Mood:** Cool, cosmic, slightly analog/print-like. Not digital-glassy. Like an independent artist's mystical zine.
 **Background:** Deep space dark (`#0D0B14`) — cosmic void. Nav chrome (tab bar, header) stays dark. Content cards are **off-white lavender paper** (`#F0EEF8`) floating on the void. Elevated panels `#E4E1F5`. Neo-Risograph paper-on-void aesthetic.
 **Text (on-void):** Near-white primary (`#EDEBF5`) + light lavender-grey secondary (`#C4C0D8`) + mid purple-grey tertiary (`#9490AA`). Used on landing, header, nav labels.
-**Text (on-card):** Near-black primary (`#12101E`) + dark purple-grey secondary (`#3D3A54`) + mid dark tertiary (`#6B6882`). Applied via local CSS var overrides on `.bazi-grid`, `.card-base`, `.blueprint-meta-item`, `.profile-btn`, form inputs. Electric purple (`#A020F0`) is accent-only — wordmark, active states, section bars, chips.
+**Text (on-card):** Solid near-black (`#0A0814`) for all content text. Structural labels (row headers, column labels, section titles, meta labels) use electric purple (`#A020F0`). Applied via CSS custom property cascade on a comprehensive 20-selector list covering all card surfaces — single source of truth at bottom of `public/styles.css`.
 **Brand token:** Electric psychic purple (`#A020F0`) for the SoulMap wordmark and active UI states.
 **Borders/corners:** Almost no rounding — `border-radius: 2px` globally. Sharp, print-like.
 **Grain texture:** SVG noise overlay at 12% opacity for the cosmic analog feel.
@@ -42,9 +42,13 @@ All values live as CSS custom properties in `:root` (`public/styles.css`).
 ### Text — on card (auto-overridden via CSS custom property cascade)
 | Token | On-card value | Use |
 |-------|--------------|-----|
-| `--color-white-bone` | `#12101E` | Near-black primary on light card |
-| `--color-ash` | `#3D3A54` | Dark purple-grey secondary |
-| `--color-ghost` | `#6B6882` | Mid dark purple-grey tertiary |
+| `--color-white-bone` | `#0A0814` | Solid near-black — all content text on light card |
+| `--color-ash` | `#0A0814` | Solid near-black (no grey gradation) |
+| `--color-ghost` | `#0A0814` | Solid near-black (no grey gradation) |
+
+**Structural labels** override to `var(--color-psychic)` (`#A020F0`): `.bazi-label`, `.bazi-label-en`, `.bazi-col-head`, `.bazi-col-en`, `.blueprint-meta-label`, `.detail-sections h3`, `.narrative-section-label`.
+
+**Comprehensive card context selectors** (dark-text block at bottom of `public/styles.css`): `.card-base`, `.card-active`, `.blueprint-detail-card`, `.blueprint-reveal-card`, `.blueprint-detail-visual`, `.blueprint-meta-item`, `.profile-btn`, `.profile-sheet-panel`, `.oracle-template-card`, `.oracle-chat`, `.oracle-messages .msg.assistant`, `.oracle-input-form textarea`, `.wisdom-vault-item`, `.spark-card`, `.meditation-item`, `.dayun-card`, `.bazi-grid`, and all `.onboard-form` inputs.
 
 ### Brand Accents
 | Token | Hex | Name | Notes |
@@ -163,4 +167,8 @@ The canonical element color mapping — used in Four Pillars chars, element bala
 | Feb 2026 | Row striping changed from `rgba(0,0,0,X)` → `rgba(30,21,53,X)` | Black overlay cast cold grey on lavender; indigo-tint overlay reads naturally with new background |
 | Feb 2026 | **Background 色块 blobs disabled** | `body::before`, `.landing-bg::before`, `.landing-bg::after` set to `display: none`. Code preserved for easy re-enable. Dynamic blob JS (`--blob-elem-1/2/3`) remains in `renderAppBlueprint()`. Clean deep-space dark background is more focused and editorial. |
 | Feb 2026 | **Text tokens brightened for dark bg readability** | `--color-ash: #A8A4BE → #C4C0D8` (~20% brighter); `--color-ghost: #625E78 → #9490AA` (~45% brighter). Secondary and tertiary labels now clearly legible on `#0D0B14`. `--color-white-bone: #EDEBF5` unchanged. |
-| Feb 2026 | **Light card surfaces — Neo-Risograph paper-on-void** | `--color-ground: #14121E → #F0EEF8` (off-white lavender paper); `--color-surface-raised: #1C1A28 → #E4E1F5`. Tab bar + header chrome stay dark (`--color-void`). Card text overridden dark (`#12101E` / `#3D3A54` / `#6B6882`) via CSS custom property cascade on `.bazi-grid`, `.card-base`, etc. Element chars (vivid HEX) on white = printed almanac. Row stripe flipped to dark-on-light tint. Badge opacity reduced to 0.13/0.11 for white bg. Portrait fade to `rgba(240,238,248,0.97)`. |
+| Feb 2026 | **Light card surfaces — Neo-Risograph paper-on-void** | `--color-ground: #14121E → #F0EEF8` (off-white lavender paper); `--color-surface-raised: #1C1A28 → #E4E1F5`. Tab bar + header chrome stay dark (`--color-void`). Card text overridden dark via CSS custom property cascade. Element chars (vivid HEX) on white = printed almanac. Row stripe flipped to dark-on-light tint. Badge opacity reduced to 0.13/0.11 for white bg. Portrait fade to `rgba(240,238,248,0.97)`. |
+| Feb 2026 | **Full chart light background** | Added `background: var(--color-ground)` to `.bazi-grid` so the Four Pillars grid surface is `#F0EEF8` (off-white paper). Previously the grid had no background and showed the dark void through cell gaps. |
+| Feb 2026 | **2-plate risograph text system** | Black content ink (`#0A0814`) + electric purple structural ink (`#A020F0`) on off-white paper. No grey intermediates. Content text (Ten Gods, sub-stars, body text) = solid near-black. Structural labels (row/col headers, section titles, meta labels) = psychic purple via explicit override rule. |
+| Feb 2026 | **Comprehensive dark-text context** | Replaced narrow 8-selector dark-text block with a comprehensive 20-selector list covering every light-background surface in the app. Single block to edit for any new card component going forward. |
+| Feb 2026 | **On-card text flattened to solid near-black** | All three on-card vars (`--color-white-bone`, `--color-ash`, `--color-ghost`) set to `#0A0814`. User requirement: "no grey, solid black or solid psychic purple." Hierarchy achieved through color (black vs. purple) not lightness gradation. |
