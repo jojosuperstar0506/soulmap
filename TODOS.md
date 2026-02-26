@@ -1,7 +1,7 @@
 # SoulMap — Master TODO List
 
 > **Source of truth for all work. Update this file as tasks are completed or added.**
-> Last updated: 2026-02-26 (Lifetime Arc: real BaZi scoring engine + combined 4-track chart + per-cycle AI narrative complete)
+> Last updated: 2026-02-26 (Engine v2: 神煞 scoring, 流年 arc, dominant TenGod, Spark personalization, Oracle persistence, archetype-first narrative — commit 8debffb)
 
 ---
 
@@ -10,7 +10,7 @@
 - Add new tasks under the relevant phase/section as they emerge
 - Keep the "Current focus" line at the top up to date
 
-**Current focus:** Phase 2 — Engagement Layer (Oracle live, Library + Spark + Still Point remaining)
+**Current focus:** Phase 2 — Engagement Layer (still point audio + share image remaining)
 
 ---
 
@@ -27,7 +27,7 @@
 - [x] 12 Growth Stages (十二长生) — `getTwelveStage()` in app.js
 - [x] Empty/Void (空亡) — `getKongWang()` in app.js
 - [x] Nayin (纳音) — `NAYIN[]` + `getNayin()` in app.js
-- [x] Spirit Killers (神煞) — `getShenSha()` in app.js (驿马, 桃花, 天乙贵人, 太极贵人, 月德合, 天医, 国印)
+- [x] Spirit Killers (神煞) — `getShenSha()` in app.js (驿马, 桃花, 天乙贵人, 太极贵人, 月德合, 天医, 国印) — **now activated in scoreCycle()** with bonuses: 天乙贵人(+10 love, +8 career), 桃花(+12 love), 驿马(+10 career), 天医(+8 health) — was dead code before Engine v2
 - [x] Day Master Strength (strong / weak / balanced) — computed in `calculateBaZi()`
 - [x] Favorable/Unfavorable Elements (喜用神) — computed in `calculateBaZi()`
 - [x] Current Annual Pillar (流年) — computed in `calculateBaZi()`, includes Ten God + Nayin
@@ -79,7 +79,7 @@
   - Removed "AI generation coming soon" badge from Blueprint UI
   - Symlink `personas → public/personas` created at project root for `npx serve .` local dev
 - [ ] Share image generation (1080×1350 PNG) — Phase 2
-- [ ] "This Year for You" section (流年 analysis) — Phase 2
+- [x] **"This Year" 流年 section (2026-02-26)** — `annual-arc` card with 4 mini score bars (Wealth/Career/Love/Health) + one-sentence annual insight; `scoreAnnualYear()` uses same engine as `scoreCycle()` including spirit killers
 - [ ] "Favorable Elements" practical guide (colors, directions, times) — Phase 2
 
 ### Onboarding
@@ -160,6 +160,7 @@
   - POST `{ chart, cycle }` → `claude-sonnet-4-6` → JSON with `{seasonName, theme, summary, wealthNote, relationshipsNote, healthNote, lifeLessonThisSeason, growthEdge, shadowWork}`
   - Lazy generation: narrative only fetched on user click; cached to profile localStorage (`daYunNarratives` map keyed by pillar label)
   - `showCycleDetail(idx)` panel: score bars (Love/Wealth/Career/Health with colored fills) + "✦ Generate Reading for this Season" button + tabbed narrative display
+- [x] **Archetype-first narrative overhaul (2026-02-26)** — `soul-system-prompt.md` Rule 3 updated: behavioral language replaces percentage-anchoring; element balance appears once as overview; added Wealth Star Protocol (weak DM + wealth star tension must be named explicitly); `route.ts` now accepts + injects `currentSeasonProfile` (hidden-stem Ten God breakdown) into user message; SPECIFICITY MANDATE updated to behavioral focus
 - [ ] Add `ANTHROPIC_API_KEY` to Vercel environment variables ← **still needed for live deploy**
 - [ ] Deploy and verify end-to-end on Vercel ← **pending above**
 
@@ -181,7 +182,7 @@
 ### Daily Spark
 - [x] Basic streak counter
 - [x] Daily text + reflection prompt + micro-practice (static rotation)
-- [ ] Day-matched elemental energy (use current day's 天干地支)
+- [x] **Day-matched elemental energy (2026-02-26)** — `getTodayBaZiDay()` shows today's pillar chars in date line; affinity insight line (favorable/challenging/neutral vs chart's useful/harmful gods); wisdom quote matched to today's stem element via `ELEMENT_TRADITION` map
 - [ ] Element collector gamification (collect all 5 in a week → Harmony badge)
 - [ ] Monthly review summary ("This month you reflected 22 times…")
 - [ ] Push notifications (OneSignal free tier) — user-chosen time
@@ -207,16 +208,16 @@
 - [x] Typing indicator (bouncing dots) while waiting for response
 - [x] Send button disabled during request; re-enabled after
 - [x] Graceful error fallback ("The Oracle is unavailable right now.")
-- [ ] Conversation history persistence across page reloads (localStorage)
+- [x] **Conversation history persistence (2026-02-26)** — per-profile localStorage key (`soulmap_oracle_{profileId}`), saves last 20 exchanges, restores on init + profile switch via `oracleApiReset()`
 - [ ] Context summarization for long conversations (stay within token window)
 - [ ] Rate limiting: 10 free messages/day (Phase 2)
-- [ ] Pre-built deep-dive prompt templates (Career, Relationships, Timing, etc.)
+- [x] **Pre-built deep-dive prompt templates (2026-02-26)** — 6 cards in 2×3 grid (Career Crossroads, Relationship Lens, {year} Reading, Shadow Patterns, Timing a Leap, Health & Vitality); auto-submit on click; collapse on first question
 
 ### Blueprint Enhancements
 - [ ] **Phase 2 TODO: Generate all 60 pillar portraits** — apply the Branch Modification System (子丑寅卯辰巳午未申酉戌亥) to each of the 10 base stem portraits via nanobanana. Example: 甲子 = jia base + "flowing water element, midnight blue tones, rat silhouette motif". Extend `scripts/generate-personas.mjs` with branch combos; save as `persona-jia-zi.png` etc.
 - [ ] Luck Pillar timeline visualization (interactive, not just cards)
-- [ ] "This Year for You" 流年 analysis section
-- [ ] Dominant Ten God personality modifier displayed on persona card
+- [x] **"This Year" 流年 analysis section (2026-02-26)** — `annual-arc` card with score bars + theme insight
+- [x] **Dominant Ten God badge (2026-02-26)** — `computeDominantTenGod()` weighted tally (year/month/hour stems + hidden stems), displayed below soul type tagline with archetype name + one-line brief (`TEN_GOD_BRIEF[]`)
 - [ ] Season modifier description shown on Blueprint
 
 ### Auth & Infrastructure
