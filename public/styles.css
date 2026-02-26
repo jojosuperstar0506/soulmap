@@ -113,10 +113,6 @@ blockquote {
 /* ANIMATIONS                                                      */
 /* ═══════════════════════════════════════════════════════════════ */
 
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
-  50%       { transform: translate(20px, -30px) scale(1.2); opacity: 0.8; }
-}
 
 @keyframes reveal-content {
   from { opacity: 0; filter: blur(4px); }
@@ -556,52 +552,6 @@ blockquote {
 
 .form-actions .btn-ghost { margin-right: auto; }
 
-/* ═══════════════════════════════════════════════════════════════ */
-/* GENERATING ANIMATION                                            */
-/* ═══════════════════════════════════════════════════════════════ */
-
-#view-generating {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.generating-content {
-  position: relative;
-}
-
-.particles {
-  position: absolute;
-  inset: -60px;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.particle {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  animation: float 4s ease-in-out infinite;
-}
-
-.generating-line {
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-ghost);
-  margin: 0.6rem 0;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.generating-line.visible {
-  opacity: 1;
-  color: var(--color-ash);
-}
 
 /* ═══════════════════════════════════════════════════════════════ */
 /* BLUEPRINT REVEAL                                                */
@@ -690,22 +640,24 @@ blockquote {
 }
 
 .soul-portrait-frame {
+  display: none; /* hidden until image loads — JS adds .portrait-loaded */
   position: relative;
   width: 100%;
   max-width: 360px;
   margin: 0 auto 1rem;
   border-radius: 2px;
   overflow: hidden;
-  background: var(--color-void);
   border: 1px solid var(--color-border);
+}
+
+.soul-portrait-frame.portrait-loaded {
+  display: block;
 }
 
 .soul-portrait-img {
   width: 100%;
   height: auto;
   display: block;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
 }
 
 .soul-portrait-text {

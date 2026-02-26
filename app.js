@@ -683,9 +683,6 @@
     if (placeholder) placeholder.style.display = 'none';
   }
 
-  // ─── Generation Animation ────────────────────────────────────────
-  const ONBOARDED_KEY = 'soulmap_has_onboarded';
-
   async function buildChart() {
     const chart = calculateBaZi(state.birthDate, state.shichen);
     chart.daYun = calculateDaYun(chart, state.birthDate, state.gender);
@@ -709,50 +706,7 @@
   }
 
   function runGeneration() {
-    // After the first onboarding is complete, skip the animation forever
-    let hasOnboarded = false;
-    try { hasOnboarded = !!localStorage.getItem(ONBOARDED_KEY); } catch(_) {}
-
-    if (hasOnboarded) {
-      buildChart();
-      return;
-    }
-
-    // First time only — show the full animation
-    showView('view-generating');
-
-    // Reset lines
-    ['gen-line-1','gen-line-2','gen-line-3'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('visible');
-    });
-
-    // Particles
-    const particlesEl = document.getElementById('particles');
-    if (particlesEl) {
-      particlesEl.innerHTML = '';
-      const colors = [ELEMENT_HEX.fire, ELEMENT_HEX.water, ELEMENT_HEX.wood, ELEMENT_HEX.metal];
-      for (let i = 0; i < 20; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;background:${colors[i%colors.length]};animation-delay:${(Math.random()*2).toFixed(2)}s`;
-        particlesEl.appendChild(p);
-      }
-    }
-
-    // Sequential line reveals
-    [1, 2, 3].forEach((n, i) => {
-      setTimeout(() => {
-        const el = document.getElementById('gen-line-' + n);
-        if (el) el.classList.add('visible');
-      }, (i + 1) * 1000);
-    });
-
-    // After 3.2 s → set flag, calculate, show app
-    setTimeout(() => {
-      try { localStorage.setItem(ONBOARDED_KEY, '1'); } catch(_) {}
-      buildChart();
-    }, 3200);
+    buildChart();
   }
 
   // ─── Helper utilities ────────────────────────────────────────────
@@ -1106,9 +1060,16 @@
     const season  = SEASON_NAMES[STEM_ELEMENT[state.chart.monthPillar.stem]] || '—';
     const zodiac  = getWesternZodiacSign(state.birthDate);
 
-    // Portrait image — static pre-generated per Day Master slug
-    const imgEl = document.getElementById('blueprint-detail-visual');
-    if (imgEl) { imgEl.src = '/personas/persona-' + t.slug + '.png'; imgEl.alt = t.name; }
+    // Portrait image — reveal frame only after image loads (no black placeholder)
+    const imgEl   = document.getElementById('blueprint-detail-visual');
+    const frameEl = document.getElementById('soul-portrait-frame');
+    if (imgEl && frameEl) {
+      frameEl.classList.remove('portrait-loaded');
+      imgEl.onload  = () => frameEl.classList.add('portrait-loaded');
+      imgEl.onerror = () => frameEl.style.display = 'none';
+      imgEl.src = '/personas/persona-' + t.slug + '.png';
+      imgEl.alt = t.name;
+    }
     setEl('detail-type-name', t.name);
     setEl('detail-type-sub', t.sub);
     setEl('detail-tagline', t.tagline);

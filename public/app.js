@@ -483,10 +483,10 @@
     [285, 1,  1,  6], // 小寒 → 丑 (January of baziYear+1)
   ];
 
-  /** JDN (Beijing time UTC+8) for each of the 12 month terms in BaZi year `by`. */
+  /** JDN for each of the 12 month terms in BaZi year `by`. No timezone offset — face value. */
   function getBaZiTermJDNs(by) {
     return BAZI_MONTH_TERMS.map(([lon, branch, aM, aD]) => ({
-      jdn:    Math.floor(solarTermJDE(aM === 1 ? by + 1 : by, aM, aD, lon) + 8/24 + 0.5),
+      jdn:    Math.floor(solarTermJDE(aM === 1 ? by + 1 : by, aM, aD, lon) + 0.5),
       branch,
     })).sort((a, b) => a.jdn - b.jdn);
   }
@@ -494,10 +494,11 @@
   /**
    * Given a birth date, return { monthBranch, baziYear }.
    * baziYear = calendar year if on/after 立春 of that year, else calendar year − 1.
+   * Dates compared face value (公历) — no UTC+8 offset applied to solar terms.
    */
   function getBaZiMonth(y, m, d) {
     const birthJDN  = jdn(y, m, d);
-    const liChunJDN = Math.floor(solarTermJDE(y, 2, 4, 315) + 8/24 + 0.5);
+    const liChunJDN = Math.floor(solarTermJDE(y, 2, 4, 315) + 0.5);
     const baziYear  = birthJDN < liChunJDN ? y - 1 : y;
     const terms     = getBaZiTermJDNs(baziYear);
     let monthBranch = terms[0].branch; // default: 寅月 (first month of BaZi year)
@@ -516,7 +517,7 @@
     const allJDNs  = [];
     for (let yr = y - 1; yr <= y + 1; yr++) {
       for (const [lon, , aM, aD] of BAZI_MONTH_TERMS) {
-        allJDNs.push(Math.floor(solarTermJDE(aM === 1 ? yr + 1 : yr, aM, aD, lon) + 8/24 + 0.5));
+        allJDNs.push(Math.floor(solarTermJDE(aM === 1 ? yr + 1 : yr, aM, aD, lon) + 0.5));
       }
     }
     allJDNs.sort((a, b) => a - b);
@@ -774,9 +775,6 @@
     if (placeholder) placeholder.style.display = 'none';
   }
 
-  // ─── Generation Animation ────────────────────────────────────────
-  const ONBOARDED_KEY = 'soulmap_has_onboarded';
-
   async function buildChart() {
     const chart = calculateBaZi(state.birthDate, state.shichen);
     chart.daYun = calculateDaYun(chart, state.birthDate, state.gender);
@@ -800,50 +798,7 @@
   }
 
   function runGeneration() {
-    // After the first onboarding is complete, skip the animation forever
-    let hasOnboarded = false;
-    try { hasOnboarded = !!localStorage.getItem(ONBOARDED_KEY); } catch(_) {}
-
-    if (hasOnboarded) {
-      buildChart();
-      return;
-    }
-
-    // First time only — show the full animation
-    showView('view-generating');
-
-    // Reset lines
-    ['gen-line-1','gen-line-2','gen-line-3'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('visible');
-    });
-
-    // Particles
-    const particlesEl = document.getElementById('particles');
-    if (particlesEl) {
-      particlesEl.innerHTML = '';
-      const colors = [ELEMENT_HEX.fire, ELEMENT_HEX.water, ELEMENT_HEX.wood, ELEMENT_HEX.metal];
-      for (let i = 0; i < 20; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;background:${colors[i%colors.length]};animation-delay:${(Math.random()*2).toFixed(2)}s`;
-        particlesEl.appendChild(p);
-      }
-    }
-
-    // Sequential line reveals
-    [1, 2, 3].forEach((n, i) => {
-      setTimeout(() => {
-        const el = document.getElementById('gen-line-' + n);
-        if (el) el.classList.add('visible');
-      }, (i + 1) * 1000);
-    });
-
-    // After 3.2 s → set flag, calculate, show app
-    setTimeout(() => {
-      try { localStorage.setItem(ONBOARDED_KEY, '1'); } catch(_) {}
-      buildChart();
-    }, 3200);
+    buildChart();
   }
 
   // ─── Helper utilities ────────────────────────────────────────────
@@ -1197,9 +1152,16 @@
     const season  = SEASON_NAMES[STEM_ELEMENT[state.chart.monthPillar.stem]] || '—';
     const zodiac  = getWesternZodiacSign(state.birthDate);
 
-    // Portrait image — static pre-generated per Day Master slug
-    const imgEl = document.getElementById('blueprint-detail-visual');
-    if (imgEl) { imgEl.src = '/personas/persona-' + t.slug + '.png'; imgEl.alt = t.name; }
+    // Portrait image — reveal frame only after image loads (no black placeholder)
+    const imgEl   = document.getElementById('blueprint-detail-visual');
+    const frameEl = document.getElementById('soul-portrait-frame');
+    if (imgEl && frameEl) {
+      frameEl.classList.remove('portrait-loaded');
+      imgEl.onload  = () => frameEl.classList.add('portrait-loaded');
+      imgEl.onerror = () => frameEl.style.display = 'none';
+      imgEl.src = '/personas/persona-' + t.slug + '.png';
+      imgEl.alt = t.name;
+    }
     setEl('detail-type-name', t.name);
     setEl('detail-type-sub', t.sub);
     setEl('detail-tagline', t.tagline);
