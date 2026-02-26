@@ -8,7 +8,7 @@
 
 **Style:** Neo-Risograph Eastern Mythology UI — "ancient wisdom transmitted through an analog signal."
 **Mood:** Cool, cosmic, slightly analog/print-like. Not digital-glassy. Like an independent artist's mystical zine.
-**Background:** Pale cosmic lavender (`#F0EEF8`), not white or warm parchment.
+**Background:** Ink-stone grey (`#EDEEF0`) — cool, almost-white neutral. Like a clean moon surface or aged Chinese ink-stone.
 **Text:** Deep indigo purple (`#1E1535`) — not black or warm ink.
 **Brand token:** Psychic purple (`#7B3FF2`) for the SoulMap wordmark and active UI states.
 **Borders/corners:** Almost no rounding — `border-radius: 2px` globally. Sharp, print-like.
@@ -25,10 +25,10 @@ All values live as CSS custom properties in `:root` (`public/styles.css`).
 ### Background & Surface
 | Token | Hex | Use |
 |-------|-----|-----|
-| `--color-void` | `#F0EEF8` | Primary background — pale cosmic lavender |
-| `--color-ground` | `#E6E3F4` | Card / section background |
-| `--color-surface-raised` | `#DAD6EE` | Elevated panels, grid header rows |
-| `--color-border` | `#C0BAE0` | Subtle borders, dividers |
+| `--color-void` | `#EDEEF0` | Primary background — ink-stone grey |
+| `--color-ground` | `#E5E6E9` | Card / section background |
+| `--color-surface-raised` | `#DCDDE1` | Elevated panels, grid header rows |
+| `--color-border` | `#D0D1D8` | Subtle borders, dividers |
 | `--color-border-active` | `#7B3FF2` | Active/selected state — psychic purple |
 
 ### Text
@@ -147,6 +147,6 @@ The canonical element color mapping — used in Four Pillars chars, element bala
 | Feb 2025 | Element colors shifted to traditional associations | Cobalt blue for Wood was confusing (read as Water) |
 | Feb 2025 | Four Pillars max-width 520px | Wide desktop columns looked sparse/unintentional |
 | Feb 2025 | Core/ref row hierarchy in grid | Reduces visual noise; focuses attention on main pillars |
-| Feb 2026 | **Cosmic Lavender** palette — replaced warm parchment | Warm parchment felt academic/generic; cosmic lavender reads as indie artist + mystical. Pairs with deep indigo-purple text hierarchy. |
+| Feb 2026 | **Cosmic Lavender** → revised to **Ink-stone grey** background | Lavender read as "soft digital" rather than Neo-Risograph print. Ink-stone grey (#EDEEF0) is cool, almost-white, neutral — like printing on clean uncoated stock. Keeps indigo-purple text hierarchy. |
 | Feb 2026 | `--color-psychic: #7B3FF2` brand token added | Vivid psychic purple reserved exclusively for SoulMap wordmark + active UI states; 4.7:1 contrast on lavender (WCAG AA ✓) |
 | Feb 2026 | Row striping changed from `rgba(0,0,0,X)` → `rgba(30,21,53,X)` | Black overlay cast cold grey on lavender; indigo-tint overlay reads naturally with new background |

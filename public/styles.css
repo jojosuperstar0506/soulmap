@@ -7,10 +7,10 @@
 
 :root {
   /* ─── Background & Surface ─── */
-  --color-void: #F0EEF8;           /* Primary background — pale cosmic lavender */
-  --color-ground: #E6E3F4;         /* Card / surface background */
-  --color-surface-raised: #DAD6EE; /* Elevated panels */
-  --color-border: #C0BAE0;         /* Subtle borders */
+  --color-void: #EDEEF0;           /* Primary background — ink-stone grey */
+  --color-ground: #E5E6E9;         /* Card / surface background */
+  --color-surface-raised: #DCDDE1; /* Elevated panels */
+  --color-border: #D0D1D8;         /* Subtle borders */
   --color-border-active: #7B3FF2;  /* Active/selected — psychic purple */
 
   /* ─── Brand Accents (one per section, never all at once) ─── */
@@ -668,7 +668,7 @@ blockquote {
   left: 0;
   right: 0;
   padding: 1rem 1rem 0.875rem;
-  background: linear-gradient(transparent, rgba(230, 227, 244, 0.92) 40%);
+  background: linear-gradient(transparent, rgba(229, 230, 233, 0.92) 40%);
 }
 
 .soul-portrait-name {
