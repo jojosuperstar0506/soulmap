@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20260226b" />
 </head>
 <body>
 
@@ -31,69 +31,72 @@
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <section id="view-onboard" class="view">
     <header class="onboard-header">
-      <span class="step-num">Your Information</span>
       <h2>Tell us about you</h2>
-      <p>Required fields unlock your BaZi chart. Optional fields deepen your reading.</p>
+      <p>Unlike horoscopes, BaZi is anchored to your exact solar birth timestamp — refined across 40+ classical texts over 1,200 years, and precise enough to map your life in decade-long phases.</p>
     </header>
     <form id="form-onboard" class="onboard-form">
 
-      <!-- ─ Required ─ -->
+      <!-- ─ Name (full width) ─ -->
       <label>
-        <span>Name <small>Whose chart is this?</small></span>
+        <span>Name</span>
         <input type="text" name="profileName" placeholder="e.g. Max, Mom, Sarah…" required autocomplete="off" />
       </label>
-      <label>
-        <span>Date of birth</span>
-        <input type="date" name="birthDate" required />
-      </label>
-      <label>
-        <span>Time of birth <small>Don't know? Choose the closest 2-hour window.</small></span>
-        <select name="shichen" required>
-          <option value="">Select 时辰 (2-hour period)</option>
-          <option value="0">子时 Zǐ 23:00–01:00</option>
-          <option value="1">丑时 Chǒu 01:00–03:00</option>
-          <option value="2">寅时 Yín 03:00–05:00</option>
-          <option value="3">卯时 Mǎo 05:00–07:00</option>
-          <option value="4">辰时 Chén 07:00–09:00</option>
-          <option value="5">巳时 Sì 09:00–11:00</option>
-          <option value="6">午时 Wǔ 11:00–13:00</option>
-          <option value="7">未时 Wèi 13:00–15:00</option>
-          <option value="8">申时 Shēn 15:00–17:00</option>
-          <option value="9">酉时 Yǒu 17:00–19:00</option>
-          <option value="10">戌时 Xū 19:00–21:00</option>
-          <option value="11">亥时 Hài 21:00–23:00</option>
-        </select>
-      </label>
-      <label>
-        <span>Gender <small>Affects Luck Pillar direction in BaZi.</small></span>
-        <select name="gender" required>
-          <option value="">Select</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-      </label>
 
-      <!-- ─ Optional ─ -->
-      <div class="onboard-optional-divider">
-        <span>Optional — deepens your reading</span>
+      <!-- ─ Birth data row ─ -->
+      <div class="form-row">
+        <label>
+          <span>Date of birth</span>
+          <input type="date" name="birthDate" required />
+        </label>
+        <label>
+          <span>Time of birth <small>Not sure? Pick the closest.</small></span>
+          <select name="shichen" required>
+            <option value="">Select time of birth</option>
+            <option value="0">子时 Zǐ 23:00–01:00</option>
+            <option value="1">丑时 Chǒu 01:00–03:00</option>
+            <option value="2">寅时 Yín 03:00–05:00</option>
+            <option value="3">卯时 Mǎo 05:00–07:00</option>
+            <option value="4">辰时 Chén 07:00–09:00</option>
+            <option value="5">巳时 Sì 09:00–11:00</option>
+            <option value="6">午时 Wǔ 11:00–13:00</option>
+            <option value="7">未时 Wèi 13:00–15:00</option>
+            <option value="8">申时 Shēn 15:00–17:00</option>
+            <option value="9">酉时 Yǒu 17:00–19:00</option>
+            <option value="10">戌时 Xū 19:00–21:00</option>
+            <option value="11">亥时 Hài 21:00–23:00</option>
+          </select>
+        </label>
       </div>
 
-      <label>
-        <span>What do you do?</span>
-        <select name="occupation">
-          <option value="">Select (optional)</option>
-          <option value="student">Student</option>
-          <option value="professional">Professional</option>
-          <option value="creative">Creative</option>
-          <option value="entrepreneur">Entrepreneur</option>
-          <option value="between">Between Things</option>
-          <option value="other">Other</option>
-        </select>
-      </label>
+      <!-- ─ Profile attributes row ─ -->
+      <div class="form-row">
+        <label>
+          <span>Gender at birth <small>For Luck Pillar direction.</small></span>
+          <select name="gender" required>
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </label>
+        <label>
+          <span>Occupation</span>
+          <select name="occupation" required>
+            <option value="">Select</option>
+            <option value="student">Student</option>
+            <option value="professional">Professional</option>
+            <option value="creative">Creative</option>
+            <option value="entrepreneur">Entrepreneur</option>
+            <option value="between">Between Things</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- ─ Relationship (full width) ─ -->
       <label>
         <span>Relationship status</span>
-        <select name="relationship">
-          <option value="">Select (optional)</option>
+        <select name="relationship" required>
+          <option value="">Select</option>
           <option value="single">Single</option>
           <option value="dating">Dating</option>
           <option value="relationship">In a Relationship</option>
@@ -102,9 +105,11 @@
           <option value="prefer-not">Prefer Not to Say</option>
         </select>
       </label>
+
+      <!-- ─ Optional ─ -->
       <label>
-        <span>What's on your mind right now?</span>
-        <textarea name="currentConcern" rows="3" placeholder="e.g. career change, a big decision, stress…"></textarea>
+        <span>What's on your mind? <small>Optional</small></span>
+        <textarea name="currentConcern" rows="2" placeholder="e.g. career change, a big decision, relationship stress…"></textarea>
       </label>
 
       <div class="form-actions">
@@ -296,23 +301,23 @@
       </div>
 
       <!-- ─────────────────────────────────────────────────────────── -->
-      <!-- TAB 3: Sacred Library -->
+      <!-- TAB 3: Wisdom Vault -->
       <!-- ─────────────────────────────────────────────────────────── -->
-      <div id="tab-library" class="tab-pane">
-        <div class="library-nav">
-          <button type="button" class="library-tab active" data-tradition="all">For You</button>
-          <button type="button" class="library-tab" data-tradition="daoism">Daoism</button>
-          <button type="button" class="library-tab" data-tradition="confucianism">Confucianism</button>
-          <button type="button" class="library-tab" data-tradition="buddhism">Buddhism</button>
-          <button type="button" class="library-tab" data-tradition="chinese">I Ching</button>
-          <button type="button" class="library-tab" data-tradition="stoicism">Stoicism</button>
-          <button type="button" class="library-tab" data-tradition="greek">Greek</button>
-          <button type="button" class="library-tab" data-tradition="sufi">Sufi</button>
-          <button type="button" class="library-tab" data-tradition="vedic">Vedic</button>
-          <button type="button" class="library-tab" data-tradition="uncategorized">Other</button>
-          <button type="button" class="library-tab" data-tradition="saved">Saved</button>
+      <div id="tab-wisdom-vault" class="tab-pane">
+        <div class="wisdom-vault-nav">
+          <button type="button" class="wisdom-vault-tab active" data-tradition="all">For You</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="daoism">Daoism</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="confucianism">Confucianism</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="buddhism">Buddhism</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="chinese">I Ching</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="stoicism">Stoicism</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="greek">Greek</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="sufi">Sufi</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="vedic">Vedic</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="uncategorized">Other</button>
+          <button type="button" class="wisdom-vault-tab" data-tradition="saved">Saved</button>
         </div>
-        <div class="library-list" id="library-list"></div>
+        <div class="wisdom-vault-list" id="wisdom-vault-list"></div>
       </div>
 
       <!-- ─────────────────────────────────────────────────────────── -->
@@ -349,9 +354,9 @@
         <span class="tab-icon">◈</span>
         <span>Oracle</span>
       </button>
-      <button type="button" class="tab-btn" data-tab="library">
+      <button type="button" class="tab-btn" data-tab="wisdom-vault">
         <span class="tab-icon">☰</span>
-        <span>Library</span>
+        <span>Wisdom Vault</span>
       </button>
       <button type="button" class="tab-btn" data-tab="spark">
         <span class="tab-icon">✦</span>
@@ -383,6 +388,6 @@
 
   <script src="content/wisdom-vault.js?v=4"></script>
   <script src="content/classical-bazi-excerpts.js?v=1"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=20260226b"></script>
 </body>
 </html>
