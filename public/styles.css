@@ -173,6 +173,10 @@ blockquote {
   overflow: hidden;
 }
 
+#view-landing.view-active {
+  display: flex;
+}
+
 /* Background: flat void — grain does the texture */
 /* Large geometric circle — risograph registration mark */
 .landing-bg {
@@ -227,6 +231,47 @@ blockquote {
   max-width: 60ch;
 }
 
+/* Landing stats row */
+.landing-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin: 0 0 2rem;
+  flex-wrap: wrap;
+}
+
+.landing-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: #D4A853;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ash);
+}
+
+.stat-divider {
+  color: var(--color-ash);
+  font-size: 1rem;
+  opacity: 0.4;
+  margin-top: -0.25rem;
+}
+
 /* ═══════════════════════════════════════════════════════════════ */
 /* BUTTONS                                                         */
 /* ═══════════════════════════════════════════════════════════════ */
@@ -257,6 +302,16 @@ blockquote {
 
 .btn-primary:hover {
   background: #c42e22;
+}
+
+/* Gold: landing CTA */
+.btn-gold {
+  background: #D4A853;
+  color: var(--color-void);
+}
+
+.btn-gold:hover {
+  background: #c49040;
 }
 
 /* Ghost: border only */
@@ -2011,6 +2066,7 @@ blockquote {
   border: 1px solid var(--color-border);
   border-radius: 2px;
   overflow: hidden;
+  background: var(--color-ground);
   font-family: var(--font-body);
 }
 
@@ -2583,14 +2639,26 @@ blockquote {
 .onboard-form input[type="date"],
 .onboard-form select,
 .onboard-form textarea {
-  --color-white-bone: #12101E; /* Near-black primary on light card */
-  --color-ash:        #3D3A54; /* Dark purple-grey secondary */
-  --color-ghost:      #6B6882; /* Mid dark purple-grey tertiary */
+  --color-white-bone: #0A0814; /* Solid near-black — no grey on cards */
+  --color-ash:        #0A0814; /* Solid near-black — no grey */
+  --color-ghost:      #0A0814; /* Solid near-black — no grey */
   --color-border:     rgba(18,16,30,0.12); /* Crisp cell lines on light surface */
-  color: #12101E;
+  color: #0A0814;
 }
 
 /* App header border stays dark/visible against the void */
 .app-header {
   border-bottom-color: #2D2A3E;
+}
+
+/* ─── Structural labels: psychic purple ────────────────────────── */
+/* Black content ink + purple label ink = 2-plate risograph on paper */
+.bazi-label,
+.bazi-label-en,
+.bazi-col-head,
+.bazi-col-en,
+.blueprint-meta-label,
+.detail-sections h3,
+.detail-sections .narrative-section-label {
+  color: var(--color-psychic);
 }
