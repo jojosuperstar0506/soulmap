@@ -105,8 +105,8 @@
       bp_divider_annual:     '\u6d41\u5e74 \u00b7 This Year',
       bp_divider_seasons:    '\u5927\u8fd0 \u00b7 Life Seasons',
       bp_divider_energy:     'Energy per Season',
-      bp_reading_card_label: '\u2726 Tap to get your cosmic reading',
-      bp_reveal_btn:         '\u2726 Reveal Your Life Journey \u2192',
+      bp_reading_card_label: '\u2726 Get your reading',
+      bp_reveal_btn:         '\u2726 Reveal Your Life Journey',
       bp_reveal_hint:        'Life Seasons \u00b7 Lifetime Arc \u00b7 Energy Charts',
       // Oracle
       oracle_placeholder:        'Your chart is loaded. Tap a question above or ask your own \u2014 Claude will answer with your BaZi context.',
@@ -329,7 +329,7 @@
       bp_divider_seasons:    '\u5927\u8fd0 \u00b7 Life Seasons',
       bp_divider_energy:     '\u5404\u8fd0\u80fd\u91cf',
       bp_reading_card_label: '\u2726 \u70b9\u51fb\u83b7\u53d6\u4f60\u7684\u6df1\u5ea6\u89e3\u8bfb',
-      bp_reveal_btn:         '\u2726 \u5c55\u5f00\u4f60\u7684\u4eba\u751f\u8f68\u8ff9 \u2192',
+      bp_reveal_btn:         '\u2726 \u5c55\u5f00\u4f60\u7684\u4eba\u751f\u8f68\u8ff9',
       bp_reveal_hint:        '\u5927\u8fd0 \u00b7 \u4eba\u751f\u5f27\u7ebf \u00b7 \u80fd\u91cf\u56fe',
       // Oracle
       oracle_placeholder:      '\u4f60\u7684\u547d\u76d8\u5df2\u52a0\u8f7d\u3002\u70b9\u51fb\u4e0a\u65b9\u95ee\u9898\uff0c\u6216\u81ea\u7531\u63d0\u95ee\u2014\u2014AI\u5c06\u7ed3\u5408\u4f60\u7684\u516b\u5b57\u4e3a\u4f60\u89e3\u7b54\u3002',
@@ -1102,10 +1102,11 @@
     const profiles = loadProfiles();
     const idx = profiles.findIndex(p => p.id === state.profileId);
     // Persist per-cycle narratives keyed by pillar label (e.g. "甲寅")
-    const daYunNarratives = {};
+    // V2 key invalidates old jargon-heavy cached narratives from before 2026-02-27
+    const daYunNarrativesV2 = {};
     if (state.chart && state.chart.daYun) {
       state.chart.daYun.forEach(d => {
-        if (d.narrative) daYunNarratives[d.label] = d.narrative;
+        if (d.narrative) daYunNarrativesV2[d.label] = d.narrative;
       });
     }
     const profileData = {
@@ -1122,7 +1123,7 @@
       narrativePillarsStr: (state.narrativeFromAPI && state.chart)
                              ? (state.chart.pillarsStr || null)
                              : null,
-      daYunNarratives:     Object.keys(daYunNarratives).length ? daYunNarratives : null,
+      daYunNarrativesV2:   Object.keys(daYunNarrativesV2).length ? daYunNarrativesV2 : null,
       savedOracleItems:    state.savedOracleItems || [],
       savedVaultCitations: state.savedVaultCitations || [],
     };
@@ -1135,10 +1136,10 @@
   function activateProfile(p) {
     const chart = calculateBaZi(p.birthDate, p.shichen);
     chart.daYun = calculateDaYun(chart, p.birthDate, p.gender || 'female');
-    // Restore persisted cycle narratives
-    if (p.daYunNarratives && chart.daYun) {
+    // Restore persisted cycle narratives (V2 key = behavioral language, post 2026-02-27)
+    if (p.daYunNarrativesV2 && chart.daYun) {
       chart.daYun.forEach(d => {
-        if (p.daYunNarratives[d.label]) d.narrative = p.daYunNarratives[d.label];
+        if (p.daYunNarrativesV2[d.label]) d.narrative = p.daYunNarrativesV2[d.label];
       });
     }
     setState({
@@ -2083,9 +2084,9 @@
     const labelEl = card.querySelector('.reading-card-label');
     if (labelEl) {
       if (!claimed) {
-        labelEl.innerHTML = '\u2726 Generate AI Reading <span class="reading-card-badge">Personalized</span>';
+        labelEl.innerHTML = '\u2726 Get your reading <span class="reading-card-badge">Personalized</span>';
       } else {
-        labelEl.innerHTML = '\u2726 Your Cosmic Reading <span class="reading-card-badge">Personalized</span>';
+        labelEl.innerHTML = '\u2726 Get your reading <span class="reading-card-badge">Personalized</span>';
       }
     }
     const previewEl = document.getElementById('reading-card-preview');

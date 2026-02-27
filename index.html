@@ -282,27 +282,34 @@
           <p id="detail-tagline" class="blueprint-tagline">—</p>
         </div>
 
-        <!-- Hero Callout — Dominant Archetype + Day Master + Favorable + Zodiac -->
+        <!-- Hero Callout — all identity facts in one unified stacked card -->
         <div class="blueprint-hero-info">
-          <div id="dominant-ten-god-badge" class="dominant-ten-god-badge"></div>
-          <div class="hero-meta-trio">
-            <div class="hero-meta-item">
-              <button class="term-link hero-meta-label" data-term="day-master" type="button">Day Master <span class="term-info">ⓘ</span></button>
-              <span id="detail-destiny-structure" class="hero-meta-value">—</span>
-            </div>
-            <div class="hero-meta-item">
-              <button class="term-link hero-meta-label" data-term="element-balance" type="button">Favorable <span class="term-info">ⓘ</span></button>
-              <span id="detail-favorable-elements" class="hero-meta-value">—</span>
-            </div>
-            <div class="hero-meta-item">
-              <span class="hero-meta-label">Zodiac</span>
-              <span id="detail-zodiac" class="hero-meta-value">—</span>
-            </div>
-          </div>
-        </div>
+          <!-- Dominant Archetype (JS populates dtg-label, dtg-name, dtg-brief) -->
+          <div id="dominant-ten-god-badge" class="dominant-ten-god-badge hero-meta-item"></div>
 
-        <!-- Decision Lens -->
-        <div id="decision-lens" class="decision-lens"></div>
+          <!-- Day Master -->
+          <div class="hero-meta-item">
+            <button class="term-link hero-meta-label" data-term="day-master" type="button">Day Master <span class="term-info">ⓘ</span></button>
+            <span id="detail-destiny-structure" class="hero-meta-value">—</span>
+          </div>
+
+          <!-- Favorable -->
+          <div class="hero-meta-item">
+            <button class="term-link hero-meta-label" data-term="element-balance" type="button">Favorable <span class="term-info">ⓘ</span></button>
+            <span id="detail-favorable-elements" class="hero-meta-value">—</span>
+            <span class="hero-meta-brief">Elements that support your chart</span>
+          </div>
+
+          <!-- Zodiac -->
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Zodiac</span>
+            <span id="detail-zodiac" class="hero-meta-value">—</span>
+            <span class="hero-meta-brief">Western birth sign</span>
+          </div>
+
+          <!-- Decision Pattern (same card, same style) -->
+          <div id="decision-lens" class="decision-lens hero-meta-item"></div>
+        </div>
 
         <!-- Four Pillars / 四柱 -->
         <div class="divider-labeled">
@@ -324,7 +331,7 @@
           <div class="reading-card-left">
             <span class="reading-card-icon">✦</span>
             <div>
-              <p class="reading-card-label" data-i18n="bp_reading_card_label">✦ Tap to get your cosmic reading</p>
+              <p class="reading-card-label" data-i18n="bp_reading_card_label">✦ Get your reading</p>
               <p class="reading-card-preview" id="reading-card-preview" hidden></p>
             </div>
           </div>
