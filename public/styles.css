@@ -975,7 +975,7 @@ select.input-cell-field {
   gap: 0.2rem;
   padding: 0.75rem 1rem;
   margin-bottom: 1.25rem;
-  background: color-mix(in srgb, var(--color-cobalt) 8%, var(--color-ground));
+  background: color-mix(in srgb, var(--color-cobalt) 18%, rgba(13,11,20,0.85));
   border: 1px solid color-mix(in srgb, var(--color-cobalt) 25%, transparent);
   border-radius: 2px;
 }
@@ -1030,9 +1030,9 @@ select.input-cell-field {
   align-items: center;
   justify-content: center;
   padding: 0.6rem 0.4rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 2px;
-  background: var(--color-surface-raised);
+  background: rgba(255,255,255,0.05);
 }
 
 .blueprint-meta-label {
@@ -1041,7 +1041,7 @@ select.input-cell-field {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-ghost);
+  color: var(--color-psychic);
   margin-bottom: 0.3rem;
 }
 
@@ -2595,8 +2595,8 @@ select.input-cell-field {
 .annual-arc {
   padding: 0.9rem 1rem;
   margin-bottom: 0.5rem;
-  background: var(--color-ground);
-  border: 1px solid color-mix(in srgb, var(--color-gold) 20%, transparent);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 30%, transparent);
   border-radius: 2px;
 }
 
@@ -2639,7 +2639,7 @@ select.input-cell-field {
 
 .annual-score-bar-wrap {
   height: 4px;
-  background: color-mix(in srgb, var(--color-void) 30%, transparent);
+  background: rgba(255,255,255,0.1);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -2663,7 +2663,7 @@ select.input-cell-field {
   line-height: 1.6;
   margin: 0;
   padding-top: 0.5rem;
-  border-top: 1px solid color-mix(in srgb, var(--color-void) 15%, transparent);
+  border-top: 1px solid rgba(255,255,255,0.08);
 }
 
 .dayun-section {
@@ -2687,13 +2687,23 @@ select.input-cell-field {
 .dayun-card {
   flex-shrink: 0;
   width: 155px;
-  background: var(--color-ground);
-  border: 1px solid var(--color-border);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 2px;
   overflow: hidden;
   scroll-snap-align: start;
   position: relative;
-  transition: border-color 0.2s ease;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.dayun-card:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(160,32,240,0.4);
+}
+
+.dayun-card:active {
+  opacity: 0.75;
 }
 
 /* Psychic purple top accent line — unified structural chrome */
@@ -2713,7 +2723,19 @@ select.input-cell-field {
 /* ─── Row system inside each card ─── */
 .dayun-row {
   padding: 0.55rem 0.8rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ─── Tap hint at bottom of each card ─── */
+.dayun-tap-hint {
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-psychic);
+  text-align: right;
+  padding: 0.3rem 0.8rem 0.4rem;
+  opacity: 0.8;
 }
 
 .dayun-row:last-child {
@@ -3038,6 +3060,36 @@ select.input-cell-field {
 /* Thick separator between core block and reference detail block */
 .bazi-row-ref-first {
   border-top: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ─── BaZi reference rows: hidden by default, expanded on toggle ─── */
+.bazi-row-ref {
+  display: none;
+}
+.bazi-grid--expanded .bazi-row-ref {
+  display: grid;
+}
+
+/* ─── BaZi detail expand/collapse toggle ─── */
+.bazi-ref-toggle {
+  display: block;
+  margin: -0.5rem auto 1rem;
+  padding: 0.3rem 1rem;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  color: var(--color-ghost);
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.bazi-ref-toggle:hover {
+  color: var(--color-psychic);
+  border-color: rgba(160,32,240,0.5);
 }
 
 /* ─── Lifetime Arc Chart ──────────────────────────────────────── */
@@ -3415,7 +3467,6 @@ select.input-cell-field {
 .blueprint-detail-card,
 .blueprint-reveal-card,
 .blueprint-detail-visual,
-.blueprint-meta-item,
 .profile-btn,
 .profile-sheet-panel,
 .oracle-template-card,
@@ -3425,9 +3476,7 @@ select.input-cell-field {
 .wisdom-vault-item,
 .vault-card,
 .spark-card,
-.meditation-item,
-.annual-arc,
-.dayun-card {
+.meditation-item {
   --color-white-bone: var(--color-ink); /* Solid near-black on light card */
   --color-ash:        var(--color-ink); /* Solid near-black */
   --color-ghost:      var(--color-ink); /* Solid near-black */

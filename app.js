@@ -1633,6 +1633,20 @@
     ];
 
     el.innerHTML = `<div class="bazi-grid">${rows.join('')}</div>`;
+
+    // Wire the static toggle button — clone to clear any stale listeners
+    const toggleBtn = document.getElementById('btn-bazi-ref-toggle');
+    const grid      = el.querySelector('.bazi-grid');
+    if (toggleBtn && grid) {
+      const freshBtn = toggleBtn.cloneNode(true);
+      toggleBtn.parentNode.replaceChild(freshBtn, toggleBtn);
+      freshBtn.textContent = '＋ Show chart details';
+      grid.classList.remove('bazi-grid--expanded');
+      freshBtn.addEventListener('click', () => {
+        const expanded = grid.classList.toggle('bazi-grid--expanded');
+        freshBtn.textContent = expanded ? '－ Hide chart details' : '＋ Show chart details';
+      });
+    }
   }
 
   // Short energy descriptions per stem index (0–9 = Jiǎ through Guǐ)
@@ -1663,7 +1677,7 @@
       const desc     = DAYUN_STEM_DESC[decade.stemIndex];
       const classes  = ['dayun-card', decade.isCurrent ? 'dayun-card-active' : ''].filter(Boolean).join(' ');
       return `
-        <div class="${classes}">
+        <div class="${classes}" data-decade-idx="${i}">
           <div class="dayun-row">
             <span class="dayun-row-label">Age · Year</span>
             <span class="dayun-age">${decade.startAge}–${decade.endAge} yrs</span>
@@ -1682,8 +1696,20 @@
             <span class="dayun-row-label">Season Energy</span>
             <span class="dayun-desc">${desc}</span>
           </div>
+          <div class="dayun-tap-hint">Tap to explore →</div>
         </div>`;
     }).join('');
+
+    // Event delegation for card taps → cycle detail panel
+    if (!strip.dataset.clickWired) {
+      strip.dataset.clickWired = '1';
+      strip.addEventListener('click', e => {
+        const card = e.target.closest('.dayun-card');
+        if (!card) return;
+        const idx = parseInt(card.dataset.decadeIdx, 10);
+        if (!isNaN(idx)) showCycleDetail(idx);
+      });
+    }
 
     // Sync custom scroll indicator thumb
     requestAnimationFrame(updateDayunScrollThumb);
