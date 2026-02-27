@@ -1571,6 +1571,38 @@ select.input-cell-field {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── Blueprint + reading sheet overflow protection ─────────────── */
+#tab-blueprint {
+  overflow-x: hidden;
+}
+
+.reading-sheet-body {
+  overflow-x: hidden;
+}
+
+/* AI-generated text — force safe wrapping on any viewport */
+.reading-sheet-body p,
+.reading-sheet-body h3,
+.narrative-core-essence,
+.narrative-season,
+.narrative-section-label,
+.detail-sections p,
+.detail-sections h3,
+#annual-arc p,
+#annual-arc h3 {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+/* Section containers: never exceed viewport */
+.blueprint-section,
+.detail-section,
+.annual-arc {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 /* ═══════════════════════════════════════════════════════════════ */
 /* BLUEPRINT DETAIL (in-app tab)                                  */
 /* ═══════════════════════════════════════════════════════════════ */
@@ -3608,12 +3640,27 @@ select.input-cell-field {
   justify-content: space-between;
   padding: 1rem 1.1rem;
   cursor: pointer;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(160, 32, 240, 0.06);
+  border: 1px solid rgba(160, 32, 240, 0.4);
   border-radius: 2px;
   margin-bottom: 1rem;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s var(--spring-smooth);
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Amber "Personalized" badge on reading card */
+.reading-card-badge {
+  display: inline-block;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-amber);
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 20px;
+  padding: 0.15em 0.55em;
+  vertical-align: middle;
 }
 .reading-card:hover {
   background: rgba(255,255,255,0.08);

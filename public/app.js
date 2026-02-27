@@ -1467,7 +1467,7 @@
     const previewEl = document.getElementById('reading-card-preview');
     if (previewEl) {
       const text = narrative.coreEssence || '';
-      previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to reveal your reading\u2026');
+      previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to unlock your personalized reading \u2192');
     }
   }
 
@@ -1501,10 +1501,9 @@
 
   function runGeneration() {
     trackEvent('blueprint_generated');
-    // Show brand splash first — no API call yet
     showView('view-generating');
-    generatingView.startSplash(state.profileName);
-    // buildChart() fires when user taps #btn-gen-cta (wired in init())
+    generatingView.startLoading(state.profileName); // skip splash, go straight to loading
+    buildChart();                                    // start immediately — no second button needed
   }
 
   // ─── Helper utilities ────────────────────────────────────────────
@@ -2355,7 +2354,7 @@
       const previewEl = document.getElementById('reading-card-preview');
       if (previewEl) {
         const text = na.coreEssence || '';
-        previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to reveal your reading\u2026');
+        previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to unlock your personalized reading \u2192');
       }
     } else {
       // Show placeholder + static fallback
@@ -2376,7 +2375,7 @@
         const previewEl = document.getElementById('reading-card-preview');
         if (previewEl) {
           const text = coreEssence || '';
-          previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to reveal your reading\u2026');
+          previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to unlock your personalized reading \u2192');
         }
       }
     }
