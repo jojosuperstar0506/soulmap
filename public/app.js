@@ -231,6 +231,41 @@
         { icon: '\ud83d\udca7', title: 'Water \u2014 Flow & Surrender',   desc: 'Fluid movement visualization. For when you feel stuck.' },
         { icon: '\u25ce',  title: 'Before a Big Decision',      desc: 'Grounding + clarity. 10 min.' },
       ],
+      // Blueprint display strings
+      dom_archetype_label:      'Dominant Archetype',
+      decision_pattern_label:   'Your Decision Pattern',
+      bp_strength_label:        'Strength',
+      bp_show_details:          '\uff0b Show chart details',
+      bp_hide_details:          '\uff0d Hide chart details',
+      reading_preview_fallback: 'Tap to unlock your personalized reading \u2192',
+      PILLAR_LABELS_EN:   ['Year', 'Month', 'Day', 'Hour'],
+      ELEMENT_NAMES:      { wood: 'Wood', fire: 'Fire', earth: 'Earth', metal: 'Metal', water: 'Water' },
+      TEN_GOD_EN:         ['Friend', 'Rob Wealth', 'Eating God', 'Hurt Officer', 'Ind. Wealth', 'Dir. Wealth', '7 Killings', 'Dir. Officer', 'Ind. Seal', 'Dir. Seal'],
+      TEN_GOD_ARCHETYPE:  ['Mirror', 'Shadow', 'Muse', 'Maverick', 'Windfall', 'Harvest', 'Challenger', 'Architect', 'Mystic', 'Guardian'],
+      TEN_GOD_BRIEF: [
+        'You define yourself through peers \u2014 collaboration and competition are your forge.',
+        "You take risks others won't \u2014 bold action is your edge and your blind spot.",
+        'Creative output flows naturally from you \u2014 talent that looks effortless to others.',
+        'You break patterns and challenge norms \u2014 innovation lives here, alongside friction.',
+        'Windfall and unexpected opportunity seek you \u2014 wealth arrives through unconventional paths.',
+        'You build wealth steadily through patience and relationship \u2014 trust compounds over time.',
+        'Pressure and competition forge you \u2014 you become most powerful when challenged.',
+        'You earn authority through structure \u2014 institutions and systems are your domain.',
+        'Deep solitary wisdom is your gift \u2014 insight arrives in stillness and silence.',
+        'You attract mentors and protection \u2014 others invest in you because they see your potential.',
+      ],
+      DECISION_LENS: [
+        "You calibrate heavily against others \u2014 what peers are doing, what the field expects, whether your move will be legible to those you respect. This makes you unusually good at reading a room, and sometimes late to trust a direction others haven't validated yet. Watch for: delaying a decision because you haven't seen someone else make it first.",
+        "You move fast and trust your instincts \u2014 which has served you. The risk is underweighting the cost of a move that can't be undone, or optimizing for the bold read when the patient one was right. Watch for: framing caution as timidity when it's actually accurate.",
+        "New possibilities reliably feel more alive than current commitments \u2014 not because of restlessness, but because your mind genuinely generates better options under constraint. The pattern to catch: surfacing new alternatives right at the moment of commitment. Watch for: mistaking the discomfort of closing as a signal the option isn't right.",
+        "You're skilled at seeing what's wrong with the conventional option. This is a genuine asset \u2014 except when it becomes harder to commit to something imperfect than to keep looking for the better path. Watch for: using critical thinking to defer rather than to decide.",
+        "You're tuned for opportunity \u2014 you notice upside quickly and move toward it naturally. The structural blind spot is underweighting the cost of moves that pull you off your core direction. Watch for: the decision that looks like expansion but is actually distraction.",
+        'You have a long horizon and genuine patience \u2014 you're comfortable with investments that take time. The pattern to watch is the inverse: sometimes what looks like patient cultivation is actually avoidance of a decision that's already overdue. Watch for: "not the right time" becoming a permanent posture.',
+        "You sharpen through resistance \u2014 you're at your best when something is pushing back. The risk is framing every decision as a test of resolve, which makes it harder to distinguish between friction that's formative and friction that's just wrong. Watch for: staying in something difficult because leaving feels like losing.",
+        'You trust structure, process, and proven precedent. This makes you reliable and often right. The structural pattern: your threshold for "enough information to decide" is higher than most situations actually require. Watch for: the decision you've made in practice but haven't made in form.',
+        "You trust deep knowing over surface evidence \u2014 and your inner sense is often accurate. The risk is that genuine insight and avoidance of the difficult can feel identical from the inside. Watch for: \"I'm not ready\" as a cover for \"I don't want to choose.\"",
+        "You decide well when you feel supported \u2014 and you're skilled at building the conditions for good decisions. The pattern to watch: over-consulting. Bringing in more perspectives beyond what the decision actually requires. Watch for: the point where more input becomes a substitute for commitment.",
+      ],
     },
 
     zh: {
@@ -385,12 +420,12 @@
         _default:   '\u4e00\u4e2a\u7a33\u6b65\u5c55\u5f00\u7684\u5e74\u4efd\u2014\u2014\u4e13\u6ce8\u4e8e\u6700\u91cd\u8981\u7684\u4e8b\u3002',
       },
       ORACLE_TEMPLATES: [
-        { icon: '\u26a1', title: '\u4e8b\u4e1a\u6289\u62e9',   desc: '\u4e0e\u4f60\u672c\u8d28\u5951\u5408\u7684\u4e8b\u4e1a\u65b9\u5411' },
-        { icon: '\u25ce',  title: '\u611f\u60c5\u955c\u50cf',   desc: '\u4f60\u7684\u611f\u60c5\u6a21\u5f0f\u4e0e\u6240\u5438\u5f15\u7684\u4eba' },
-        { icon: '\u25c9',  title: '{year} \u6d41\u5e74', desc: '\u4eca\u5e74\u6fc0\u6d3b\u4e86\u4f60\u547d\u76d8\u4e2d\u7684\u4ec0\u4e48' },
-        { icon: '\u25d0',  title: '\u9634\u6697\u9762\u6a21\u5f0f', desc: '\u5728\u6697\u5904\u5bf9\u4f60\u8d77\u4f5c\u7528\u7684\u76f2\u70b9' },
-        { icon: '\u2696',  title: '\u884c\u52a8\u65f6\u673a',   desc: '\u5f53\u4e0b\u9002\u5408\u5927\u80c6\u6539\u53d8\u5417\uff1f' },
-        { icon: '\u2726',  title: '\u5065\u5eb7\u4e0e\u6d3b\u529b', desc: '\u4f60\u7684\u4f53\u8d28\u4e0e\u80fd\u91cf\u8282\u5f8b' },
+        { icon: '\u26a1', title: '\u4e8b\u4e1a\u6289\u62e9',   desc: '\u4e0e\u4f60\u672c\u8d28\u5951\u5408\u7684\u4e8b\u4e1a\u65b9\u5411',   question: 'What kind of work environment, role, or path is most aligned with who I fundamentally am? What am I genuinely built for \u2014 and what tends to quietly drain me, even when it looks right on paper?' },
+        { icon: '\u25ce',  title: '\u611f\u60c5\u955c\u50cf',   desc: '\u4f60\u7684\u611f\u60c5\u6a21\u5f0f\u4e0e\u6240\u5438\u5f15\u7684\u4eba',   question: 'What are my real patterns in love and close relationships \u2014 what I need, what I tend to create, what I avoid or attract? Be honest with me about the recurring shape of things.' },
+        { icon: '\u25c9',  title: '{year} \u6d41\u5e74', desc: '\u4eca\u5e74\u6fc0\u6d3b\u4e86\u4f60\u547d\u76d8\u4e2d\u7684\u4ec0\u4e48',   question: 'What is {year} asking from me? Where is the current running, and where might I be swimming against it without knowing? What deserves the most of my attention and energy this year?' },
+        { icon: '\u25d0',  title: '\u9634\u6697\u9762\u6a21\u5f0f', desc: '\u5728\u6697\u5904\u5bf9\u4f60\u8d77\u4f5c\u7528\u7684\u76f2\u70b9',   question: "There's something I keep returning to but haven't resolved. I want to understand what's actually underneath it \u2014 not just the surface version of the question. Help me see it more clearly." },
+        { icon: '\u2696',  title: '\u884c\u52a8\u65f6\u673a',   desc: '\u5f53\u4e0b\u9002\u5408\u5927\u80c6\u6539\u53d8\u5417\uff1f',   question: "I'm weighing something significant. I want to understand whether this is the right moment to move \u2014 or whether patience, preparation, or a different approach is the more intelligent choice right now." },
+        { icon: '\u2726',  title: '\u5065\u5eb7\u4e0e\u6d3b\u529b', desc: '\u4f60\u7684\u4f53\u8d28\u4e0e\u80fd\u91cf\u8282\u5f8b',   question: 'What am I actually building across this decade \u2014 not just the year? What deserves my deepest investment right now, and what would I regret not having started?' },
       ],
       THEME_LABELS: {
         healing: '\u7597\u6108\u4e0e\u66f4\u65b0', courage: '\u52c7\u6c14\u4e0e\u529b\u91cf', clarity: '\u6e05\u660e\u4e0e\u771f\u5b9e',
@@ -418,6 +453,41 @@
         { icon: '\ud83e\ude99', title: '\u91d1\u2014\u2014\u91ca\u653e\u4e0e\u6e05\u660e',  desc: '\u4ee5\u547c\u5438\u4e3a\u4e3b\u7684\u653e\u4e0b\u51a5\u60f3\uff0c\u9002\u5408\u6df7\u4e71\u6216\u96be\u4ee5\u51b3\u65ad\u65f6\u3002' },
         { icon: '\ud83d\udca7', title: '\u6c34\u2014\u2014\u6d41\u52a8\u4e0e\u81e3\u670d',  desc: '\u6d41\u52a8\u610f\u8c61\u5f15\u5bfc\uff0c\u9002\u5408\u611f\u5230\u505c\u6ede\u65f6\u3002' },
         { icon: '\u25ce',  title: '\u91cd\u5927\u6289\u62e9\u524d\u7684\u51c6\u5907', desc: '\u624e\u6839\uff0b\u6e05\u660e\u300210 \u5206\u949f\u3002' },
+      ],
+      // Blueprint display strings (Chinese)
+      dom_archetype_label:      '\u547d\u4e3b\u539f\u578b',
+      decision_pattern_label:   '\u4f60\u7684\u51b3\u7b56\u6a21\u5f0f',
+      bp_strength_label:        '\u5f3a\u5ea6',
+      bp_show_details:          '\uff0b \u5c55\u5f00\u547d\u76d8\u8be6\u60c5',
+      bp_hide_details:          '\uff0d \u6536\u8d77\u547d\u76d8\u8be6\u60c5',
+      reading_preview_fallback: '\u70b9\u51fb\u89e3\u9501\u4f60\u7684\u4e13\u5c5e\u89e3\u8bfb \u2192',
+      PILLAR_LABELS_EN:   ['\u5e74', '\u6708', '\u65e5', '\u65f6'],
+      ELEMENT_NAMES:      { wood: '\u6728', fire: '\u706b', earth: '\u571f', metal: '\u91d1', water: '\u6c34' },
+      TEN_GOD_EN:         ['\u6bd4\u80a9', '\u52ab\u8d22', '\u98df\u795e', '\u4f24\u5b98', '\u504f\u8d22', '\u6b63\u8d22', '\u4e03\u6740', '\u6b63\u5b98', '\u504f\u5370', '\u6b63\u5370'],
+      TEN_GOD_ARCHETYPE:  ['\u955c\u50cf\u8005', '\u5f71\u8005', '\u7075\u611f\u8005', '\u7834\u683c\u8005', '\u673a\u7f18\u8005', '\u79ef\u805a\u8005', '\u6311\u6218\u8005', '\u5efa\u6784\u8005', '\u7384\u601d\u8005', '\u5b88\u62a4\u8005'],
+      TEN_GOD_BRIEF: [
+        '\u4f60\u901a\u8fc7\u540c\u4f34\u5b9a\u4e49\u81ea\u6211\u2014\u2014\u534f\u4f5c\u4e0e\u7ade\u4e89\u662f\u78e8\u792c\u4f60\u7684\u71d4\u7089\u3002',
+        '\u4f60\u656c\u4e8e\u5192\u4ed6\u4eba\u4e0d\u656c\u5192\u7684\u9669\u2014\u2014\u679c\u656c\u884c\u52a8\u662f\u4f60\u7684\u4f18\u52bf\uff0c\u4e5f\u662f\u4f60\u7684\u76f2\u70b9\u3002',
+        '\u521b\u9020\u6027\u7684\u8f93\u51fa\u4ece\u4f60\u8eab\u4e0a\u81ea\u7136\u6d41\u6de4\u2014\u2014\u90a3\u4efd\u624d\u534e\u5728\u65c1\u4eba\u773c\u4e2d\u770b\u4f3c\u6beb\u4e0d\u8d39\u529b\u3002',
+        '\u4f60\u6253\u7834\u6a21\u5f0f\u3001\u6311\u6218\u5e38\u89c4\u2014\u2014\u9769\u65b0\u5728\u6b64\uff0c\u6469\u64e6\u4ea6\u7136\u3002',
+        '\u504f\u8d22\u4e0e\u610f\u5916\u673a\u9047\u4e3b\u52a8\u5bfb\u4f60\u2014\u2014\u8d22\u5bcc\u901a\u8fc7\u975e\u5bfb\u5e38\u7684\u8def\u5f84\u5230\u6765\u3002',
+        '\u4f60\u4ee5\u8010\u5fc3\u548c\u5173\u7cfb\u7a33\u5065\u79ef\u累\u8d22\u5bcc\u2014\u2014\u4fe1\u4efb\u968f\u65f6\u95f4\u590d\u5229\u589e\u957f\u3002',
+        '\u538b\u529b\u4e0e\u7ade\u4e89\u953b\u9020\u4f60\u2014\u2014\u5f53\u4f60\u88ab\u6311\u6218\u65f6\uff0c\u4f60\u624d\u771f\u6b63\u5f3a\u5927\u8d77\u6765\u3002',
+        '\u4f60\u901a\u8fc7\u7ed3\u6784\u8d62\u5f97\u6743\u5a01\u2014\u2014\u673a\u6784\u4e0e\u4f53\u7cfb\u662f\u4f60\u7684\u821e\u53f0\u3002',
+        '\u6df1\u6c89\u5b64\u72ec\u7684\u667a\u6167\u662f\u4f60\u7684\u5929\u8d4b\u2014\u2014\u6d1e\u89c1\u5728\u9759\u9ed8\u4e2d\u5230\u6765\u3002',
+        '\u4f60\u5438\u5f15\u5bfc\u5e08\u4e0e\u5e87\u62a4\u2014\u2014\u4ed6\u4eba\u5728\u4f60\u8eab\u4e0a\u6295\u5165\uff0c\u662f\u56e0\u4e3a\u4ed6\u4eec\u770b\u89c1\u4e86\u4f60\u7684\u6f5c\u529b\u3002',
+      ],
+      DECISION_LENS: [
+        '\u4f60\u5927\u91cf\u53c2\u7167\u4ed6\u4eba\u2014\u2014\u540c\u4f34\u7684\u52a8\u5411\u3001\u9886\u57df\u7684\u671f\u5f85\u3001\u4f60\u7684\u5224\u65ad\u662f\u5426\u5f97\u5230\u8ba4\u53ef\u3002\u8fd9\u8ba9\u4f60\u5f02\u5e38\u5584\u4e8e\u8bfb\u61c2\u4e00\u4e2a\u573a\u5408\uff0c\u5374\u6709\u65f6\u8fdf\u8fdf\u4e0d\u4fe1\u4efb\u5c1a\u672a\u88ab\u9a8c\u8bc1\u7684\u65b9\u5411\u3002\u8b66\u60d5\uff1a\u56e0\u4e3a\u6ca1\u89c1\u8fc7\u522b\u4eba\u5148\u8d70\u8fd9\u4e00\u6b65\uff0c\u5c31\u63a8\u8fdf\u81ea\u5df1\u7684\u51b3\u5b9a\u3002',
+        '\u4f60\u884c\u52a8\u8fc5\u901f\uff0c\u4fe1\u4efb\u76f4\u89c9\u2014\u2014\u8fd9\u5df2\u4e3a\u4f60\u6240\u7528\u3002\u98ce\u9669\u5728\u4e8e\u4f4e\u4f30\u4e86\u65e0\u6cd5\u64a4\u56de\u7684\u884c\u52a8\u7684\u4ee3\u4ef7\uff0c\u6216\u5728\u8be5\u4fdd\u6301\u8010\u5fc3\u65f6\u5374\u505a\u51fa\u4e86\u5927\u80c6\u7684\u5224\u65ad\u3002\u8b66\u60d5\uff1a\u628a\u8c28\u614e\u6807\u8bb0\u4e3a\u61e6\u5f31\uff0c\u800c\u4e8b\u5b9e\u4e0a\u90a3\u624d\u662f\u51c6\u786e\u7684\u8bfb\u53d6\u3002',
+        '\u65b0\u7684\u53ef\u80fd\u6027\u603b\u6bd4\u73b0\u6709\u627f\u8bfa\u66f4\u6709\u751f\u547d\u529b\u2014\u2014\u4e0d\u662f\u56e0\u4e3a\u6d6e\u8e81\uff0c\u800c\u662f\u4f60\u7684\u601d\u7ef4\u5728\u9650\u5236\u4e2d\u771f\u7684\u80fd\u751f\u6210\u66f4\u597d\u7684\u9009\u9879\u3002\u9700\u8981\u6293\u4f4f\u7684\u6a21\u5f0f\u662f\uff1a\u6070\u5728\u505a\u51fa\u627f\u8bfa\u7684\u65f6\u523b\uff0c\u6d6e\u73b0\u65b0\u7684\u66ff\u4ee3\u65b9\u6848\u3002\u8b66\u60d5\uff1a\u628a\u5173\u95ed\u9009\u9879\u7684\u4e0d\u9002\uff0c\u8bef\u8bfb\u4e3a\u8fd9\u4e2a\u9009\u9879\u672c\u8eab\u4e0d\u5bf9\u3002',
+        '\u4f60\u64c5\u957f\u770b\u51fa\u5e38\u89c4\u9009\u9879\u7684\u95ee\u9898\u6240\u5728\u3002\u8fd9\u662f\u771f\u6b63\u7684\u8d44\u4ea7\u2014\u2014\u9664\u975e\u5b83\u53d8\u6210\u4e86\u6bd4\u8d77\u505a\u51fa\u4e0d\u5b8c\u7f8e\u7684\u627f\u8bfa\uff0c\u66f4\u96be\u505c\u6b62\u5bfb\u627e\u66f4\u597d\u8def\u5f84\u7684\u4e60\u60ef\u3002\u8b66\u60d5\uff1a\u7528\u6279\u5224\u6027\u601d\u7ef4\u6765\u62d6\u5ef6\uff0c\u800c\u975e\u505a\u51fa\u51b3\u5b9a\u3002',
+        '\u4f60\u5bf9\u673a\u9047\u654f\u611f\u2014\u2014\u4f60\u80fd\u8fc5\u901f\u53d1\u73b0\u4e0a\u884c\u7a7a\u95f4\u5e76\u81ea\u7136\u5730\u9760\u8fd1\u5b83\u3002\u7ed3\u6784\u6027\u7684\u76f2\u70b9\u662f\u4f4e\u4f30\u4e86\u90a3\u4e9b\u628a\u4f60\u62c9\u79bb\u6838\u5fc3\u65b9\u5411\u7684\u884c\u52a8\u7684\u4ee3\u4ef7\u3002\u8b66\u60d5\uff1a\u770b\u4f3c\u6269\u5f20\u3001\u5b9e\u4e3a\u5206\u6563\u6ce8\u610f\u529b\u7684\u51b3\u5b9a\u3002',
+        '\u4f60\u6709\u957f\u8fdc\u7684\u773c\u5149\u548c\u771f\u6b63\u7684\u8010\u5fc3\u2014\u2014\u4f60\u80fd\u63a5\u53d7\u9700\u8981\u65f6\u95f4\u7684\u6295\u8d44\u3002\u9700\u8981\u89c2\u5bdf\u7684\u6a21\u5f0f\u6070\u6070\u76f8\u53cd\uff1a\u6709\u65f6\u770b\u4f3c\u8010\u5fc3\u8015\u8018\u7684\uff0c\u5b9e\u9645\u4e0a\u662f\u5728\u56de\u907f\u4e00\u4e2a\u65e9\u5c31\u8be5\u505a\u7684\u51b3\u5b9a\u3002\u8b66\u60d5\uff1a"\u65f6\u673a\u672a\u5230"\u6210\u4e3a\u6c38\u4e45\u7684\u59ff\u6001\u3002',
+        '\u4f60\u5728\u963b\u529b\u4e2d\u78e8\u792c\u2014\u2014\u6709\u963b\u529b\u7684\u65f6\u5019\u4f60\u72b6\u6001\u6700\u597d\u3002\u98ce\u9669\u5728\u4e8e\u628a\u6bcf\u4e00\u4e2a\u51b3\u5b9a\u90fd\u6846\u67b6\u4e3a\u610f\u5fd7\u529b\u7684\u8003\u9a8c\uff0c\u8fd9\u8ba9\u4f60\u66f4\u96be\u533a\u5206\u5851\u9020\u4f60\u7684\u6469\u64e6\u4e0e\u53ea\u662f\u4e0d\u5bf9\u7684\u6469\u64e6\u3002\u8b66\u60d5\uff1a\u56e0\u4e3a\u79bb\u5f00\u611f\u89c9\u50cf\u8f93\uff0c\u800c\u7ee7\u7eed\u7559\u5728\u4e00\u4ef6\u8270\u96be\u7684\u4e8b\u60c5\u4e2d\u3002',
+        '\u4f60\u4fe1\u4efb\u7ed3\u6784\u3001\u6d41\u7a0b\u548c\u7ecf\u8fc7\u9a8c\u8bc1\u7684\u5148\u4f8b\u3002\u8fd9\u8ba9\u4f60\u53ef\u9760\uff0c\u800c\u4e14\u5f80\u5f80\u662f\u5bf9\u7684\u3002\u7ed3\u6784\u6027\u6a21\u5f0f\u662f\uff1a\u4f60\u7684"\u8db3\u591f\u4fe1\u606f\u624d\u80fd\u51b3\u5b9a"\u7684\u95e8\u69db\uff0c\u9ad8\u4e8e\u5927\u591a\u6570\u60c5\u51b5\u5b9e\u9645\u9700\u8981\u7684\u3002\u8b66\u60d5\uff1a\u90a3\u4e2a\u5728\u5b9e\u8df5\u4e2d\u4f60\u5df2\u7ecf\u505a\u4e86\u3001\u4f46\u5728\u5f62\u5f0f\u4e0a\u8fd8\u6ca1\u6709\u786e\u8ba4\u7684\u51b3\u5b9a\u3002',
+        '\u4f60\u76f8\u4fe1\u6df1\u5c42\u7684\u8ba4\u77e5\u800c\u975e\u8868\u9762\u7684\u8bc1\u636e\u2014\u2014\u4f60\u7684\u5185\u5728\u611f\u77e5\u5f80\u5f80\u662f\u51c6\u786e\u7684\u3002\u98ce\u9669\u5728\u4e8e\uff0c\u771f\u6b63\u7684\u6d1e\u89c1\u4e0e\u56de\u907f\u56f0\u96be\uff0c\u4ece\u5185\u90e8\u611f\u53d7\u8d77\u6765\u53ef\u80fd\u662f\u4e00\u6837\u7684\u3002\u8b66\u60d5\uff1a"\u6211\u8fd8\u6ca1\u51c6\u5907\u597d"\u6210\u4e3a"\u6211\u4e0d\u60f3\u505a\u9009\u62e9"\u7684\u63a9\u62a4\u3002',
+        '\u5f53\u4f60\u611f\u5230\u88ab\u652f\u6301\u65f6\uff0c\u4f60\u505a\u51fa\u597d\u7684\u51b3\u5b9a\u2014\u2014\u4f60\u4e5f\u64c5\u957f\u4e3a\u597d\u51b3\u5b9a\u521b\u9020\u6761\u4ef6\u3002\u9700\u8981\u89c2\u5bdf\u7684\u6a21\u5f0f\u662f\uff1a\u8fc7\u5ea6\u548b\u8be2\u2014\u2014\u5f15\u5165\u8d85\u8fc7\u8fd9\u4e2a\u51b3\u5b9a\u5b9e\u9645\u6240\u9700\u7684\u66f4\u591a\u89c6\u89d2\u3002\u8b66\u60d5\uff1a\u66f4\u591a\u7684\u8f93\u5165\u6210\u4e3a\u4ee3\u66ff\u627f\u8bfa\u7684\u66ff\u4ee3\u54c1\u3002',
       ],
     },
   };
@@ -1930,7 +2000,7 @@
     const previewEl = document.getElementById('reading-card-preview');
     if (previewEl) {
       const text = narrative.coreEssence || '';
-      previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to unlock your personalized reading \u2192');
+      previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || t('reading_preview_fallback'));
     }
     // Sync card CTA state now that narrative has arrived
     updateReadingCardState();
@@ -2009,7 +2079,7 @@
     }
     const previewEl = document.getElementById('reading-card-preview');
     if (previewEl && !claimed) {
-      previewEl.textContent = 'Tap to unlock your personalized narrative \u2192';
+      previewEl.textContent = t('reading_preview_fallback');
     }
   }
 
@@ -2050,7 +2120,7 @@
       return `<div class="bazi-cell">
         <span class="bazi-romanization">${STEM_ROMANIZATION[d.p.stem]}</span>
         <span class="bazi-char" style="color:${ELEMENT_HEX[d.stemEl]}">${STEMS[d.p.stem]}</span>
-        <span class="bazi-elem-tag bazi-elem-${d.stemEl}">${ELEMENT_NAMES[d.stemEl]}</span>
+        <span class="bazi-elem-tag bazi-elem-${d.stemEl}">${(t('ELEMENT_NAMES') || ELEMENT_NAMES)[d.stemEl]}</span>
       </div>`;
     }
 
@@ -2058,7 +2128,7 @@
       return `<div class="bazi-cell">
         <span class="bazi-romanization">${BRANCH_ROMANIZATION[d.p.branch]}</span>
         <span class="bazi-char" style="color:${ELEMENT_HEX[d.branchEl]}">${BRANCHES[d.p.branch]}</span>
-        <span class="bazi-elem-tag bazi-elem-${d.branchEl}">${ELEMENT_NAMES[d.branchEl]}</span>
+        <span class="bazi-elem-tag bazi-elem-${d.branchEl}">${(t('ELEMENT_NAMES') || ELEMENT_NAMES)[d.branchEl]}</span>
       </div>`;
     }
 
@@ -2084,13 +2154,13 @@
       // Row 0 — header
       `<div class="bazi-row bazi-row-header bazi-row-core">
         <div class="bazi-label">${termLabel('日期', 'Pillar', 'four-pillars')}</div>
-        ${PILLAR_LABELS_CN.map((cn, i) => `<div class="bazi-col-head${i===2?' bazi-day-head':''}">${cn}<span class="bazi-col-en">${PILLAR_LABELS_EN[i]}</span></div>`).join('')}
+        ${PILLAR_LABELS_CN.map((cn, i) => `<div class="bazi-col-head${i===2?' bazi-day-head':''}">${cn}<span class="bazi-col-en">${(t('PILLAR_LABELS_EN') || PILLAR_LABELS_EN)[i]}</span></div>`).join('')}
       </div>`,
 
       // Row 1 — 主星 Ten God
       `<div class="bazi-row bazi-row-core">
         <div class="bazi-label">${termLabel('主星', '10 Gods', 'ten-gods')}</div>
-        ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-tengod${i===2?' bazi-day':''}">${TEN_GOD_NAMES[d.tg]}<span class="bazi-tg-en">${TEN_GOD_EN[d.tg]}</span></div>`).join('')}
+        ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-tengod${i===2?' bazi-day':''}">${TEN_GOD_NAMES[d.tg]}<span class="bazi-tg-en">${(t('TEN_GOD_EN') || TEN_GOD_EN)[d.tg]}</span></div>`).join('')}
       </div>`,
 
       // Row 2 — 天干 Heavenly Stems
@@ -2156,11 +2226,11 @@
     if (toggleBtn && grid) {
       const freshBtn = toggleBtn.cloneNode(true);
       toggleBtn.parentNode.replaceChild(freshBtn, toggleBtn);
-      freshBtn.textContent = '＋ Show chart details';
+      freshBtn.textContent = t('bp_show_details');
       grid.classList.remove('bazi-grid--expanded');
       freshBtn.addEventListener('click', () => {
         const expanded = grid.classList.toggle('bazi-grid--expanded');
-        freshBtn.textContent = expanded ? '－ Hide chart details' : '＋ Show chart details';
+        freshBtn.textContent = expanded ? t('bp_hide_details') : t('bp_show_details');
       });
     }
   }
@@ -2808,27 +2878,28 @@
     const badgeEl = document.getElementById('dominant-ten-god-badge');
     if (badgeEl && state.chart.dominantTenGod != null) {
       const dtgIdx  = state.chart.dominantTenGod;
-      const dtgName = TEN_GOD_ARCHETYPE[dtgIdx] || '';
-      const dtgCN   = TEN_GOD_NAMES[dtgIdx] || '';
-      const dtgBrief = TEN_GOD_BRIEF[dtgIdx] || '';
+      const dtgName  = (t('TEN_GOD_ARCHETYPE')[dtgIdx] || TEN_GOD_ARCHETYPE[dtgIdx] || '');
+      const dtgCN    = TEN_GOD_NAMES[dtgIdx] || '';
+      const dtgBrief = (t('TEN_GOD_BRIEF')[dtgIdx]    || TEN_GOD_BRIEF[dtgIdx]    || '');
       badgeEl.innerHTML =
         `<button class="term-link" data-term="dominant-archetype" type="button" style="display:block;text-align:left;width:100%">` +
-        `<span class="dtg-label">Dominant Archetype <span class="term-info">\u24d8</span></span>` +
+        `<span class="dtg-label">${t('dom_archetype_label')} <span class="term-info">\u24d8</span></span>` +
         `<span class="dtg-name">${dtgName} <span class="dtg-cn">${dtgCN}</span></span>` +
         `<span class="dtg-brief">${dtgBrief}</span>` +
         `</button>`;
 
       // Decision Lens — behavioral decision pattern from dominant archetype
-      const lensEl = document.getElementById('decision-lens');
-      if (lensEl && dtgIdx >= 0 && DECISION_LENS[dtgIdx]) {
+      const lensEl    = document.getElementById('decision-lens');
+      const lensItems = t('DECISION_LENS');
+      if (lensEl && dtgIdx >= 0 && (lensItems[dtgIdx] || DECISION_LENS[dtgIdx])) {
         lensEl.innerHTML =
-          `<span class="decision-lens-label">Your Decision Pattern</span>` +
-          `<p class="decision-lens-text">${DECISION_LENS[dtgIdx]}</p>`;
+          `<span class="decision-lens-label">${t('decision_pattern_label')}</span>` +
+          `<p class="decision-lens-text">${lensItems[dtgIdx] || DECISION_LENS[dtgIdx]}</p>`;
       }
     }
 
     // Meta
-    setEl('detail-destiny-structure', 'Strength: ' + getDayMasterStrength());
+    setEl('detail-destiny-structure', t('bp_strength_label') + ': ' + getDayMasterStrength());
     const favEls = (state.chart.favorableElements || []).join(' · ');
     setEl('detail-favorable-elements', favEls || season);
     setEl('detail-zodiac', zodiac);
@@ -2838,7 +2909,7 @@
     if (barsEl) {
       barsEl.innerHTML = Object.entries(balance).map(([k, v]) =>
         `<div class="element-row">
-          <button class="term-link" data-term="element-balance" type="button" style="display:inline;font-size:inherit">${ELEMENT_NAMES[k]}</button>
+          <button class="term-link" data-term="element-balance" type="button" style="display:inline;font-size:inherit">${(t('ELEMENT_NAMES') || ELEMENT_NAMES)[k]}</button>
           <div class="bar"><div class="fill" style="width:${v}%;background:${ELEMENT_HEX[k]}"></div></div>
           <span>${v}%</span>
         </div>`
@@ -2868,7 +2939,7 @@
       const previewEl = document.getElementById('reading-card-preview');
       if (previewEl) {
         const text = na.coreEssence || '';
-        previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to unlock your personalized reading \u2192');
+        previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || t('reading_preview_fallback'));
       }
     } else {
       // Show placeholder + static fallback
@@ -2889,7 +2960,7 @@
         const previewEl = document.getElementById('reading-card-preview');
         if (previewEl) {
           const text = coreEssence || '';
-          previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to unlock your personalized reading \u2192');
+          previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || t('reading_preview_fallback'));
         }
       }
     }
@@ -4251,19 +4322,24 @@
   const generatingView = initGeneratingView(); // module-level — must init before init()
 
   // ─── Init ────────────────────────────────────────────────────────
+  // Defensive wrapper — one crashing module must not block all others
+  function safeInit(fn) {
+    try { fn(); } catch (e) { console.error('[init] ' + fn.name + ' failed:', e); }
+  }
+
   function init() {
     initLangSwitcher();
-    initLanding();
-    initOnboard();
-    initTabs();
-    initOracle();
-    initWisdomVault();
-    initSpark();
-    initStillPoint();
-    initRefreshNarrative();
-    initProfileSwitcher();
-    initReadingSheet();
-    initGlossaryModal();
+    safeInit(initLanding);
+    safeInit(initOnboard);
+    safeInit(initTabs);
+    safeInit(initOracle);
+    safeInit(initWisdomVault);
+    safeInit(initSpark);
+    safeInit(initStillPoint);
+    safeInit(initRefreshNarrative);
+    safeInit(initProfileSwitcher);
+    safeInit(initReadingSheet);
+    safeInit(initGlossaryModal);
 
     // Migrate any legacy single-session → first named profile
     migrateOldSession();
