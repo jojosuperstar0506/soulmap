@@ -1221,6 +1221,9 @@
     document.getElementById('form-onboard').addEventListener('submit', function (e) {
       e.preventDefault();
       const fd = new FormData(this);
+      const email = (fd.get('email') || '').trim();
+      // Track whether this is a brand-new profile BEFORE we mint an ID
+      const isNewProfile = !state.profileId;
       // If no profileId in state (adding new), mint a fresh ID now
       const profileId = state.profileId || (String(Date.now()) + '_' + Math.floor(Math.random() * 1e6));
       setState({
@@ -1233,6 +1236,16 @@
         relationship:   fd.get('relationship') || '',
         currentConcern: (fd.get('currentConcern') || '').trim()
       });
+
+      // Fire-and-forget email collection — only on first-time profile creation, never on edits
+      if (isNewProfile && email && email.includes('@')) {
+        fetch('/api/collect-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, name: (fd.get('profileName') || '').trim() }),
+        }).catch(() => {}); // swallow all errors — user experience unaffected
+      }
+
       runGeneration();
     });
   }
@@ -3341,6 +3354,7 @@
     set('occupation',  state.occupation);
     set('relationship',state.relationship);
     set('currentConcern', state.currentConcern);
+    set('email',       state.email || '');
   }
 
   // ─── Init ────────────────────────────────────────────────────────
