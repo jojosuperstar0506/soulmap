@@ -47,6 +47,8 @@
   const I18N = {
     en: {
       // Landing
+      landing_hl_top:        'ACT ON YOUR',
+      landing_hl_accent:     'Destiny',
       landing_tagline:       'Ancient Wisdom Meets Modern Navigation',
       landing_stat1_label:   'years of ancient wisdom',
       landing_stat2_label:   'unique life patterns',
@@ -233,6 +235,8 @@
 
     zh: {
       // Landing
+      landing_hl_top:        '\u638c\u63e1\u4f60\u7684',
+      landing_hl_accent:     '\u547d\u8fd0',
       landing_tagline:       '\u53e4\u8001\u667a\u6167\uff0c\u7167\u4eae\u5f53\u4e0b',
       landing_stat1_label:   '\u5e74\u7684\u53e4\u8001\u4f20\u627f',
       landing_stat2_label:   '\u79cd\u72ec\u7279\u547d\u8fd0\u683c\u5c40',

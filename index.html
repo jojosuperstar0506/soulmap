@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Noto+Serif+SC:wght@200;300;400;600;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260228c" />
+  <link rel="stylesheet" href="styles.css?v=20260227d" />
   <!-- Vercel Analytics Web SDK -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
@@ -24,16 +24,41 @@
   <!-- LANDING / SPLASH -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <section id="view-landing" class="view view-active">
-    <div class="landing-bg"></div>
-    <div class="landing-content">
-      <div class="lang-switcher" id="lang-switcher">
-        <button class="lang-btn lang-btn--active" id="lang-btn-en" type="button">EN</button>
-        <span class="lang-divider" aria-hidden="true">/</span>
-        <button class="lang-btn" id="lang-btn-zh" type="button">中文</button>
-      </div>
-      <h1 class="logo">SoulMap</h1>
-      <p class="tagline" data-i18n="landing_tagline">Ancient Wisdom Meets Modern Navigation</p>
 
+    <!-- Background decorative layers -->
+    <div class="landing-bg" aria-hidden="true">
+      <div class="landing-strip"></div>
+      <div class="landing-circle-green"></div>
+    </div>
+
+    <div class="landing-content">
+
+      <!-- Top bar: brand wordmark left + language switcher right -->
+      <div class="landing-topbar">
+        <span class="landing-wordmark">SOULMAP™</span>
+        <div class="lang-switcher" id="lang-switcher">
+          <button class="lang-btn lang-btn--active" id="lang-btn-en" type="button">EN</button>
+          <span class="lang-divider" aria-hidden="true">/</span>
+          <button class="lang-btn" id="lang-btn-zh" type="button">中文</button>
+        </div>
+      </div>
+
+      <!-- Hero: stacked headline + oval -->
+      <div class="landing-hero">
+        <h1 class="landing-headline">
+          <span class="landing-hl-top" data-i18n="landing_hl_top">ACT ON YOUR</span>
+          <span class="landing-hl-accent"><em data-i18n="landing_hl_accent">Destiny</em></span>
+        </h1>
+
+        <!-- Purple oval with SOULMAP inside -->
+        <div class="landing-oval-outer">
+          <div class="landing-oval">
+            <span class="landing-oval-logo">SOULMAP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats row -->
       <div class="landing-stats">
         <div class="landing-stat">
           <span class="stat-num">3,500+</span>
@@ -46,8 +71,11 @@
         </div>
       </div>
 
+      <!-- Description — DM Mono 400 -->
       <p class="sub" data-i18n="landing_sub">From the oldest astronomical tradition on earth — it doesn't predict the future. It maps the terrain, so you know when to climb and when to rest.</p>
+
       <button type="button" class="btn btn-cta btn-landing" id="btn-start" data-i18n="landing_cta">See My Blueprint</button>
+
     </div>
   </section>
 

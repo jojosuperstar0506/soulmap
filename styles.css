@@ -193,12 +193,14 @@ blockquote {
 /* LANDING                                                         */
 /* ═══════════════════════════════════════════════════════════════ */
 
+/* ─── Landing: full-height poster ─── */
 #view-landing {
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 3rem 1.5rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0;
   position: relative;
+  min-height: 100dvh;
   overflow: hidden;
 }
 
@@ -206,102 +208,198 @@ blockquote {
   display: flex;
 }
 
-/* Background: flat void — grain does the texture */
-/* Large geometric circle — risograph registration mark */
+/* ─── Background decorative layers ─── */
 .landing-bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
 }
 
-.landing-bg::before {
-  display: none; /* 色块 disabled */
+/* Right-side orange strip — Fire element color block */
+.landing-strip {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 28%;
+  background: var(--color-vermillion);
 }
 
-.landing-bg::after {
-  display: none; /* 色块 disabled */
+/* Small sage green circle — top area decorative shape */
+.landing-circle-green {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: 5%;
+  right: 18%;
+  background: #7A9B7A;
+  border-radius: 50%;
+  opacity: 0.78;
 }
 
+/* ─── Content column ─── */
 .landing-content {
   position: relative;
   z-index: 1;
-  max-width: 420px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom, 1.5rem);
 }
 
-.logo {
+/* ─── Top bar ─── */
+.landing-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.4rem 1.25rem 0;
+}
+
+.landing-wordmark {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+/* lang switcher inside topbar — no bottom margin */
+.landing-topbar .lang-switcher {
+  margin-bottom: 0;
+  justify-content: flex-end;
+}
+
+/* ─── Hero area: headline + oval ─── */
+.landing-hero {
+  padding: 2.25rem 1.25rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-headline {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 1.75rem;
+  gap: 0;
+}
+
+/* "ACT ON YOUR" — Outfit 900 black, massive stacked */
+.landing-hl-top {
+  display: block;
   font-family: var(--font-body);
-  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-size: clamp(2.8rem, 12.5vw, 5.5rem);
   font-weight: 900;
-  margin: 0 0 0.75rem;
   letter-spacing: -0.04em;
   text-transform: uppercase;
   color: var(--color-ink);
-  line-height: 0.9;
+  line-height: 0.88;
 }
-.logo em {
+
+/* "Destiny" — Playfair italic large purple */
+.landing-hl-accent {
+  display: block;
+  line-height: 1.05;
+}
+.landing-hl-accent em {
   font-family: var(--font-display);
   font-style: italic;
+  font-size: clamp(2.5rem, 10.5vw, 4.8rem);
   font-weight: 900;
-  font-size: 0.75em;
   color: var(--color-psychic);
   letter-spacing: -0.02em;
-  text-transform: none;
-  display: block;
-  margin-top: 0.1em;
 }
 
-.tagline {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-ash);
-  margin: 0.5rem 0 1.75rem;
-  opacity: 0.85;
-}
-
-.sub {
-  color: var(--color-ash);
-  font-size: 0.875rem;
-  margin: 0 0 2.5rem;
-  line-height: 1.75;
-  max-width: 60ch;
-}
-
-/* Landing stats row */
-.landing-stats {
+/* ─── Purple oval with SOULMAP inside ─── */
+.landing-oval-outer {
+  position: relative;
+  width: min(68vw, 290px);
+  height: min(31vw, 132px);
+  margin: 0 auto 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.25rem;
+}
+
+/* Thin ink border ring — slightly larger than oval */
+.landing-oval-outer::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border: 1.5px solid var(--color-ink);
+  border-radius: 50%;
+  opacity: 0.45;
+}
+
+/* Purple filled ellipse */
+.landing-oval {
+  width: 100%;
+  height: 100%;
+  background: var(--color-psychic);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SOULMAP wordmark inside oval — warm paper on purple */
+.landing-oval-logo {
+  font-family: var(--font-body);
+  font-size: clamp(1.3rem, 5.5vw, 2.1rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--color-paper);
+  line-height: 1;
+}
+
+/* ─── Description — DM Mono 400 ─── */
+.sub {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  line-height: 1.8;
+  color: var(--color-ash);
   margin: 0 0 2rem;
+  padding: 0 1.25rem;
+  max-width: 52ch;
+}
+
+/* ─── Stats row ─── */
+.landing-stats {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 0 0 1.75rem;
+  padding: 0 1.25rem;
   flex-wrap: wrap;
 }
 
 .landing-stat {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
+  align-items: flex-start;
+  gap: 0.15rem;
 }
 
 .stat-num {
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 400;
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
   color: var(--color-psychic);
   line-height: 1;
-  letter-spacing: -0.01em;
 }
 
 .stat-label {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-ash);
 }
@@ -309,8 +407,8 @@ blockquote {
 .stat-divider {
   color: var(--color-ash);
   font-size: 1rem;
-  opacity: 0.4;
-  margin-top: -0.25rem;
+  opacity: 0.35;
+  margin-top: -0.5rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════ */
@@ -373,8 +471,11 @@ blockquote {
 }
 
 .btn-landing {
-  padding: 1rem 2.5rem;
-  font-size: 0.75rem;
+  padding: 1rem 1.5rem;
+  font-size: 0.72rem;
+  margin: 0 1.25rem;
+  width: calc(72% - 2.5rem);  /* ~72% — leaves orange strip exposed */
+  align-self: flex-start;
 }
 
 /* ─── Language switcher ─── */
