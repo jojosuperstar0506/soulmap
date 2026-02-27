@@ -472,7 +472,12 @@ blockquote {
 
 .btn-landing {
   padding: 1rem 1.5rem;
-  font-size: 0.72rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
   margin: 0 1.25rem;
   width: calc(72% - 2.5rem);  /* ~72% — leaves orange strip exposed */
   align-self: flex-start;
