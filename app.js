@@ -2050,6 +2050,36 @@
     }
   }
 
+  // ─── Blueprint Reveal Gate ───────────────────────────────────────
+  function initBlueprintReveal() {
+    const dayunSection  = document.getElementById('dayun-section');
+    const dayunDivider  = document.getElementById('dayun-divider');
+    const energySection = document.getElementById('energy-charts-section');
+    const energyDivider = document.getElementById('energy-divider');
+    const revealWrap    = document.getElementById('reveal-seasons-wrap');
+    if (!dayunSection || !energySection || !revealWrap) return;
+
+    dayunSection.hidden  = true;
+    energySection.hidden = true;
+    if (dayunDivider)  dayunDivider.hidden  = true;
+    if (energyDivider) energyDivider.hidden = true;
+    revealWrap.hidden = false;
+
+    // cloneNode wipes stale listeners — renderAppBlueprint() is called on every tab switch
+    const oldBtn = revealWrap.querySelector('#btn-reveal-seasons');
+    const newBtn = oldBtn.cloneNode(true);
+    oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+    newBtn.addEventListener('click', () => {
+      haptic('medium');
+      dayunSection.hidden  = false;
+      energySection.hidden = false;
+      if (dayunDivider)  dayunDivider.hidden  = false;
+      if (energyDivider) energyDivider.hidden = false;
+      revealWrap.hidden = true;
+      requestAnimationFrame(() => dayunSection.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    });
+  }
+
   // ─── Main Blueprint Renderer ─────────────────────────────────────
   function renderAppBlueprint() {
     if (!state.chart) return;
@@ -2166,9 +2196,10 @@
     // Annual Arc (流年)
     renderAnnualArc(state.chart);
 
-    // Life Seasons + Energy Charts
+    // Life Seasons + Energy Charts (rendered but gated behind reveal button)
     renderDaYun();
     renderEnergyCharts();
+    initBlueprintReveal();
   }
 
   // ─── Tab Management ──────────────────────────────────────────────
@@ -2917,26 +2948,79 @@
     _setupSwipeDismiss(modal.querySelector('.vault-modal-card'), modal);
   }
 
+  // ─── Vault filter pill data ───────────────────────────────────────
+  const VAULT_THEME_PILLS = [
+    { value: 'healing',    label: 'Healing' },
+    { value: 'courage',    label: 'Courage' },
+    { value: 'clarity',    label: 'Clarity' },
+    { value: 'love',       label: 'Love' },
+    { value: 'purpose',    label: 'Purpose' },
+    { value: 'stillness',  label: 'Stillness' },
+    { value: 'resilience', label: 'Resilience' },
+    { value: 'change',     label: 'Change' },
+  ];
+  const VAULT_TRADITION_PILLS = [
+    { value: 'daoism',       label: 'Daoism' },
+    { value: 'buddhism',     label: 'Buddhism' },
+    { value: 'stoicism',     label: 'Stoicism' },
+    { value: 'christianity', label: 'Christianity' },
+    { value: 'judaism',      label: 'Judaism' },
+    { value: 'islam',        label: 'Islam' },
+    { value: 'confucianism', label: 'Confucianism' },
+    { value: 'sufi',         label: 'Sufi' },
+    { value: 'greek',        label: 'Greek' },
+    { value: 'vedic',        label: 'Vedic' },
+    { value: 'chinese',      label: 'I Ching' },
+    { value: 'saved',        label: 'Saved' },
+  ];
+
+  function renderVaultPills(container, pills, filterType, activeValue) {
+    container.innerHTML = pills.map(p =>
+      `<button class="vault-filter-btn${p.value === activeValue ? ' active' : ''}"
+        data-filter-type="${filterType}" data-filter-value="${p.value}"
+        type="button">${p.label}</button>`
+    ).join('');
+  }
+
   function initWisdomVault() {
     renderWisdomVault('theme', 'all');
     initVaultModal();
 
-    document.querySelectorAll('.vault-filter-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const type  = this.dataset.filterType;
-        const value = this.dataset.filterValue;
+    const segControl = document.getElementById('vault-seg-control');
+    const pillsWrap  = document.getElementById('vault-filter-pills');
+    if (!segControl || !pillsWrap) return;
 
-        // Update active state — theme and tradition rows are independent
-        if (type === 'theme') {
-          document.querySelectorAll('.vault-filter-themes .vault-filter-btn').forEach(b => b.classList.remove('active'));
-          document.querySelectorAll('.vault-filter-traditions .vault-filter-btn').forEach(b => b.classList.remove('active'));
-        } else {
-          document.querySelectorAll('.vault-filter-traditions .vault-filter-btn').forEach(b => b.classList.remove('active'));
-          document.querySelectorAll('.vault-filter-themes .vault-filter-btn').forEach(b => b.classList.remove('active'));
-        }
-        this.classList.add('active');
-        renderWisdomVault(type, value);
-      });
+    // Segmented tab switching
+    segControl.addEventListener('click', function(e) {
+      const btn = e.target.closest('.vault-seg-btn');
+      if (!btn) return;
+      segControl.querySelectorAll('.vault-seg-btn').forEach(b => b.classList.remove('vault-seg-btn--active'));
+      btn.classList.add('vault-seg-btn--active');
+      haptic('light');
+      const seg = btn.dataset.seg;
+      if (seg === 'foryou') {
+        pillsWrap.hidden = true;
+        pillsWrap.innerHTML = '';
+        renderWisdomVault('theme', 'all');
+      } else if (seg === 'theme') {
+        pillsWrap.hidden = false;
+        renderVaultPills(pillsWrap, VAULT_THEME_PILLS, 'theme', VAULT_THEME_PILLS[0].value);
+        renderWisdomVault('theme', VAULT_THEME_PILLS[0].value);
+      } else if (seg === 'tradition') {
+        pillsWrap.hidden = false;
+        renderVaultPills(pillsWrap, VAULT_TRADITION_PILLS, 'tradition', VAULT_TRADITION_PILLS[0].value);
+        renderWisdomVault('tradition', VAULT_TRADITION_PILLS[0].value);
+      }
+    });
+
+    // Event delegation for dynamically injected pills
+    pillsWrap.addEventListener('click', function(e) {
+      const btn = e.target.closest('.vault-filter-btn');
+      if (!btn) return;
+      pillsWrap.querySelectorAll('.vault-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      haptic('light');
+      renderWisdomVault(btn.dataset.filterType, btn.dataset.filterValue);
     });
   }
 

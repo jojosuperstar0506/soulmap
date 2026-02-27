@@ -286,8 +286,16 @@
           <p id="annual-theme" class="annual-theme">—</p>
         </div>
 
+        <!-- Reveal gate: Life Seasons + Energy Charts hidden until tapped -->
+        <div id="reveal-seasons-wrap" class="reveal-seasons-wrap" hidden>
+          <button class="btn-reveal-seasons" id="btn-reveal-seasons" type="button">
+            <span>✦</span> Reveal Your Life Journey <span class="reveal-arrow">→</span>
+          </button>
+          <p class="reveal-hint">Life Seasons · Lifetime Arc · Energy Charts</p>
+        </div>
+
         <!-- Life Seasons / 大运 -->
-        <div class="divider-labeled">
+        <div class="divider-labeled" id="dayun-divider">
           <span class="divider-label-text">大运 · Life Seasons</span>
         </div>
         <div class="dayun-section" id="dayun-section">
@@ -298,7 +306,7 @@
         </div>
 
         <!-- Energy Aspects Charts -->
-        <div class="divider-labeled">
+        <div class="divider-labeled" id="energy-divider">
           <span class="divider-label-text">Energy per Season</span>
         </div>
         <div class="energy-charts-section" id="energy-charts-section">
@@ -334,34 +342,13 @@
       <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-wisdom-vault" class="tab-pane">
 
-        <!-- Theme filters (primary) -->
-        <div class="vault-filter-row vault-filter-themes">
-          <button type="button" class="vault-filter-btn active" data-filter-type="theme" data-filter-value="all">✦ For You</button>
-          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="healing">Healing &amp; Renewal</button>
-          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="courage">Courage &amp; Strength</button>
-          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="clarity">Clarity &amp; Truth</button>
-          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="love">Love &amp; Belonging</button>
-          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="purpose">Purpose &amp; Calling</button>
-          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="stillness">Stillness &amp; Peace</button>
-          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="resilience">Resilience &amp; Endurance</button>
-          <button type="button" class="vault-filter-btn" data-filter-type="theme" data-filter-value="change">Change &amp; Letting Go</button>
+        <!-- Vault filter: 3-tab segmented control + dynamic pill row -->
+        <div class="vault-seg-control" id="vault-seg-control">
+          <button class="vault-seg-btn vault-seg-btn--active" data-seg="foryou" type="button">✦ For You</button>
+          <button class="vault-seg-btn" data-seg="theme" type="button">Theme</button>
+          <button class="vault-seg-btn" data-seg="tradition" type="button">Tradition</button>
         </div>
-
-        <!-- Tradition filters (secondary) -->
-        <div class="vault-filter-row vault-filter-traditions">
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="daoism">Daoism</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="buddhism">Buddhism</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="stoicism">Stoicism</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="christianity">Christianity</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="judaism">Judaism</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="islam">Islam</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="confucianism">Confucianism</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="sufi">Sufi</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="greek">Greek</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="vedic">Vedic</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="chinese">I Ching</button>
-          <button type="button" class="vault-filter-btn vault-filter-btn--sm" data-filter-type="tradition" data-filter-value="saved">Saved</button>
-        </div>
+        <div class="vault-filter-row vault-filter-pills" id="vault-filter-pills" hidden></div>
 
         <div class="wisdom-vault-list" id="wisdom-vault-list"></div>
       </div>
