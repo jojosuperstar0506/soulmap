@@ -182,25 +182,25 @@
         { name: 'The Mist',     tagline: 'Still water runs deep. You absorb everything, reflecting the world with quiet clarity.' },
       ],
       ANNUAL_INSIGHTS: {
-        architect:  'Architect energy opens formal recognition \u2014 push for structure and clarity this year.',
-        harvest:    'Harvest star is active \u2014 patient effort compounds. Relationships become wealth channels.',
-        windfall:   'Windfall stirs \u2014 stay open to unexpected opportunity outside your usual path.',
-        challenger: 'Challenger pressure forges you. Channel friction into output, not reaction.',
-        muse:       'Muse energy flows \u2014 creative and expressive work gains real traction.',
-        maverick:   "Maverick sparks disruption. Question what no longer fits; don\u2019t defend the old.",
-        guardian:   'Guardian wraps this year in support. Lean on mentors \u2014 they will hold.',
-        mystic:     'Mystic depth deepens. Quiet insight arrives. Protect your inner space.',
-        mirror:     'Mirror energy brings peers into focus. Choose your circle with care.',
-        shadow:     'Shadow year: watch for risk escalation. Bold moves carry real downside.',
+        architect:  'The year rewards structure and formal moves. What you\u2019ve been building quietly is ready to be named.',
+        harvest:    'Patient work begins paying. Relationships and effort that have been quietly compounding become visible.',
+        windfall:   'The year carries an unconventional current \u2014 stay open to what arrives through unexpected doors.',
+        challenger: 'Friction this year is formative, not punitive. What resists you is clarifying what you\u2019re actually made of.',
+        muse:       'Creative and expressive work has real traction right now. Make things.',
+        maverick:   'A year for questioning what no longer fits. Don\u2019t defend structures out of habit.',
+        guardian:   'Support arrives this year. Lean on people who have been watching you \u2014 they want to help.',
+        mystic:     'A quiet year, but a deep one. Insight arrives in stillness. Protect your inner space.',
+        mirror:     'The people around you are unusually instructive this year. Choose your circle carefully.',
+        shadow:     'This is a year for precision, not boldness. Measure twice before committing.',
         _default:   'A year of steady unfolding \u2014 tend to what matters most.',
       },
       ORACLE_TEMPLATES: [
-        { icon: '\u26a1', title: 'Career Crossroads',  desc: 'Work aligned with your fundamental nature' },
-        { icon: '\u25ce',  title: 'Relationship Lens',  desc: 'Love patterns and what you attract' },
-        { icon: '\u25c9',  title: '{year} Reading',     desc: 'What this year activates in your chart' },
-        { icon: '\u25d0',  title: 'Shadow Patterns',    desc: 'Recurring blind spots working against you' },
-        { icon: '\u2696',  title: 'Timing a Leap',      desc: 'Is this season right for a bold change?' },
-        { icon: '\u2726',  title: 'Health & Vitality',  desc: 'Your constitution and energy rhythms' },
+        { icon: '\u26a1', title: 'What am I built for?',       desc: 'Work that fits your actual nature',        question: 'What kind of work environment, role, or path is most aligned with who I fundamentally am? What am I genuinely built for \u2014 and what tends to quietly drain me, even when it looks right on paper?' },
+        { icon: '\u25ce', title: 'The relationship question',  desc: 'Patterns in love and close connection',    question: 'What are my real patterns in love and close relationships \u2014 what I need, what I tend to create, what I avoid or attract? Be honest with me about the recurring shape of things.' },
+        { icon: '\u25c9', title: '{year} \u2014 the current', desc: 'What this year is asking from you',         question: 'What is {year} asking from me? Where is the current running, and where might I be swimming against it without knowing? What deserves the most of my attention and energy this year?' },
+        { icon: '\u25d0', title: 'What I keep circling',       desc: 'The thing you haven\u2019t resolved yet',  question: 'There\u2019s something I keep returning to but haven\u2019t resolved. I want to understand what\u2019s actually underneath it \u2014 not just the surface version of the question. Help me see it more clearly.' },
+        { icon: '\u2696', title: 'Is the timing right?',       desc: 'A significant move, and when to make it',  question: 'I\u2019m weighing something significant. I want to understand whether this is the right moment to move \u2014 or whether patience, preparation, or a different approach is the more intelligent choice right now.' },
+        { icon: '\u2726', title: 'The long game',              desc: 'What this decade is actually building',    question: 'What am I actually building across this decade \u2014 not just the year? What deserves my deepest investment right now, and what would I regret not having started?' },
       ],
       THEME_LABELS: {
         healing: 'Healing & Renewal', courage: 'Courage & Strength', clarity: 'Clarity & Truth',
@@ -513,6 +513,34 @@
     'You earn authority through structure — institutions and systems are your domain.',        // Architect
     'Deep solitary wisdom is your gift — insight arrives in stillness and silence.',           // Mystic
     'You attract mentors and protection — others invest in you because they see your potential.', // Guardian
+  ];
+
+  // Decade period character — what this 10-year window is structurally asking for (behavioral, no jargon)
+  const DECADE_CHARACTER = {
+    architect: 'A decade for earning formal authority. The structures and institutions that once felt constraining become navigable — and then yours to shape. Moves toward recognition and consolidation are well-timed here.',
+    harvest:   'A decade where patience pays visibly. What has been quietly built now compounds — relationships become resources, past effort yields. This is not the decade to plant entirely new seeds; it\'s the decade to harvest what\'s already in the ground.',
+    windfall:  'An unconventional decade — the unexpected is the point. Unusual opportunities arrive through unusual doors. The instinct to normalize this period, to make it fit prior patterns, will cost you.',
+    challenger:'A decade of productive pressure. Something is being forged in you, and the friction is the process. The people and circumstances that challenge you most are your real teachers here.',
+    muse:      'A creative and expressive decade. Output — making, communicating, building things that carry your voice — gains real traction. The instinct to suppress or delay what wants to be expressed will be harder to justify now.',
+    maverick:  'A decade for breaking patterns. What served you in the last chapter will not serve you here. The willingness to question received wisdom — including your own — is the core competency this period rewards.',
+    guardian:  'A decade of deep support. Mentors, allies, and invisible protection are closer than usual. The instinct toward self-sufficiency may be worth questioning — letting others invest in you is itself a decision.',
+    mystic:    'A quiet decade, but not an empty one. The visible surface slows down; depth increases. This is a decade for building invisible foundations — expertise, inner clarity, the kind of knowledge that can\'t be rushed.',
+    mirror:    'A decade dominated by the people around you. Who you surround yourself with will shape you more than usual. This is a decade to choose your circle with real care — and to notice what you learn from those who reflect you back.',
+    shadow:    'A decade that rewards precision over boldness. The unconventional move has higher stakes here. This is a decade to sharpen, consolidate, and be deliberate — not to overextend.',
+  };
+
+  // Decision Lens — structural decision pattern per dominant Ten God (indexed 0–9: Mirror Shadow Muse Maverick Windfall Harvest Challenger Architect Mystic Guardian)
+  const DECISION_LENS = [
+    'You calibrate heavily against others — what peers are doing, what the field expects, whether your move will be legible to those you respect. This makes you unusually good at reading a room, and sometimes late to trust a direction others haven\'t validated yet. Watch for: delaying a decision because you haven\'t seen someone else make it first.',
+    'You move fast and trust your instincts — which has served you. The risk is underweighting the cost of a move that can\'t be undone, or optimizing for the bold read when the patient one was right. Watch for: framing caution as timidity when it\'s actually accurate.',
+    'New possibilities reliably feel more alive than current commitments — not because of restlessness, but because your mind genuinely generates better options under constraint. The pattern to catch: surfacing new alternatives right at the moment of commitment. Watch for: mistaking the discomfort of closing as a signal the option isn\'t right.',
+    'You\'re skilled at seeing what\'s wrong with the conventional option. This is a genuine asset — except when it becomes harder to commit to something imperfect than to keep looking for the better path. Watch for: using critical thinking to defer rather than to decide.',
+    'You\'re tuned for opportunity — you notice upside quickly and move toward it naturally. The structural blind spot is underweighting the cost of moves that pull you off your core direction. Watch for: the decision that looks like expansion but is actually distraction.',
+    'You have a long horizon and genuine patience — you\'re comfortable with investments that take time. The pattern to watch is the inverse: sometimes what looks like patient cultivation is actually avoidance of a decision that\'s already overdue. Watch for: "not the right time" becoming a permanent posture.',
+    'You sharpen through resistance — you\'re at your best when something is pushing back. The risk is framing every decision as a test of resolve, which makes it harder to distinguish between friction that\'s formative and friction that\'s just wrong. Watch for: staying in something difficult because leaving feels like losing.',
+    'You trust structure, process, and proven precedent. This makes you reliable and often right. The structural pattern: your threshold for "enough information to decide" is higher than most situations actually require. Watch for: the decision you\'ve made in practice but haven\'t made in form.',
+    'You trust deep knowing over surface evidence — and your inner sense is often accurate. The risk is that genuine insight and avoidance of the difficult can feel identical from the inside. Watch for: "I\'m not ready" as a cover for "I don\'t want to choose."',
+    'You decide well when you feel supported — and you\'re skilled at building the conditions for good decisions. The pattern to watch: over-consulting. Bringing in more perspectives beyond what the decision actually requires. Watch for: the point where more input becomes a substitute for commitment.',
   ];
 
   // Element → traditional affinity for wisdom vault matching
@@ -2773,6 +2801,14 @@
         `<span class="dtg-name">${dtgName} <span class="dtg-cn">${dtgCN}</span></span>` +
         `<span class="dtg-brief">${dtgBrief}</span>` +
         `</button>`;
+
+      // Decision Lens — behavioral decision pattern from dominant archetype
+      const lensEl = document.getElementById('decision-lens');
+      if (lensEl && dtgIdx >= 0 && DECISION_LENS[dtgIdx]) {
+        lensEl.innerHTML =
+          `<span class="decision-lens-label">Your Decision Pattern</span>` +
+          `<p class="decision-lens-text">${DECISION_LENS[dtgIdx]}</p>`;
+      }
     }
 
     // Meta
@@ -2891,39 +2927,39 @@
   const ORACLE_TEMPLATES = [
     {
       icon:     '⚡',
-      title:    'Career Crossroads',
-      desc:     'Work aligned with your fundamental nature',
-      question: 'Looking at my Day Master, current life season (大运), and element balance — what kind of work environment, role, or path is most aligned with who I fundamentally am? What am I built for, and what tends to drain me professionally?',
+      title:    'What am I built for?',
+      desc:     'Work that fits your actual nature',
+      question: 'What kind of work environment, role, or path is most aligned with who I fundamentally am? What am I genuinely built for — and what tends to quietly drain me, even when it looks right on paper?',
     },
     {
       icon:     '◎',
-      title:    'Relationship Lens',
-      desc:     'Love patterns and what you attract',
-      question: 'Based on my BaZi chart, what are my natural patterns in love and close relationships? What does my chart reveal about what I genuinely need in a partner, and what challenges do I tend to create or attract?',
+      title:    'The relationship question',
+      desc:     'Patterns in love and close connection',
+      question: 'What are my real patterns in love and close relationships — what I need, what I tend to create, what I avoid or attract? Be honest with me about the recurring shape of things.',
     },
     {
       icon:     '◉',
-      title:    '{year} Reading',
-      desc:     'What this year activates in your chart',
-      question: 'How does {year}\'s energy interact with my natal chart and current life season? What themes, opportunities, or friction points should I be most aware of this year — and what would you counsel me to prioritize?',
+      title:    '{year} — the current',
+      desc:     'What this year is asking from you',
+      question: 'What is {year} asking from me? Where is the current running, and where might I be swimming against it without knowing? What deserves the most of my attention and energy this year?',
     },
     {
       icon:     '◐',
-      title:    'Shadow Patterns',
-      desc:     'Recurring blind spots working against you',
-      question: 'What patterns does my BaZi chart reveal that may be quietly working against me — recurring challenges, blind spots, or self-sabotage tendencies I might not see clearly? Be direct with me.',
+      title:    'What I keep circling',
+      desc:     'The thing you haven\'t resolved yet',
+      question: 'There\'s something I keep returning to but haven\'t resolved. I want to understand what\'s actually underneath it — not just the surface version of the question. Help me see it more clearly.',
     },
     {
       icon:     '⚖',
-      title:    'Timing a Leap',
-      desc:     'Is this season right for a bold change?',
-      question: 'I\'m considering a significant life change. Looking at my current life season (大运), this year\'s energy (流年), and my element balance — is this a period for bold action, patient groundwork, or strategic consolidation? What does the timing tell you?',
+      title:    'Is the timing right?',
+      desc:     'A significant move, and when to make it',
+      question: 'I\'m weighing something significant. I want to understand whether this is the right moment to move — or whether patience, preparation, or a different approach is the more intelligent choice right now.',
     },
     {
       icon:     '✦',
-      title:    'Health & Vitality',
-      desc:     'Your constitution and energy rhythms',
-      question: 'What does my element balance and Day Master reveal about my physical constitution and energy rhythms? What should I protect, and what tends to deplete me at a deep level?',
+      title:    'The long game',
+      desc:     'What this decade is actually building',
+      question: 'What am I actually building across this decade — not just the year? What deserves my deepest investment right now, and what would I regret not having started?',
     },
   ];
 
@@ -3781,22 +3817,45 @@
     // Date line: "Mon Feb 26 2026 · 丙午"
     document.getElementById('spark-date').textContent = today.toDateString() + ' · ' + pillarStr;
 
+    // Day affinity text — behavioral, no element names surfaced to user
+    const DAY_AFFINITY_TEXT = {
+      wood:  { favor:   'An expansive day. Good for reaching out, starting new threads, making contact.',
+               counter: 'The day\'s growing energy runs against your grain. Consolidate more than you reach today.',
+               neutral: 'A moderate, forward-moving day. Incremental progress lands well.' },
+      fire:  { favor:   'High-charged energy today. Bold moves and direct expression land well.',
+               counter: 'Intense energy today that works against your natural mode. Channel it into output, not friction.',
+               neutral: 'Warm energy. Steady, expressive movement forward.' },
+      earth: { favor:   'A grounding day. Good for consolidating, organizing, and building steadily.',
+               counter: 'The day favors staying put in ways that feel constraining. Work with the slower pace.',
+               neutral: 'A methodical day. Careful, detailed work suits this energy.' },
+      metal: { favor:   'A clarifying day. Good for finishing, deciding, and making precise moves.',
+               counter: 'Cutting energy today that works against your rhythm. Better to observe than to close.',
+               neutral: 'A day for discernment. Precision over force.' },
+      water: { favor:   'A deep, receptive day. Good for reflection, research, letting understanding settle.',
+               counter: 'Still, inward energy that runs counter to what you need. Conserve rather than push.',
+               neutral: 'A quieter day. Trust what surfaces in stillness.' },
+    };
+
     // Affinity line — only if chart is loaded
     const affinityEl = document.getElementById('spark-affinity');
     if (affinityEl) {
       if (state.chart && todayStemEl) {
         const useful  = state.chart.usefulGods  || [];
         const harmful = state.chart.harmfulGods || [];
+        const dayTexts = DAY_AFFINITY_TEXT[todayStemEl];
         let msg = '';
-        if (useful.includes(todayStemEl)) {
-          msg = `Today's ${ELEMENT_NAMES[todayStemEl]} energy is favorable for you — act with confidence.`;
-        } else if (harmful.includes(todayStemEl)) {
-          msg = `Today's ${ELEMENT_NAMES[todayStemEl]} energy runs counter to your chart — conserve and observe.`;
-        } else {
-          msg = `Today's energy is neutral — a good day for steady, deliberate work.`;
+        if (dayTexts) {
+          const quality = useful.includes(todayStemEl) ? 'favor'
+                        : harmful.includes(todayStemEl) ? 'counter'
+                        : 'neutral';
+          msg = dayTexts[quality];
         }
-        affinityEl.textContent = msg;
-        affinityEl.style.display = '';
+        if (msg) {
+          affinityEl.textContent = msg;
+          affinityEl.style.display = '';
+        } else {
+          affinityEl.style.display = 'none';
+        }
       } else {
         affinityEl.style.display = 'none';
       }

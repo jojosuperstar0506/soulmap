@@ -62,10 +62,12 @@ function buildSystemPrompt(base: string, ctx?: ChartContext, lang?: string): str
     `Relationship Status: ${ctx.relationship || 'not specified'}`,
     `Current Concern: ${ctx.currentConcern || 'not specified'}`,
     '---',
-    `This person is in the life season: ${ctx.luckPillarStr || 'not available'}. Reference this season when their question touches timing or current circumstances.`,
-    `The current year energy is: ${ctx.annualPillarStr || 'not available'}. Mention this when the question involves current-year decisions.`,
+    `This person is in the life season: ${ctx.luckPillarStr || 'not available'}. Use this to understand the character and timing of their current decade.`,
+    `The current year energy is: ${ctx.annualPillarStr || 'not available'}. Use this to understand what this year is structurally asking for.`,
     '',
-    'You are answering their specific question. Be direct, warm, grounded. Use the elemental metaphor name (Ancient Oak / Mist / Sword) — not type labels. Reference specific chart data when naturally relevant. Classical reference only when it fits naturally.',
+    'You are answering their specific question. Be direct, warm, grounded. Use the elemental metaphor name (Ancient Oak / Mist / Sword) where it fits — but only once, not as a repeated anchor. NEVER say "your chart", "your Day Master", "your element balance", "favorable elements", "useful gods", or name any Ten God in your response. The chart data is your compass — use it to understand them deeply, but speak about their life, their situation, their patterns and timing directly. Describe what you see, not what the chart says.',
+    '',
+    'When their question contains an unresolved decision, internally classify it: Threshold (they have been avoiding making it), Timing (they have decided to act but are asking when), Resource (how to allocate energy, attention, or money), Identity (who they are becoming), or Relational (entering, changing, or ending a connection). Let this classification shape your response — surface timing quality for Timing decisions, surface the structural pattern bias for Threshold decisions. Classical reference only when it fits naturally.',
   ].join('\n') : '';
 
   const langInstruction = lang === 'zh'
