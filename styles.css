@@ -1,48 +1,50 @@
-/* SoulMap — Neo-Risograph Eastern Mythology UI */
-/* Ancient wisdom transmitted through an analog signal */
+/* SoulMap — Mid-Century Screenprint Design System */
+/* Saul Bass × Alexander Girard × Chinese fate-mapping */
 
 /* ═══════════════════════════════════════════════════════════════ */
 /* DESIGN TOKENS                                                   */
 /* ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ─── Background & Surface ─── */
-  --color-void: #0D0B14;           /* Primary background — deep space dark */
-  --color-ground: #F0EEF8;         /* Card / surface background — off-white lavender paper */
-  --color-surface-raised: #E4E1F5; /* Elevated panels — light lavender */
-  --color-border: #CCC8E4;         /* Subtle borders — light lavender */
-  --color-border-active: #A020F0;  /* Active/selected — psychic purple */
+  /* ─── Paper stocks (primary palette) ─── */
+  --color-paper: #EDE3C8;          /* Warm paper — body canvas */
+  --color-void: #1E1610;           /* Paper dark — nav, dark bars, overlays */
+  --color-ground: #F2EBD6;         /* Cream — card / surface background */
+  --color-surface-raised: #DDD3B8; /* Aged paper — elevated panels */
+  --color-border: rgba(30,22,16,0.15); /* Warm ink border */
+  --color-border-active: #7B5FA0;  /* Active/selected — muted ink purple */
 
-  /* ─── Brand Accents (one per section, never all at once) ─── */
-  --color-vermillion: #E8372A;     /* Fire — vermillion red */
-  --color-cyan: #1A4DB5;           /* Water — deep sapphire */
-  --color-gold: #D4AF37;           /* Metal — burnished gold */
-  --color-cobalt: #3A7D44;         /* Wood — forest green */
-  --color-amber: #9B5523;          /* Earth — terracotta/sienna */
+  /* ─── Five Elements — screenprint overprint inks ─── */
+  --color-vermillion: #C45A3A;     /* Fire — coral screenprint */
+  --color-cyan: #4A7090;           /* Water — indigo */
+  --color-gold: #C9A840;           /* Metal — mustard */
+  --color-cobalt: #3A7A4A;         /* Wood — forest green */
+  --color-amber: #8A6A3A;          /* Earth — umber */
 
-  /* ─── Content ink token ─── */
-  --color-ink: #0A0814;            /* Solid near-black — content text on light card */
-  --color-deep: var(--color-void); /* Alias for void — used in vault modal */
+  /* ─── Content ink ─── */
+  --color-ink: #1E1610;            /* Dark ink — text on light surfaces */
+  --color-deep: var(--color-void); /* Alias — vault modal, overlays */
 
-  /* ─── Lifetime Arc track colors (mapped to Five Elements palette) ─── */
-  --arc-love:   var(--color-vermillion); /* Fire red — passion/love */
-  --arc-wealth: var(--color-gold);       /* Gold — wealth/abundance */
-  --arc-career: var(--color-cyan);       /* Sapphire — direction/career */
-  --arc-health: var(--color-cobalt);     /* Forest green — vitality/health */
+  /* ─── Lifetime Arc track colors (Five Elements) ─── */
+  --arc-love:   var(--color-vermillion);
+  --arc-wealth: var(--color-gold);
+  --arc-career: var(--color-cyan);
+  --arc-health: var(--color-cobalt);
 
-  /* ─── Text ─── */
-  --color-white-bone: #EDEBF5;     /* Primary text — near-white, faint lavender */
-  --color-ash: #C4C0D8;            /* Secondary text — light lavender-grey */
-  --color-ghost: #9490AA;          /* Disabled / tertiary — mid purple-grey */
-  --color-psychic: #A020F0;        /* Brand token — electric psychic purple (wordmark) */
+  /* ─── Text hierarchy ─── */
+  --color-white-bone: #EDE3C8;     /* Warm paper — text on dark surfaces */
+  --color-ash: #5A4A38;            /* Secondary text — warm medium brown */
+  --color-ghost: #8A7A68;          /* Tertiary / disabled — warm grey-brown */
+  --color-psychic: #7B5FA0;        /* Brand — muted ink purple */
 
   /* ─── Typography ─── */
   --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'DM Mono', monospace;
   --font-chinese: 'Noto Serif SC', 'Source Han Serif SC', serif;
 
   /* ─── Grain ─── */
-  --grain-opacity: 0.12;
+  --grain-opacity: 1; /* built into halftone color; kept for legacy ref */
 
   /* ─── Five Elements palette (mapped to brand accents) ─── */
   --wood: var(--color-cobalt);
@@ -52,10 +54,10 @@
   --water: var(--color-cyan);
 
   /* ─── Legacy aliases for JS compatibility ─── */
-  --bg: var(--color-void);
+  --bg: var(--color-paper);
   --bg-elevated: var(--color-ground);
-  --bg-card: var(--color-border);
-  --text: var(--color-white-bone);
+  --bg-card: var(--color-ground);
+  --text: var(--color-ink);
   --text-muted: var(--color-ash);
   --accent: var(--color-vermillion);
   --font-serif: var(--font-display);
@@ -88,8 +90,8 @@ html {
 body {
   min-height: 100vh;
   font-family: var(--font-body);
-  background: var(--color-void);
-  color: var(--color-white-bone);
+  background: var(--color-paper);   /* warm paper canvas — not dark void */
+  color: var(--color-ink);          /* dark ink on warm paper */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;        /* crisp text rendering */
   -moz-osx-font-smoothing: grayscale;
@@ -110,17 +112,16 @@ body::before {
   display: none; /* 色块 disabled */
 }
 
+/* ─── Halftone grain — screenprint texture ─── */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  opacity: var(--grain-opacity);
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
-  mix-blend-mode: overlay;
+  background: radial-gradient(circle, #00000009 1px, transparent 1px);
+  background-size: 4px 4px;
+  mix-blend-mode: multiply;
 }
 
 blockquote {
@@ -240,7 +241,7 @@ blockquote {
 }
 
 .tagline {
-  font-family: 'Cinzel', Georgia, serif;
+  font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 400;
   letter-spacing: 0.22em;
@@ -349,8 +350,8 @@ blockquote {
 }
 
 .btn-ghost:hover {
-  color: var(--color-white-bone);
-  border-color: var(--color-ghost);
+  color: var(--color-ink);
+  border-color: var(--color-ash);
 }
 
 .btn-sm {
@@ -408,7 +409,7 @@ blockquote {
 .card-active {
   background: var(--color-ground);
   border: 1px solid var(--color-psychic);
-  box-shadow: inset 0 0 40px rgba(160, 32, 240, 0.22);
+  box-shadow: inset 0 0 40px rgba(123, 95, 160, 0.22);
 }
 
 /* ─── Card text helpers ─── */
@@ -453,7 +454,7 @@ blockquote {
   font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 400;
-  color: var(--color-white-bone);
+  color: var(--color-ink);
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
@@ -477,7 +478,7 @@ blockquote {
 .text-body {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: var(--color-white-bone);
+  color: var(--color-ink);
   line-height: 1.7;
   opacity: 0.85;
 }
@@ -554,7 +555,7 @@ blockquote {
   padding-top: env(safe-area-inset-top, 0px);
   height: calc(52px + env(safe-area-inset-top, 0px));
   background: var(--color-void);
-  border-bottom: 1px solid rgba(196, 192, 216, 0.12);
+  border-bottom: 1px solid rgba(30,22,16,0.3);
 }
 
 /* Back: text + chevron, no border box */
@@ -677,12 +678,12 @@ blockquote {
 }
 .input-group:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(160, 32, 240, 0.1);
+  box-shadow: 0 4px 12px rgba(123, 95, 160, 0.1);
 }
 .input-group:focus-within {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(160, 32, 240, 0.18);
-  border-color: rgba(160, 32, 240, 0.3);
+  box-shadow: 0 8px 24px rgba(123, 95, 160, 0.18);
+  border-color: rgba(123, 95, 160, 0.3);
 }
 
 /* ── Individual cell ── */
@@ -699,7 +700,7 @@ blockquote {
 }
 
 .input-cell:focus-within {
-  background: rgba(160, 32, 240, 0.04); /* faint psychic wash on focus */
+  background: rgba(123, 95, 160, 0.04); /* faint psychic wash on focus */
 }
 
 /* ── Hairline divider between cells — iOS inset separator ── */
@@ -831,7 +832,7 @@ select.input-cell-field {
   background: var(--color-vermillion);
   color: #ffffff;
 }
-.btn-step-cta--generate:hover { background: #c42e22; }
+.btn-step-cta--generate:hover { background: #a84228; }
 
 
 /* ═══════════════════════════════════════════════════════════════ */
@@ -869,7 +870,7 @@ select.input-cell-field {
   font-family: var(--font-display);
   font-size: clamp(1.4rem, 5vw, 2rem);
   font-weight: 700;
-  color: var(--color-white-bone);
+  color: var(--color-ink);
   line-height: 1.4;
   white-space: pre-line;
   animation: gen-phrase-fade 0.6s var(--spring-smooth);
@@ -893,7 +894,7 @@ select.input-cell-field {
   transition: opacity 0.15s ease, transform 0.1s ease;
   animation: gen-phrase-fade 0.5s var(--spring-smooth);
 }
-.gen-cta:hover { background: #8a1ad0; }
+.gen-cta:hover { background: var(--color-psychic); opacity: 0.85; }
 .gen-cta:active { opacity: 0.85; transform: scale(0.99); }
 
 /* ─── Phase B: Loading state ─── */
@@ -1079,14 +1080,14 @@ select.input-cell-field {
   left: 0;
   right: 0;
   padding: 1rem 1rem 0.875rem;
-  background: linear-gradient(transparent, rgba(240, 238, 248, 0.97) 40%);
+  background: linear-gradient(transparent, rgba(242, 235, 214, 0.97) 40%);
 }
 
 .soul-portrait-name {
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 700;
-  color: var(--color-white-bone);
+  color: var(--color-ink);
   margin: 0 0 0.2rem;
   letter-spacing: 0.01em;
 }
@@ -1118,7 +1119,7 @@ select.input-cell-field {
   gap: 0.2rem;
   padding: 0.75rem 1rem;
   margin-bottom: 1.25rem;
-  background: color-mix(in srgb, var(--color-cobalt) 18%, rgba(13,11,20,0.85));
+  background: color-mix(in srgb, var(--color-cobalt) 8%, var(--color-ground));
   border: 1px solid color-mix(in srgb, var(--color-cobalt) 25%, transparent);
   border-radius: 2px;
 }
@@ -1134,7 +1135,7 @@ select.input-cell-field {
 .dtg-name {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--color-white-bone);
+  color: var(--color-ink);
   line-height: 1.2;
 }
 
@@ -1173,9 +1174,9 @@ select.input-cell-field {
   align-items: center;
   justify-content: center;
   padding: 0.6rem 0.4rem;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid var(--color-border);
   border-radius: 2px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(30,22,16,0.03);
 }
 
 .blueprint-meta-label {
@@ -1397,7 +1398,7 @@ select.input-cell-field {
 
 .profile-list-item-active {
   border-color: var(--color-border-active);
-  background: rgba(160, 32, 240, 0.18);
+  background: rgba(123, 95, 160, 0.18);
 }
 
 .profile-list-info {
@@ -1480,8 +1481,9 @@ select.input-cell-field {
   justify-content: space-around;
   padding: 0;
   padding-bottom: env(safe-area-inset-bottom, 0px);  /* iPhone home indicator */
-  background: var(--color-void);        /* Stays cosmic dark — nav chrome, not content */
-  border-top: 1px solid #2D2A3E;
+  background: var(--color-void);        /* Dark paper bar — nav chrome */
+  color: var(--color-white-bone);       /* Warm paper text on dark nav */
+  border-top: 1px solid rgba(30,22,16,0.4); /* Warm ink edge */
   z-index: 100;
 }
 
@@ -1496,7 +1498,7 @@ select.input-cell-field {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-ash); /* AA-legible on void dark */
+  color: var(--color-ghost); /* muted warm on dark nav */
   background: none;
   border: none;
   cursor: pointer;
@@ -1516,7 +1518,7 @@ select.input-cell-field {
   background: none; /* No background pill — restraint */
 }
 
-/* 2px vermillion line above active tab — only indicator */
+/* 2px ink-purple line above active tab — only indicator */
 .tab-btn.active::before {
   content: '';
   position: absolute;
@@ -1524,7 +1526,7 @@ select.input-cell-field {
   left: 15%;
   right: 15%;
   height: 2px;
-  background: var(--color-vermillion);
+  background: var(--color-psychic);
 }
 
 /* ── iOS press feedback ── */
@@ -1644,7 +1646,7 @@ select.input-cell-field {
   color: var(--color-psychic);
   margin: 0 0 0.75rem;
   display: inline-block;
-  background: rgba(160, 32, 240, 0.22);
+  background: rgba(123, 95, 160, 0.22);
   padding: 0.15rem 0.55rem;
 }
 
@@ -2001,17 +2003,17 @@ select.input-cell-field {
 }
 
 .oracle-messages .msg.user {
-  background: rgba(26, 77, 181, 0.07);
+  background: rgba(74, 112, 144, 0.08);
   border-left: 2px solid var(--color-cyan);
   margin-left: 1rem;
-  color: var(--color-white-bone);
+  color: var(--color-ink);
 }
 
 .oracle-messages .msg.assistant {
   background: var(--color-surface-raised);
   border-left: 2px solid var(--color-cobalt);
   margin-right: 1rem;
-  color: var(--color-white-bone);
+  color: var(--color-ink);
 }
 
 .oracle-messages .msg.assistant.error {
@@ -2149,9 +2151,9 @@ select.input-cell-field {
 }
 
 .wisdom-vault-tab.active {
-  color: var(--color-white-bone);
+  color: var(--color-cobalt);
   border-color: var(--color-cobalt);
-  background: rgba(58, 125, 68, 0.10);
+  background: rgba(58, 122, 74, 0.10);
 }
 
 .wisdom-vault-item {
@@ -2281,8 +2283,8 @@ select.input-cell-field {
 .vault-seg-btn:last-child { border-right: none; }
 
 .vault-seg-btn--active {
-  background: rgba(160, 32, 240, 0.12);
-  color: var(--color-white-bone);
+  background: rgba(123, 95, 160, 0.12);
+  color: var(--color-psychic);
 }
 
 .vault-seg-btn:active {
@@ -2328,9 +2330,9 @@ select.input-cell-field {
 }
 
 .vault-filter-btn.active {
-  color: var(--color-white-bone);
+  color: var(--color-psychic);
   border-color: var(--color-psychic);
-  background: rgba(122, 30, 186, 0.12);
+  background: rgba(123, 95, 160, 0.1);
 }
 
 /* ── Vault badges ─────────────────────────────────────────────── */
@@ -2346,14 +2348,14 @@ select.input-cell-field {
 }
 
 .vault-badge--tradition {
-  background: rgba(255,255,255,0.05);
+  background: rgba(30,22,16,0.04);
   border: 1px solid var(--color-border);
   color: var(--color-ghost);
 }
 
 .vault-badge--theme {
-  background: rgba(122, 30, 186, 0.1);
-  border: 1px solid rgba(122, 30, 186, 0.25);
+  background: rgba(123, 95, 160, 0.1);
+  border: 1px solid rgba(123, 95, 160, 0.25);
   color: var(--color-psychic);
 }
 
@@ -2381,8 +2383,8 @@ select.input-cell-field {
 }
 
 .vault-card:hover {
-  border-color: rgba(122, 30, 186, 0.4);
-  background: rgba(122, 30, 186, 0.04);
+  border-color: rgba(123, 95, 160, 0.4);
+  background: rgba(123, 95, 160, 0.04);
 }
 
 .vault-card:hover::before {
@@ -2770,7 +2772,7 @@ select.input-cell-field {
 .annual-arc {
   padding: 0.9rem 1rem;
   margin-bottom: 0.5rem;
-  background: rgba(255,255,255,0.04);
+  background: rgba(30,22,16,0.03);
   border: 1px solid color-mix(in srgb, var(--color-gold) 30%, transparent);
   border-radius: 2px;
 }
@@ -2814,7 +2816,7 @@ select.input-cell-field {
 
 .annual-score-bar-wrap {
   height: 4px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(30,22,16,0.12);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -2838,7 +2840,7 @@ select.input-cell-field {
   line-height: 1.6;
   margin: 0;
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(30,22,16,0.12);
 }
 
 .dayun-section {
@@ -2862,8 +2864,8 @@ select.input-cell-field {
 .dayun-card {
   flex-shrink: 0;
   width: 155px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--color-ground);
+  border: 1px solid var(--color-border);
   border-radius: 2px;
   overflow: hidden;
   scroll-snap-align: start;
@@ -2873,8 +2875,8 @@ select.input-cell-field {
 }
 
 .dayun-card:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(160,32,240,0.4);
+  background: var(--color-surface-raised);
+  border-color: rgba(123,95,160,0.4);
 }
 
 .dayun-card:active {
@@ -2898,7 +2900,7 @@ select.input-cell-field {
 /* ─── Row system inside each card ─── */
 .dayun-row {
   padding: 0.55rem 0.8rem;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(30,22,16,0.08);
 }
 
 /* ─── Tap hint at bottom of each card ─── */
@@ -3003,10 +3005,10 @@ select.input-cell-field {
   width: 100%;
   max-width: 520px;
   margin: 0 auto 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(30,22,16,0.2);
   border-radius: 2px;
   overflow: hidden;
-  background: var(--color-void);
+  background: var(--color-void);   /* Dark paper-dark interior — grid stays dark */
   font-family: var(--font-body);
 }
 
@@ -3133,7 +3135,7 @@ select.input-cell-field {
 .bazi-elem-wood  { color: var(--color-cobalt);     background: rgba(58,125,68,0.25); }
 .bazi-elem-fire  { color: var(--color-vermillion); background: rgba(232,55,42,0.20); }
 .bazi-elem-earth { color: var(--color-amber);      background: rgba(155,85,35,0.25); }
-.bazi-elem-metal { color: var(--color-gold);       background: rgba(212,175,55,0.25); }
+.bazi-elem-metal { color: var(--color-gold);       background: rgba(201,168,64,0.25); }
 .bazi-elem-water { color: var(--color-cyan);       background: rgba(26,77,181,0.25); }
 
 /* Romanization text above Chinese char in stem/branch cells */
@@ -3251,7 +3253,7 @@ select.input-cell-field {
   margin: -0.5rem auto 1rem;
   padding: 0.3rem 1rem;
   background: none;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--color-border);
   border-radius: 20px;
   color: var(--color-ghost);
   font-family: var(--font-body);
@@ -3327,11 +3329,11 @@ select.input-cell-field {
 }
 
 .arc-insight-card.arc-insight-peak {
-  border-top: 3px solid #D4AF37;
+  border-top: 3px solid #C9A840;
 }
 
 .arc-insight-card.arc-insight-turn {
-  border-top: 3px solid #3A7D44;
+  border-top: 3px solid #3A7A4A;
 }
 
 .arc-insight-card.arc-insight-now {
@@ -3536,8 +3538,8 @@ select.input-cell-field {
 }
 
 .cycle-lesson {
-  background: rgba(212,175,55,0.07);
-  border-left: 2px solid #D4AF37;
+  background: rgba(201,168,64,0.07);
+  border-left: 2px solid #C9A840;
   padding: 0.6rem 0.75rem;
   border-radius: 0 2px 2px 0;
   margin-top: 0.75rem;
@@ -3600,7 +3602,7 @@ select.input-cell-field {
 }
 .btn-reveal-seasons {
   padding: 0.7rem 1.75rem;
-  background: rgba(160, 32, 240, 0.1);
+  background: rgba(123, 95, 160, 0.1);
   border: 1px solid var(--color-psychic);
   color: var(--color-psychic);
   font-family: var(--font-body);
@@ -3613,7 +3615,7 @@ select.input-cell-field {
   transition: all 0.2s var(--spring-smooth);
   touch-action: manipulation;
 }
-.btn-reveal-seasons:hover { background: rgba(160, 32, 240, 0.18); }
+.btn-reveal-seasons:hover { background: rgba(123, 95, 160, 0.18); }
 .btn-reveal-seasons:active { transform: scale(0.97); transition: transform 0.08s var(--spring-smooth); }
 .reveal-arrow {
   margin-left: 0.3rem;
@@ -3640,8 +3642,8 @@ select.input-cell-field {
   justify-content: space-between;
   padding: 1rem 1.1rem;
   cursor: pointer;
-  background: rgba(160, 32, 240, 0.06);
-  border: 1px solid rgba(160, 32, 240, 0.4);
+  background: rgba(123, 95, 160, 0.06);
+  border: 1px solid rgba(123, 95, 160, 0.4);
   border-radius: 2px;
   margin-bottom: 1rem;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s var(--spring-smooth);
@@ -3656,15 +3658,15 @@ select.input-cell-field {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-amber);
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(201, 168, 64, 0.12);
+  border: 1px solid rgba(201, 168, 64, 0.3);
   border-radius: 20px;
   padding: 0.15em 0.55em;
   vertical-align: middle;
 }
 .reading-card:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(160,32,240,0.4);
+  background: var(--color-surface-raised);
+  border-color: rgba(123,95,160,0.4);
   transform: translateY(-1px);
 }
 .reading-card:active { transform: scale(0.99); opacity: 0.85; }
@@ -3801,18 +3803,18 @@ select.input-cell-field {
   cursor: pointer;
   text-decoration: underline;
   text-decoration-style: dotted;
-  text-decoration-color: rgba(160, 32, 240, 0.35);
+  text-decoration-color: rgba(123, 95, 160, 0.35);
   text-underline-offset: 3px;
   transition: text-decoration-color 0.15s ease, color 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 .term-link:hover {
   color: var(--color-psychic);
-  text-decoration-color: rgba(160, 32, 240, 0.7);
+  text-decoration-color: rgba(123, 95, 160, 0.7);
 }
 .term-info {
   font-size: 0.65em;
-  color: rgba(160, 32, 240, 0.5);
+  color: rgba(123, 95, 160, 0.5);
   vertical-align: super;
   margin-left: 0.15em;
   font-style: normal;
@@ -3857,12 +3859,12 @@ select.input-cell-field {
 /* ─── Reading card: unclaimed / pulsing CTA state ─────────────── */
 @keyframes reading-card-glow {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(160, 32, 240, 0);
-    border-color: rgba(160, 32, 240, 0.3);
+    box-shadow: 0 0 0 0 rgba(123, 95, 160, 0);
+    border-color: rgba(123, 95, 160, 0.3);
   }
   50% {
-    box-shadow: 0 0 18px 2px rgba(160, 32, 240, 0.18);
-    border-color: rgba(160, 32, 240, 0.65);
+    box-shadow: 0 0 18px 2px rgba(123, 95, 160, 0.18);
+    border-color: rgba(123, 95, 160, 0.65);
   }
 }
 .reading-card--unclaimed {
@@ -3892,11 +3894,12 @@ select.input-cell-field {
 }
 
 /* ═══════════════════════════════════════════════════════════════ */
-/* ALL LIGHT CARD SURFACES — comprehensive dark text context      */
-/* Every surface with --color-ground / --color-surface-raised     */
-/* background gets dark text via CSS custom property cascade.     */
-/* Single source of truth — add any new card selector here.       */
-/* Void zones (landing, header, nav) are not listed → keep light. */
+/* ALL LIGHT CARD SURFACES — white-bone → ink cascade             */
+/* The new --color-white-bone is warm paper (#EDE3C8), which is   */
+/* nearly invisible on cream card surfaces. Scope it to dark ink  */
+/* inside all card contexts so card body text stays readable.     */
+/* ash/ghost already resolve to warm ink browns — no override     */
+/* needed. Void zones (reading sheet, nav, modals) keep white.   */
 /* ═══════════════════════════════════════════════════════════════ */
 
 .card-base,
@@ -3904,6 +3907,8 @@ select.input-cell-field {
 .blueprint-detail-card,
 .blueprint-reveal-card,
 .blueprint-detail-visual,
+.blueprint-meta-item,
+.dominant-ten-god-badge,
 .profile-btn,
 .profile-sheet-panel,
 .oracle-template-card,
@@ -3913,17 +3918,18 @@ select.input-cell-field {
 .wisdom-vault-item,
 .vault-card,
 .spark-card,
-.meditation-item {
-  --color-white-bone: var(--color-ink); /* Solid near-black on light card */
-  --color-ash:        var(--color-ink); /* Solid near-black */
-  --color-ghost:      var(--color-ink); /* Solid near-black */
-  --color-border:     rgba(18,16,30,0.12); /* Crisp lines on light surface */
+.meditation-item,
+.dayun-card,
+.annual-arc {
+  --color-white-bone: var(--color-ink); /* paper-warm → ink on cream surfaces */
+  --color-border:     rgba(30,22,16,0.12); /* warm ink border on cream */
   color: var(--color-ink);
 }
 
-/* App header border stays dark/visible against the void */
+/* App header border: warm ink edge on warm paper canvas */
 .app-header {
-  border-bottom-color: #2D2A3E;
+  border-bottom-color: rgba(30,22,16,0.15);
+  color: var(--color-ink);
 }
 
 /* ─── Targeted readability fixes ───────────────────────────────── */
