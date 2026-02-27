@@ -81,6 +81,35 @@
   // Element → traditional affinity for wisdom vault matching
   const ELEMENT_TRADITION = { wood:'vedic', fire:'sufi', earth:'confucianism', metal:'stoicism', water:'daoism' };
 
+  /** Simple Mulberry32 PRNG seeded with an integer */
+  function seededRandom(seed) {
+    return function () {
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /** Fisher-Yates shuffle using a deterministic PRNG */
+  function seededShuffle(arr, seed) {
+    const rng = seededRandom(seed);
+    const a   = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  /** Returns a stable integer seed for today + current profile */
+  function getDailySeed() {
+    const str = (state.profileId || 'default') + new Date().toDateString();
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+    return Math.abs(h);
+  }
+
   /** Return today's BaZi day stem+branch using the same +49 offset as the birth engine */
   function getTodayBaZiDay() {
     const jdn = Math.floor(Date.now() / 86400000 + 2440587.5);
@@ -2557,32 +2586,61 @@
     metal:  ['chinese', 'stoicism', 'islam'],         // precision, discipline, refinement
   };
 
-  // One-line caption explaining why a quote speaks to the user's elemental chart
-  const WHY_CAPTIONS = {
+  // Captions for when a quote scores via useful gods — "this tradition speaks the language of what fortifies you"
+  const WHY_CAPTIONS_USEFUL = {
+    metal: {
+      chinese:  'Metal precision finds its home in the I Ching — each line a cut toward clarity.',
+      stoicism: 'Stoicism was built for Metal\'s path: discipline, refinement, the unnecessary stripped away.',
+      islam:    'Islamic tradition on purification speaks to Metal\'s practice of becoming more exact.',
+    },
     water: {
-      daoism:       'Water is scarce in your chart — Daoism teaches yielding as strength.',
-      sufi:         'The Sufi poets speak to Water\'s longing: love that dissolves the self.',
-      buddhism:     'Buddhism\'s teaching on impermanence mirrors the flow of Water.',
+      daoism:   'Daoism flows from the same source as Water — yielding, deep, impossible to stop.',
+      sufi:     'The Sufi poets are Water\'s people: love as the deepest current, the self dissolved.',
+      buddhism: 'Buddhism\'s teaching on non-grasping mirrors Water\'s native state — nothing held, everything flowing.',
     },
     wood: {
-      buddhism:     'Your Wood nature grows through conscious unfolding — Buddhism shows the path.',
-      confucianism: 'Wood seeks upward cultivation — Confucius teaches the discipline of character.',
-      vedic:        'The Vedic tradition speaks to Wood\'s dharma: purposeful, devoted action.',
+      buddhism:     'Wood grows toward light; Buddhism illuminates the path without forcing the direction.',
+      confucianism: 'Confucian cultivation is Wood\'s process — upward, purposeful, becoming who you\'re meant to be.',
+      vedic:        'Vedic dharma speaks to Wood\'s mission: the specific path you were born to walk.',
     },
     fire: {
-      stoicism:     'Stoicism channels Fire\'s intensity into practical wisdom under pressure.',
-      greek:        'Greek philosophy asks Fire\'s question: how to live a life worth living.',
-      christianity: 'The Christian tradition speaks to Fire\'s warmth — love as the highest virtue.',
+      stoicism:     'Stoicism is how Fire sustains without burning out — passion focused into practical wisdom.',
+      greek:        'Greek philosophy asks Fire\'s question: how to live fully and love what you love.',
+      christianity: 'Christian love theology speaks to Fire\'s gift — warmth that transforms everything it touches.',
     },
     earth: {
-      confucianism: 'Earth energy needs roots — Confucianism builds the stable ground of virtue.',
-      judaism:      'Jewish wisdom speaks to Earth\'s covenant: showing up faithfully, day after day.',
-      vedic:        'The Vedic path of karma yoga speaks to Earth\'s gift: steady, devoted action.',
+      confucianism: 'Confucian virtue is Earth made conscious — showing up reliably, building trust over time.',
+      judaism:      'Jewish covenant wisdom speaks to Earth\'s gift: faithful presence, day after day.',
+      vedic:        'Karma yoga is Earth\'s native language — devoted, steady action without attachment to outcome.',
+    },
+  };
+
+  // Captions for when a quote scores via day master identity — "this tradition speaks to who you are"
+  const WHY_CAPTIONS_IDENTITY = {
+    water: {
+      daoism:   'As Water, Daoism is your native language — the tradition that names what you already know.',
+      sufi:     'Sufi depth speaks to Water\'s inner world: the boundless beneath the calm surface.',
+      buddhism: 'Buddhism\'s teaching on flow and impermanence mirrors Water\'s experience of the world.',
+    },
+    wood: {
+      buddhism:     'Wood\'s upward nature meets its reflection in Buddhism — conscious growth toward light.',
+      confucianism: 'Confucian self-cultivation is Wood\'s process: growing into who you\'re meant to be.',
+      vedic:        'The Vedic tradition speaks to Wood\'s dharma — the purposeful path, lived fully.',
+    },
+    fire: {
+      stoicism:     'Fire\'s intensity finds form in Stoicism — warmth without burning, passion with discipline.',
+      greek:        'Fire asks Greek philosophy\'s central question: how to live the good life, fully lit.',
+      christianity: 'The Christian tradition speaks Fire\'s language — love as transformative force.',
+    },
+    earth: {
+      confucianism: 'Earth\'s stability finds its highest expression in Confucian virtue — rootedness as gift.',
+      judaism:      'Jewish wisdom speaks to Earth\'s deepest knowing: reliable presence is its own power.',
+      vedic:        'Earth finds its path in the Vedic tradition — steady, grounded, devoted action.',
     },
     metal: {
-      chinese:      'The I Ching speaks to Metal\'s discernment — timing and precision over force.',
-      stoicism:     'Metal resonates with Stoic refinement: cutting away what is not essential.',
-      islam:        'Islamic teaching on discipline speaks to Metal\'s path of purification.',
+      chinese:  'Metal\'s discernment meets the I Ching: precision in reading what each moment requires.',
+      stoicism: 'Stoicism speaks Metal\'s language — cut away what doesn\'t serve, refine what remains.',
+      islam:    'Islamic discipline resonates with Metal\'s path of purification and exactness.',
     },
   };
 
@@ -2590,37 +2648,64 @@
     const nonSaved = vault.filter(x => x.tradition !== 'saved');
     if (!chart || !chart.elementBalance) return nonSaved.slice(0, 18);
 
-    const elNames = ['wood','fire','earth','metal','water'];
-    const balance = chart.elementBalance; // { wood, fire, earth, metal, water } percentages
-    const sorted  = elNames.slice().sort((a, b) => (balance[a] || 0) - (balance[b] || 0));
-    const weakest    = sorted[0];
-    const secondWeak = sorted[1];
+    // Useful gods: primary signal — traditions aligned with what fortifies the chart
+    const usefulGods = (chart.usefulGods || []).map(e => e.toLowerCase());
     const dmEl       = (chart.dayMasterEl || '').toLowerCase();
 
-    // Score each item by how well its tradition resonates with the user's element profile
+    // Current decade element: tertiary signal — what's active right now
+    const currentDecade = (chart.daYun || []).find(d => d.isCurrent);
+    const seasonEl      = currentDecade ? STEM_EL_NAME[currentDecade.stemIndex] : null;
+
+    // Score each item: useful gods (+4 each), day master identity (+2), current decade (+1)
     const scored = nonSaved.map(item => {
       let score = 0;
-      if (ELEMENT_TRADITION_AFFINITY[weakest]?.includes(item.tradition))    score += 3;
-      if (ELEMENT_TRADITION_AFFINITY[secondWeak]?.includes(item.tradition)) score += 2;
-      if (ELEMENT_TRADITION_AFFINITY[dmEl]?.includes(item.tradition))       score += 1;
-      const why = WHY_CAPTIONS[weakest]?.[item.tradition]
-               || WHY_CAPTIONS[dmEl]?.[item.tradition]
-               || null;
+      // Tier 1: useful gods — traditions that speak the language of what empowers you
+      for (const el of usefulGods) {
+        if (ELEMENT_TRADITION_AFFINITY[el]?.includes(item.tradition)) score += 4;
+      }
+      // Tier 2: day master identity resonance — traditions that speak to who you ARE
+      if (ELEMENT_TRADITION_AFFINITY[dmEl]?.includes(item.tradition)) score += 2;
+      // Tier 3: current decade element — what's active and alive right now
+      if (seasonEl && ELEMENT_TRADITION_AFFINITY[seasonEl]?.includes(item.tradition)) score += 1;
+
+      // Determine caption: first useful-god match gives the reason; fall back to DM identity
+      let why = null;
+      for (const el of usefulGods) {
+        if (ELEMENT_TRADITION_AFFINITY[el]?.includes(item.tradition)) {
+          why = WHY_CAPTIONS_USEFUL[el]?.[item.tradition] || null;
+          break; // first useful god match sets the tone
+        }
+      }
+      if (!why && ELEMENT_TRADITION_AFFINITY[dmEl]?.includes(item.tradition)) {
+        why = WHY_CAPTIONS_IDENTITY[dmEl]?.[item.tradition] || null;
+      }
+
       return { ...item, _score: score, _why: why };
     }).sort((a, b) => b._score - a._score);
 
-    // Shuffle within each score tier so the feed feels fresh on each visit
+    // Shuffle within each score tier using a deterministic daily seed (stable across tab switches)
+    const dailySeed = getDailySeed();
     const tiers = {};
     for (const item of scored) {
       (tiers[item._score] = tiers[item._score] || []).push(item);
     }
-    const result = [];
+    const sortedByScore = [];
     for (const score of Object.keys(tiers).sort((a, b) => b - a)) {
-      const shuffled = tiers[score].sort(() => Math.random() - 0.5);
-      result.push(...shuffled);
-      if (result.length >= 18) break;
+      const shuffled = seededShuffle(tiers[score], dailySeed + Number(score));
+      sortedByScore.push(...shuffled);
     }
-    return result.slice(0, 18);
+
+    // Diversity cap: max 5 quotes per tradition so at least 2-3 traditions always appear
+    const tradCount = {};
+    const diverse   = [];
+    for (const item of sortedByScore) {
+      if ((tradCount[item.tradition] || 0) < 5) {
+        tradCount[item.tradition] = (tradCount[item.tradition] || 0) + 1;
+        diverse.push(item);
+        if (diverse.length >= 18) break;
+      }
+    }
+    return diverse;
   }
 
   function categorizeCitation(citation) {
