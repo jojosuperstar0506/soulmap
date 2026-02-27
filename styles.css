@@ -529,144 +529,298 @@ blockquote {
 }
 
 /* ═══════════════════════════════════════════════════════════════ */
-/* ONBOARDING                                                      */
+/* ONBOARDING — iOS-native 2-step progressive form                 */
 /* ═══════════════════════════════════════════════════════════════ */
 
-/* Override default .view padding for onboarding — keeps all fields on screen */
+/* Scrollable top-aligned view — no more vertical centering */
 #view-onboard {
-  padding: 1rem 1.5rem 0.5rem;
+  padding: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#view-onboard.view-active {
+  display: block;
 }
 
-/* Vertically center the form on desktop; no visual effect on mobile (content = viewport height) */
-#view-onboard.view-active {
+/* ── Sticky nav bar ── */
+.onboard-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  padding-top: env(safe-area-inset-top, 0px);
+  height: calc(52px + env(safe-area-inset-top, 0px));
+  background: var(--color-void);
+  border-bottom: 1px solid rgba(196, 192, 216, 0.12);
 }
 
-.onboard-inner {
-  width: 100%;
-  max-width: 360px;
-}
-
-.onboard-header {
-  margin-bottom: 0.5rem;
-}
-
-.step-num {
-  display: inline-block;
-  font-size: 0.625rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--color-ghost);
-  margin-bottom: 0.75rem;
-}
-
-.onboard-header h2 {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
+/* Back: text + chevron, no border box */
+.onboard-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+  color: var(--color-psychic);
+  font-family: var(--font-body);
+  font-size: 1rem;
   font-weight: 400;
-  margin: 0 0 0.25rem;
+  transition: opacity 0.15s ease;
+}
+.onboard-nav-back:active { opacity: 0.6; }
+
+.onboard-nav-chevron {
+  font-size: 1.4rem;
+  line-height: 1;
+  margin-top: -1px;
+}
+
+/* Centered title — absolutely positioned to avoid flex space stealing */
+.onboard-nav-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
   color: var(--color-white-bone);
-  letter-spacing: -0.01em;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
-.onboard-header p {
+/* Right step counter */
+.onboard-nav-counter {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
   color: var(--color-ghost);
-  margin: 0;
-  font-size: 0.75rem;
-  line-height: 1.55;
+  letter-spacing: 0.02em;
 }
 
+/* ── Step progress dots ── */
+.onboard-progress {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 0 4px;
+}
+
+.onboard-progress-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ghost);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.onboard-progress-dot--active {
+  background: var(--color-psychic);
+  transform: scale(1.25);
+}
+
+/* ── Form container ── */
 .onboard-form {
   width: 100%;
+  padding: 0 1rem 3rem;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
-.onboard-form label {
+/* ── Step wrappers: slide animations ── */
+.onboard-step {
+  display: none;
+}
+
+.onboard-step--active {
   display: block;
-  margin-bottom: 0.625rem;
+  animation: onboard-slide-in 0.3s var(--spring-smooth) forwards;
 }
 
-/* Labels inside form-rows don't need their own trailing margin — the row handles it */
-.form-row label {
-  margin-bottom: 0;
-}
-
-.onboard-form label span {
+.onboard-step--exit {
   display: block;
-  font-family: var(--font-body);
-  font-size: 0.675rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--color-ash);
-  margin-bottom: 0.35rem;
+  animation: onboard-slide-out 0.22s ease-in forwards;
 }
 
-.onboard-form label small {
-  display: block;
-  font-weight: 400;
-  font-size: 0.75rem;
+@keyframes onboard-slide-in {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes onboard-slide-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-28px); }
+}
+
+/* Step description text */
+.onboard-step-desc {
   color: var(--color-ghost);
-  margin-top: 0.25rem;
-  text-transform: none;
-  letter-spacing: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  margin: 0.75rem 0 1.25rem;
 }
 
-.onboard-form input[type="text"],
-.onboard-form input[type="date"],
-.onboard-form select,
-.onboard-form textarea {
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
+/* ── iOS-style grouped input container ── */
+.input-group {
   background: var(--color-ground);
   border: 1px solid var(--color-border);
-  border-radius: 2px;
-  color: var(--color-white-bone);
-  transition: border-color 0.2s ease;
-  color-scheme: light;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
 }
 
-.onboard-form select {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23B060E0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.9rem center;
-  padding-right: 2.5rem;
+/* ── Individual cell ── */
+.input-cell {
+  padding: 0.625rem 1rem 0.75rem;
+  background: var(--color-ground);
+  transition: background 0.15s ease;
+  /* Dark text context — all tokens override to ink on light surface */
+  --color-white-bone: var(--color-ink);
+  --color-ash:        var(--color-ink);
+  --color-ghost:      rgba(10, 8, 20, 0.42);
+  --color-border:     rgba(18, 16, 30, 0.12);
+  color: var(--color-ink);
 }
 
-.onboard-form input[type="text"]:focus,
-.onboard-form input[type="date"]:focus,
-.onboard-form select:focus,
-.onboard-form textarea:focus {
-  outline: none;
-  border-color: var(--color-vermillion);
+.input-cell:focus-within {
+  background: rgba(160, 32, 240, 0.04); /* faint psychic wash on focus */
 }
 
-.onboard-form textarea {
-  resize: vertical;
-  min-height: 56px;
+/* ── Hairline divider between cells — iOS inset separator ── */
+.input-cell-divider {
+  height: 1px;
+  background: rgba(18, 16, 30, 0.1);
+  margin: 0 1rem;
 }
 
-.form-actions {
+/* ── Label above each field ── */
+.input-cell-label {
   display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(10, 8, 20, 0.45);
+  margin-bottom: 0.25rem;
+  cursor: default;
+  transition: color 0.15s ease;
 }
 
-/* Two-column grid for paired form fields */
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 0.75rem;
-  margin-bottom: 0.625rem;
+/* Label turns psychic purple when cell is focused */
+.input-cell:focus-within .input-cell-label {
+  color: var(--color-psychic);
 }
 
-.form-actions .btn-ghost { margin-right: auto; }
+/* ── "Optional" badge beside label ── */
+.input-cell-optional {
+  font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+  color: inherit;
+}
+
+/* ── Hint text (below label, above input) ── */
+.input-cell-hint {
+  font-size: 0.75rem;
+  color: rgba(10, 8, 20, 0.4);
+  margin: 0 0 0.3rem;
+  line-height: 1.4;
+}
+
+/* ── Input / select / textarea — shared ── */
+.input-cell-field {
+  width: 100%;
+  min-height: 50px;
+  padding: 0.75rem 0;
+  font-family: var(--font-body);
+  font-size: 1rem;          /* 16px — prevents iOS auto-zoom on focus */
+  font-weight: 400;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--color-ink);
+  color-scheme: light;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.input-cell-field::placeholder {
+  color: rgba(10, 8, 20, 0.28);
+}
+
+/* Select: custom chevron arrow */
+select.input-cell-field {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23A020F0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  padding-right: 1.5rem;
+  cursor: pointer;
+}
+
+/* Textarea variant */
+.input-cell-field--textarea {
+  min-height: 80px;
+  resize: none;
+  line-height: 1.5;
+}
+
+/* ── Validation error state ── */
+.input-cell--error .input-cell-label {
+  color: var(--color-vermillion);
+}
+
+.input-cell--error {
+  background: rgba(232, 55, 42, 0.05);
+}
+
+/* ── Full-width step CTA buttons ── */
+.btn-step-cta {
+  display: block;
+  width: 100%;
+  min-height: 54px;
+  padding: 0 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.btn-step-cta:active {
+  opacity: 0.85;
+  transform: scale(0.99);
+}
+
+/* Step 1 Continue — psychic purple (iOS tint = brand color) */
+.btn-step-cta--continue {
+  background: var(--color-psychic);
+  color: #ffffff;
+}
+.btn-step-cta--continue:hover { background: #8a1ad0; }
+
+/* Step 2 Generate — vermillion (fire / action) */
+.btn-step-cta--generate {
+  background: var(--color-vermillion);
+  color: #ffffff;
+}
+.btn-step-cta--generate:hover { background: #c42e22; }
 
 
 /* ═══════════════════════════════════════════════════════════════ */
@@ -3273,11 +3427,7 @@ blockquote {
 .spark-card,
 .meditation-item,
 .annual-arc,
-.dayun-card,
-.onboard-form input[type="text"],
-.onboard-form input[type="date"],
-.onboard-form select,
-.onboard-form textarea {
+.dayun-card {
   --color-white-bone: var(--color-ink); /* Solid near-black on light card */
   --color-ash:        var(--color-ink); /* Solid near-black */
   --color-ghost:      var(--color-ink); /* Solid near-black */

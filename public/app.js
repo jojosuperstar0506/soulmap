@@ -1212,26 +1212,118 @@
 
   // ─── Landing ─────────────────────────────────────────────────────
   function initLanding() {
-    document.getElementById('btn-start').addEventListener('click', () => showView('view-onboard'));
+    document.getElementById('btn-start').addEventListener('click', () => {
+      showView('view-onboard');
+      if (initOnboard._reset) initOnboard._reset(); // always start at Step 1
+    });
   }
 
-  // ─── Merged Onboarding ───────────────────────────────────────────
+  // ─── 2-Step Onboarding Navigation ────────────────────────────────
+  function initOnboardSteps() {
+    let currentStep = 1;
+
+    const step1El     = document.getElementById('onboard-step-1');
+    const step2El     = document.getElementById('onboard-step-2');
+    const dot1        = document.getElementById('prog-dot-1');
+    const dot2        = document.getElementById('prog-dot-2');
+    const navTitle    = document.getElementById('onboard-nav-title');
+    const navCounter  = document.getElementById('onboard-nav-counter');
+    const continueBtn = document.getElementById('btn-step1-continue');
+    const TITLES      = ['Your Birth Chart', 'Life Context'];
+
+    function goToStep(n) {
+      const fromEl = currentStep === 1 ? step1El : step2El;
+      const toEl   = n === 1 ? step1El : step2El;
+      if (fromEl === toEl) return;
+
+      // Animate exit
+      fromEl.classList.add('onboard-step--exit');
+      fromEl.addEventListener('animationend', () => {
+        fromEl.classList.remove('onboard-step--active', 'onboard-step--exit');
+      }, { once: true });
+
+      // Animate enter (force reflow so animation triggers fresh)
+      void toEl.offsetWidth;
+      toEl.classList.add('onboard-step--active');
+
+      // Update nav bar
+      navTitle.textContent   = TITLES[n - 1];
+      navCounter.textContent = n + ' of 2';
+      navCounter.setAttribute('aria-label', 'Step ' + n + ' of 2');
+      dot1.classList.toggle('onboard-progress-dot--active', n === 1);
+      dot2.classList.toggle('onboard-progress-dot--active', n === 2);
+
+      // Scroll view to top so step starts visible
+      const view = document.getElementById('view-onboard');
+      if (view) view.scrollTop = 0;
+
+      currentStep = n;
+    }
+
+    // "Continue →" — validate Step 1 required fields before advancing
+    if (continueBtn) {
+      continueBtn.addEventListener('click', () => {
+        const form = document.getElementById('form-onboard');
+        if (!form) return;
+        const required1 = ['profileName', 'birthDate', 'shichen', 'gender'];
+        let valid = true;
+        required1.forEach(name => {
+          const el   = form.elements[name];
+          const cell = el && el.closest('.input-cell');
+          if (cell) cell.classList.remove('input-cell--error');
+          if (!el || !el.value.trim()) {
+            valid = false;
+            if (cell) cell.classList.add('input-cell--error');
+          }
+        });
+        if (valid) {
+          goToStep(2);
+        } else {
+          const first = step1El.querySelector('.input-cell--error');
+          if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    }
+
+    // Clear error state when user interacts with a field
+    const form = document.getElementById('form-onboard');
+    if (form) {
+      ['input', 'change'].forEach(evt => form.addEventListener(evt, e => {
+        const cell = e.target.closest('.input-cell');
+        if (cell) cell.classList.remove('input-cell--error');
+      }));
+    }
+
+    return { currentStep: () => currentStep, goToStep };
+  }
+
+  // ─── Onboarding ──────────────────────────────────────────────────
   function initOnboard() {
+    const steps = initOnboardSteps();
+
+    // Expose reset so showView('view-onboard') callers can return to Step 1
+    initOnboard._reset = () => steps.goToStep(1);
+
+    // Back button: step-aware navigation
     document.getElementById('btn-back-landing').addEventListener('click', () => {
-      // If we have profiles already (came from the app), go back to app; else landing
+      if (steps.currentStep() === 2) {
+        steps.goToStep(1);
+        return;
+      }
+      // Step 1: exit onboarding entirely
       if (loadProfiles().length > 0 && state.chart) {
         showView('view-app');
       } else {
         showView('view-landing');
       }
     });
+
+    // Form submit (Step 2 CTA)
     document.getElementById('form-onboard').addEventListener('submit', function (e) {
       e.preventDefault();
       const fd = new FormData(this);
       const email = (fd.get('email') || '').trim();
-      // Track whether this is a brand-new profile BEFORE we mint an ID
       const isNewProfile = !state.profileId;
-      // If no profileId in state (adding new), mint a fresh ID now
       const profileId = state.profileId || (String(Date.now()) + '_' + Math.floor(Math.random() * 1e6));
       setState({
         profileId,
@@ -1244,7 +1336,7 @@
         currentConcern: (fd.get('currentConcern') || '').trim()
       });
 
-      // Fire-and-forget email collection — only on first-time profile creation, never on edits
+      // Fire-and-forget email — only on first-time profile creation
       if (isNewProfile) {
         trackEvent('profile_created', { gender: fd.get('gender') || 'unknown' });
         if (email && email.includes('@')) {
@@ -1252,7 +1344,7 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, name: (fd.get('profileName') || '').trim() }),
-          }).catch(() => {}); // swallow all errors — user experience unaffected
+          }).catch(() => {});
         }
       }
 
@@ -3352,6 +3444,7 @@
         // Signal to onboarding that this is a new profile (not editing existing)
         setState({ profileId: null, profileName: '' });
         showView('view-onboard');
+        if (initOnboard._reset) initOnboard._reset(); // always start at Step 1
       });
     }
   }

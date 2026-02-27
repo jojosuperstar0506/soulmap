@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260226h" />
+  <link rel="stylesheet" href="styles.css?v=20260227a" />
   <!-- Vercel Analytics Web SDK -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
@@ -47,108 +47,143 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- ONBOARDING — Single unified page -->
+  <!-- ONBOARDING — iOS 2-step progressive form                        -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <section id="view-onboard" class="view">
-    <div class="onboard-inner">
-    <header class="onboard-header">
-      <h2>Tell us about you</h2>
-      <p>Unlike horoscopes, BaZi is anchored to your exact solar birth timestamp — refined across 40+ classical texts over 1,200 years, and precise enough to map your life in decade-long phases.</p>
-    </header>
-    <form id="form-onboard" class="onboard-form">
 
-      <!-- ─ Name (full width) ─ -->
-      <label>
-        <span>Name</span>
-        <input type="text" name="profileName" placeholder="e.g. Max, Mom, Sarah…" required autocomplete="off" />
-      </label>
+    <!-- Sticky nav: back chevron + step title + step counter -->
+    <nav class="onboard-nav">
+      <button type="button" class="onboard-nav-back" id="btn-back-landing" aria-label="Go back">
+        <span class="onboard-nav-chevron" aria-hidden="true">‹</span>
+        <span class="onboard-nav-back-label">Back</span>
+      </button>
+      <span class="onboard-nav-title" id="onboard-nav-title">Your Birth Chart</span>
+      <span class="onboard-nav-counter" id="onboard-nav-counter" aria-label="Step 1 of 2">1 of 2</span>
+    </nav>
 
-      <!-- ─ Birth data row ─ -->
-      <div class="form-row">
-        <label>
-          <span>Date of birth</span>
-          <input type="date" name="birthDate" required />
-        </label>
-        <label>
-          <span>Time of birth <small>Not sure? Pick the closest.</small></span>
-          <select name="shichen" required>
-            <option value="">Select time of birth</option>
-            <option value="0">子时 Zǐ 23:00–01:00</option>
-            <option value="1">丑时 Chǒu 01:00–03:00</option>
-            <option value="2">寅时 Yín 03:00–05:00</option>
-            <option value="3">卯时 Mǎo 05:00–07:00</option>
-            <option value="4">辰时 Chén 07:00–09:00</option>
-            <option value="5">巳时 Sì 09:00–11:00</option>
-            <option value="6">午时 Wǔ 11:00–13:00</option>
-            <option value="7">未时 Wèi 13:00–15:00</option>
-            <option value="8">申时 Shēn 15:00–17:00</option>
-            <option value="9">酉时 Yǒu 17:00–19:00</option>
-            <option value="10">戌时 Xū 19:00–21:00</option>
-            <option value="11">亥时 Hài 21:00–23:00</option>
-          </select>
-        </label>
-      </div>
+    <!-- Step progress dots -->
+    <div class="onboard-progress" aria-hidden="true">
+      <span class="onboard-progress-dot onboard-progress-dot--active" id="prog-dot-1"></span>
+      <span class="onboard-progress-dot" id="prog-dot-2"></span>
+    </div>
 
-      <!-- ─ Profile attributes row ─ -->
-      <div class="form-row">
-        <label>
-          <span>Gender at birth <small>For Luck Pillar direction.</small></span>
-          <select name="gender" required>
-            <option value="">Select</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </label>
-        <label>
-          <span>Occupation</span>
-          <select name="occupation" required>
-            <option value="">Select</option>
-            <option value="student">Student</option>
-            <option value="professional">Professional</option>
-            <option value="creative">Creative</option>
-            <option value="entrepreneur">Entrepreneur</option>
-            <option value="between">Between Things</option>
-            <option value="other">Other</option>
-          </select>
-        </label>
-      </div>
+    <form id="form-onboard" class="onboard-form" novalidate>
 
-      <!-- ─ Relationship (full width) ─ -->
-      <label>
-        <span>Relationship status</span>
-        <select name="relationship" required>
-          <option value="">Select</option>
-          <option value="single">Single</option>
-          <option value="dating">Dating</option>
-          <option value="relationship">In a Relationship</option>
-          <option value="married">Married</option>
-          <option value="complicated">It's Complicated</option>
-          <option value="prefer-not">Prefer Not to Say</option>
-        </select>
-      </label>
+      <!-- ═══ STEP 1 — Birth Chart ═══ -->
+      <div class="onboard-step onboard-step--active" id="onboard-step-1">
+        <p class="onboard-step-desc">BaZi is anchored to your exact solar birth timestamp — precise enough to map your life in decade-long phases.</p>
 
-      <!-- ─ Optional ─ -->
-      <label>
-        <span>What's on your mind? <small>Optional</small></span>
-        <textarea name="currentConcern" rows="2" placeholder="e.g. Am I dating the right person? Will I get rich in this life? Where do I find meaning?"></textarea>
-      </label>
+        <!-- Name -->
+        <div class="input-group">
+          <div class="input-cell">
+            <label class="input-cell-label" for="ob-name">Name</label>
+            <input id="ob-name" type="text" name="profileName" class="input-cell-field"
+              placeholder="e.g. Max, Mom, Sarah…" required autocomplete="off" />
+          </div>
+        </div>
 
-      <label class="onboard-email-label">
-        <span>Email <small>Optional — get updates &amp; early access</small></span>
-        <input
-          type="email"
-          name="email"
-          placeholder="you@example.com"
-          autocomplete="email"
-        />
-      </label>
+        <!-- Birth details: DOB / Time / Gender -->
+        <div class="input-group">
+          <div class="input-cell">
+            <label class="input-cell-label" for="ob-dob">Date of Birth</label>
+            <input id="ob-dob" type="date" name="birthDate" class="input-cell-field" required />
+          </div>
+          <div class="input-cell-divider"></div>
+          <div class="input-cell">
+            <label class="input-cell-label" for="ob-shichen">Time of Birth</label>
+            <p class="input-cell-hint">Not sure? Pick the closest.</p>
+            <select id="ob-shichen" name="shichen" class="input-cell-field" required>
+              <option value="">Select time of birth</option>
+              <option value="0">子时 Zǐ · 23:00–01:00</option>
+              <option value="1">丑时 Chǒu · 01:00–03:00</option>
+              <option value="2">寅时 Yín · 03:00–05:00</option>
+              <option value="3">卯时 Mǎo · 05:00–07:00</option>
+              <option value="4">辰时 Chén · 07:00–09:00</option>
+              <option value="5">巳时 Sì · 09:00–11:00</option>
+              <option value="6">午时 Wǔ · 11:00–13:00</option>
+              <option value="7">未时 Wèi · 13:00–15:00</option>
+              <option value="8">申时 Shēn · 15:00–17:00</option>
+              <option value="9">酉时 Yǒu · 17:00–19:00</option>
+              <option value="10">戌时 Xū · 19:00–21:00</option>
+              <option value="11">亥时 Hài · 21:00–23:00</option>
+            </select>
+          </div>
+          <div class="input-cell-divider"></div>
+          <div class="input-cell">
+            <label class="input-cell-label" for="ob-gender">Gender at Birth</label>
+            <p class="input-cell-hint">Used for Luck Pillar direction.</p>
+            <select id="ob-gender" name="gender" class="input-cell-field" required>
+              <option value="">Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+        </div>
 
-      <div class="form-actions">
-        <button type="button" class="btn btn-ghost" id="btn-back-landing">Back</button>
-        <button type="submit" class="btn btn-primary">Generate My Blueprint →</button>
-      </div>
+        <button type="button" class="btn-step-cta btn-step-cta--continue" id="btn-step1-continue">
+          Continue →
+        </button>
+      </div><!-- /step-1 -->
+
+      <!-- ═══ STEP 2 — Life Context ═══ -->
+      <div class="onboard-step" id="onboard-step-2">
+        <p class="onboard-step-desc">A few more details help the AI speak to where you actually are right now.</p>
+
+        <!-- Occupation + Relationship -->
+        <div class="input-group">
+          <div class="input-cell">
+            <label class="input-cell-label" for="ob-occupation">Occupation</label>
+            <select id="ob-occupation" name="occupation" class="input-cell-field" required>
+              <option value="">Select</option>
+              <option value="student">Student</option>
+              <option value="professional">Professional</option>
+              <option value="creative">Creative</option>
+              <option value="entrepreneur">Entrepreneur</option>
+              <option value="between">Between Things</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="input-cell-divider"></div>
+          <div class="input-cell">
+            <label class="input-cell-label" for="ob-relationship">Relationship Status</label>
+            <select id="ob-relationship" name="relationship" class="input-cell-field" required>
+              <option value="">Select</option>
+              <option value="single">Single</option>
+              <option value="dating">Dating</option>
+              <option value="relationship">In a Relationship</option>
+              <option value="married">Married</option>
+              <option value="complicated">It's Complicated</option>
+              <option value="prefer-not">Prefer Not to Say</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Optional: concern + email -->
+        <div class="input-group">
+          <div class="input-cell">
+            <label class="input-cell-label" for="ob-concern">
+              What's on your mind? <span class="input-cell-optional">Optional</span>
+            </label>
+            <textarea id="ob-concern" name="currentConcern" class="input-cell-field input-cell-field--textarea"
+              rows="3" placeholder="e.g. Am I on the right path? Career, love, purpose…"></textarea>
+          </div>
+          <div class="input-cell-divider"></div>
+          <div class="input-cell">
+            <label class="input-cell-label" for="ob-email">
+              Email <span class="input-cell-optional">Optional</span>
+            </label>
+            <p class="input-cell-hint">Get updates and early access.</p>
+            <input id="ob-email" type="email" name="email" class="input-cell-field"
+              placeholder="you@example.com" autocomplete="email" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-step-cta btn-step-cta--generate">
+          Generate My Blueprint →
+        </button>
+      </div><!-- /step-2 -->
+
     </form>
-    </div><!-- /.onboard-inner -->
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
@@ -455,6 +490,6 @@
 
   <script src="content/wisdom-vault.js?v=6"></script>
   <script src="content/classical-bazi-excerpts.js?v=1"></script>
-  <script src="app.js?v=20260226h"></script>
+  <script src="app.js?v=20260227a"></script>
 </body>
 </html>
