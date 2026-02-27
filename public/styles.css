@@ -3205,6 +3205,13 @@ select.input-cell-field {
   border-color: rgba(30,22,16,0.3);
 }
 
+/* Selected season: gold border + warm tint */
+.dayun-card-selected {
+  border-color: var(--color-gold, #C9A840) !important;
+  background: rgba(201,168,64,0.06);
+  box-shadow: 0 0 0 1px rgba(201,168,64,0.18), 0 4px 16px rgba(201,168,64,0.07);
+}
+
 /* ─── Row system inside each card ─── */
 .dayun-row {
   padding: 0.55rem 0.8rem;
@@ -3221,6 +3228,29 @@ select.input-cell-field {
   text-align: right;
   padding: 0.3rem 0.8rem 0.4rem;
   opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+}
+.dayun-tap-spark {
+  display: inline-block;
+  animation: tap-spark-pulse 2s ease-in-out infinite;
+}
+.dayun-tap-label {
+  opacity: 0.75;
+}
+.dayun-card:hover .dayun-tap-hint,
+.dayun-card-selected .dayun-tap-hint {
+  opacity: 1;
+}
+.dayun-card-selected .dayun-tap-spark {
+  animation: none;
+  opacity: 1;
+}
+@keyframes tap-spark-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.2); }
 }
 
 .dayun-row:last-child {
@@ -3915,6 +3945,63 @@ select.input-cell-field {
   font-weight: 400;
   letter-spacing: 0.1em;
   margin-top: 0.5rem;
+}
+
+/* ─── Auto-generating loading state ─── */
+.cycle-narrative-generating {
+  padding: 2rem 1rem 1.75rem;
+  text-align: center;
+}
+.cycle-gen-phrase {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.83rem;
+  color: var(--color-psychic);
+  line-height: 1.65;
+  max-width: 26ch;
+  margin: 0 auto 1.25rem;
+  animation: phrase-breathe 4s ease-in-out infinite;
+  transition: opacity 0.35s ease;
+}
+@keyframes phrase-breathe {
+  0%, 100% { opacity: 0.72; }
+  50%       { opacity: 1;    }
+}
+.cycle-gen-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 0.75rem;
+}
+.cycle-gen-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-psychic);
+  animation: gen-dot-pulse 1.4s ease-in-out infinite;
+}
+.cycle-gen-dots span:nth-child(2) { animation-delay: 0.22s; }
+.cycle-gen-dots span:nth-child(3) { animation-delay: 0.44s; }
+@keyframes gen-dot-pulse {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.75); }
+  40%           { opacity: 1;   transform: scale(1);    }
+}
+.cycle-gen-sub {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
+  margin: 0;
+}
+.cycle-gen-error {
+  text-align: center;
+  padding: 1rem 0;
+}
+.cycle-gen-error p {
+  font-size: 0.78rem;
+  color: var(--color-ghost);
+  margin-bottom: 0.75rem;
 }
 
 /* Season badge on dayun cards */

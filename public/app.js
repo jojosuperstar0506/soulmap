@@ -867,6 +867,17 @@
     return result;
   }
 
+  // English translations for spirit killer names (神煞)
+  const SHEN_SHA_EN = {
+    '驿马':   'Traveling Horse',
+    '桃花':   'Peach Blossom',
+    '天乙贵人': 'Heavenly Noble',
+    '太极贵人': 'Supreme Noble',
+    '月德合':  'Month Virtue',
+    '天医':   'Heaven Doctor',
+    '国印':   'Nation Seal',
+  };
+
   // (DAYUN_ACCENT_COLORS removed — dayun card borders now uniformly psychic purple per 2-plate ink system)
 
   // ─── Lifetime Arc scoring engine constants ────────────────────────
@@ -2145,7 +2156,10 @@
 
     function shaCell(d) {
       if (!d.sha || d.sha.length === 0) return `<div class="bazi-cell bazi-cell-small">—</div>`;
-      return `<div class="bazi-cell bazi-cell-sha">${d.sha.map(s => `<span class="bazi-sha-tag">${s}</span>`).join('')}</div>`;
+      return `<div class="bazi-cell bazi-cell-sha">${d.sha.map(s => {
+        const en = SHEN_SHA_EN[s] || '';
+        return `<span class="bazi-sha-tag">${s}${en ? `<span class="bazi-sha-en">${en}</span>` : ''}</span>`;
+      }).join('')}</div>`;
     }
 
     const hasSha = pData.some(d => d.sha && d.sha.length > 0);
@@ -2261,7 +2275,8 @@
       const stemEl   = dyElKeys[STEM_ELEMENT[decade.stemIndex]];
       const branchEl = dyElKeys[BRANCH_EL_IDX[decade.branchIndex]];
       const desc     = DAYUN_STEM_DESC[decade.stemIndex];
-      const classes  = ['dayun-card', decade.isCurrent ? 'dayun-card-active' : ''].filter(Boolean).join(' ');
+      const isSelected = _cycleDetailIdx !== null ? _cycleDetailIdx === i : decade.isCurrent;
+      const classes  = ['dayun-card', decade.isCurrent ? 'dayun-card-active' : '', isSelected ? 'dayun-card-selected' : ''].filter(Boolean).join(' ');
       return `
         <div class="${classes}" data-decade-idx="${i}">
           <div class="dayun-row">
@@ -2282,7 +2297,7 @@
             <span class="dayun-row-label">Season Energy</span>
             <span class="dayun-desc">${desc}</span>
           </div>
-          <div class="dayun-tap-hint">Tap to explore →</div>
+          <div class="dayun-tap-hint"><span class="dayun-tap-spark">✦</span><span class="dayun-tap-label"> Deep reading</span></div>
         </div>`;
     }).join('');
 
@@ -2322,6 +2337,8 @@
     { key:'career', label:'Career', cn:'事业', color:'#1A4DB5' }, /* --arc-career: var(--color-cyan) */
     { key:'health', label:'Health', cn:'健康', color:'#3A7D44' }, /* --arc-health: var(--color-cobalt) */
   ];
+
+  let _cycleDetailIdx = null; // which season is currently open/selected
 
   // Compute insight summary from daYun array
   function computeArcInsights(daYun) {
@@ -2376,6 +2393,11 @@
     svg.setAttribute('width', '100%');
     svg.setAttribute('height', VH);
     svg.setAttribute('class', 'arc-chart-svg');
+
+    // Column highlight group — first child so it renders behind all data
+    const hlGroup = document.createElementNS(ns, 'g');
+    hlGroup.setAttribute('id', 'arc-col-hl');
+    svg.appendChild(hlGroup);
 
     // Y-axis grid lines + labels (20 / 50 / 80)
     for (const [val, lbl] of [[20,'Low'],[50,'Mid'],[80,'High']]) {
@@ -2546,6 +2568,31 @@
       <div id="cycle-detail-panel" class="cycle-detail-panel" style="display:none"></div>
     `;
     document.getElementById('arc-svg-wrap').appendChild(svg);
+
+    // Highlight initially selected column (current decade or previously opened)
+    const initSel = _cycleDetailIdx !== null ? _cycleDetailIdx : currentIdx;
+    if (initSel >= 0) highlightChartColumn(initSel);
+  }
+
+  /** Update the gold column highlight in the arc SVG chart */
+  function highlightChartColumn(idx) {
+    const g = document.getElementById('arc-col-hl');
+    if (!g || !state.chart || !state.chart.daYun) return;
+    const n = state.chart.daYun.length;
+    const VW = 500, VH = 200, PL = 28, PR = 12, PT = 16, PB = 38;
+    const CW = VW - PL - PR;
+    const xPos = PL + (n > 1 ? (idx / (n - 1)) * CW : CW / 2);
+    const colW = Math.max(30, n > 1 ? CW / (n - 1) : CW);
+    const ns2 = 'http://www.w3.org/2000/svg';
+    g.innerHTML = '';
+    const rect = document.createElementNS(ns2, 'rect');
+    rect.setAttribute('x', String(xPos - colW / 2 + 1));
+    rect.setAttribute('y', String(PT - 6));
+    rect.setAttribute('width', String(colW - 2));
+    rect.setAttribute('height', String(VH - PT - PB + 34));
+    rect.setAttribute('fill', 'rgba(212,175,55,0.13)');
+    rect.setAttribute('rx', '4');
+    g.appendChild(rect);
   }
 
   // ─── Cycle Detail Panel ───────────────────────────────────────────
@@ -2554,6 +2601,13 @@
     if (!panel || !state.chart || !state.chart.daYun) return;
     const decade = state.chart.daYun[idx];
     if (!decade) return;
+
+    // ── Selection state: update card strip + chart highlight ──────
+    _cycleDetailIdx = idx;
+    document.querySelectorAll('.dayun-card').forEach((card, i) => {
+      card.classList.toggle('dayun-card-selected', i === idx);
+    });
+    highlightChartColumn(idx);
 
     // Scores bar HTML
     const scoreBar = (label, value, color) => `
@@ -2572,8 +2626,11 @@
       ? decade.stemTenGod.charAt(0).toUpperCase() + decade.stemTenGod.slice(1)
       : '—';
 
-    // Check if narrative already loaded
+    // ── Narrative state machine ────────────────────────────────────
     const narrative = decade.narrative;
+    const loadingPhrases = t('LOADING_PHRASES');
+    const randomPhrase = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
+
     const narrativeHtml = narrative
       ? `<div class="cycle-narrative">
           <p class="cycle-theme">"${narrative.theme}"</p>
@@ -2581,19 +2638,27 @@
           <div class="cycle-narrative-domains">
             <div><strong>💰 Wealth</strong><p>${narrative.wealthNote}</p></div>
             <div><strong>❤️ Love</strong><p>${narrative.relationshipsNote}</p></div>
-            <div><strong>💼 Career</strong><p>${narrative.wealthNote}</p></div>
+            <div><strong>💼 Career</strong><p>${narrative.careerNote || narrative.wealthNote}</p></div>
             <div><strong>💪 Health</strong><p>${narrative.healthNote}</p></div>
           </div>
           <div class="cycle-lesson">
             <p><strong>Life Lesson:</strong> ${narrative.lifeLessonThisSeason}</p>
           </div>
         </div>`
-      : `<div class="cycle-narrative-loading">
-          <button class="btn-refresh btn-cycle-narrative" onclick="fetchCycleNarrative(${idx})">
-            ✦ Generate Reading for this Season
-          </button>
-          <p class="cycle-narrative-hint">Takes ~10 seconds · Saved to profile</p>
-        </div>`;
+      : decade._narrativeError
+        ? `<div class="cycle-narrative-loading">
+            <div class="cycle-gen-error">
+              <p>${window.appLang === 'zh' ? '解读加载失败。' : 'Reading couldn\u2019t load.'}</p>
+              <button class="btn-refresh btn-cycle-narrative" onclick="retrySeasonNarrative(${idx})">
+                ${window.appLang === 'zh' ? '重试' : 'Try again'}
+              </button>
+            </div>
+          </div>`
+        : `<div class="cycle-narrative-loading cycle-narrative-generating">
+            <p class="cycle-gen-phrase" id="cycle-gen-phrase">${randomPhrase}</p>
+            <div class="cycle-gen-dots"><span></span><span></span><span></span></div>
+            <p class="cycle-gen-sub">${window.appLang === 'zh' ? '正在推演大运规律…' : 'Consulting the ancient calendar\u2026'}</p>
+          </div>`;
 
     panel.style.display = '';
     panel.innerHTML = `
@@ -2619,15 +2684,45 @@
 
     // Scroll into view
     panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // ── Auto-fetch narrative if not yet loaded ────────────────────
+    if (!narrative && !decade._narrativeFetching && !decade._narrativeError) {
+      decade._narrativeFetching = true;
+      fetchCycleNarrative(idx);
+    }
   }
 
-  /** Fetch AI narrative for a specific decade cycle (lazy, on click) */
+  function retrySeasonNarrative(idx) {
+    const decade = state.chart && state.chart.daYun && state.chart.daYun[idx];
+    if (!decade) return;
+    decade._narrativeError = false;
+    decade._narrativeFetching = false;
+    showCycleDetail(idx);
+  }
+  window.retrySeasonNarrative = retrySeasonNarrative;
+
+  /** Fetch AI narrative for a specific decade cycle (auto-triggered on card open) */
   async function fetchCycleNarrative(idx) {
     const decade = state.chart && state.chart.daYun && state.chart.daYun[idx];
     if (!decade) return;
 
-    const btn = document.querySelector('.btn-cycle-narrative');
-    if (btn) { btn.disabled = true; btn.textContent = '✦ Generating…'; }
+    // Cycle through loading phrases while waiting
+    const phrases = t('LOADING_PHRASES');
+    let pi = Math.floor(Math.random() * phrases.length);
+    const phraseInterval = setInterval(() => {
+      const el = document.getElementById('cycle-gen-phrase');
+      if (el) {
+        pi = (pi + 1) % phrases.length;
+        el.style.transition = 'opacity 0.35s';
+        el.style.opacity = '0';
+        setTimeout(() => {
+          const el2 = document.getElementById('cycle-gen-phrase');
+          if (el2) { el2.textContent = phrases[pi]; el2.style.opacity = ''; }
+        }, 360);
+      } else {
+        clearInterval(phraseInterval);
+      }
+    }, 3200);
 
     try {
       const chart = state.chart;
@@ -2666,14 +2761,19 @@
       if (!res.ok) throw new Error('API error ' + res.status);
       const data = await res.json();
       decade.narrative = data;
+      decade._narrativeFetching = false;
 
       // Persist to profile
       saveCurrentProfile();
 
-      // Re-render panel
+      // Re-render panel with narrative
+      clearInterval(phraseInterval);
       showCycleDetail(idx);
     } catch (err) {
-      if (btn) { btn.disabled = false; btn.textContent = '✦ Try Again'; }
+      clearInterval(phraseInterval);
+      decade._narrativeFetching = false;
+      decade._narrativeError = true;
+      showCycleDetail(idx);
       console.error('fetchCycleNarrative error:', err);
     }
   }
