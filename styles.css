@@ -3941,3 +3941,72 @@ select.input-cell-field {
 .detail-sections .narrative-section-label {
   color: var(--color-psychic);
 }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* DESKTOP / LAPTOP RESPONSIVE LAYOUT                             */
+/* Single breakpoint at 680px: center all views in a readable     */
+/* column. Mobile layout is unchanged below this threshold.       */
+/* ═══════════════════════════════════════════════════════════════ */
+@media (min-width: 680px) {
+
+  /* Center every view in a 680px column */
+  .view {
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 5rem; /* desktop nav is narrower; less clearance needed */
+  }
+
+  /* Bottom nav: pin width + position to match the content column */
+  .app-tabs {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    max-width: 680px;
+    width: 100%;
+  }
+
+  /* BaZi Four Pillars grid: release its own 520px cap (parent constrains it now) */
+  .bazi-grid {
+    max-width: 100%;
+  }
+
+  /* Oracle templates: 3 columns on wider screens */
+  .oracle-templates-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Onboarding form: expand from 480px → 560px */
+  .onboard-form {
+    max-width: 560px;
+  }
+
+  /* Brand splash: expand from 440px → 560px */
+  .gen-splash {
+    max-width: 560px;
+  }
+
+  /* Loading emblem: expand from 320px → 400px */
+  .gen-loading {
+    max-width: 400px;
+  }
+
+  /* Reading sheet: allow slightly more width on desktop */
+  .reading-sheet {
+    max-width: min(100%, 640px);
+  }
+
+  /* Vault and glossary modals: a little more breathing room */
+  .vault-modal-card {
+    max-width: 640px;
+  }
+  .glossary-card {
+    max-width: 480px;
+  }
+
+  /* Tab buttons: slightly taller hit area for pointer (non-touch) devices */
+  .tab-btn {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
