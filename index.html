@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Noto+Serif+SC:wght@200;300;400;600;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260227f" />
+  <link rel="stylesheet" href="styles.css?v=20260227g" />
   <!-- Vercel Analytics Web SDK -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
@@ -350,22 +350,22 @@
           <p class="reveal-hint" data-i18n="bp_reveal_hint">Life Seasons · Lifetime Arc · Energy Charts</p>
         </div>
 
-        <!-- Life Seasons / 大运 -->
-        <div class="divider-labeled" id="dayun-divider">
+        <!-- Life Seasons / 大运 — hidden until Reveal Journey is tapped -->
+        <div class="divider-labeled" id="dayun-divider" hidden>
           <button class="term-link divider-label-text" data-term="life-seasons" type="button">大运 · Life Seasons <span class="term-info">ⓘ</span></button>
         </div>
-        <div class="dayun-section" id="dayun-section">
+        <div class="dayun-section" id="dayun-section" hidden>
           <div class="dayun-strip" id="dayun-strip">
             <!-- Populated by renderDaYun() -->
           </div>
           <div class="dayun-scroll-track"><div class="dayun-scroll-thumb" id="dayun-scroll-thumb"></div></div>
         </div>
 
-        <!-- Energy Aspects Charts -->
-        <div class="divider-labeled" id="energy-divider">
+        <!-- Energy Aspects Charts — hidden until Reveal Journey is tapped -->
+        <div class="divider-labeled" id="energy-divider" hidden>
           <span class="divider-label-text" data-i18n="bp_divider_energy">Energy per Season</span>
         </div>
-        <div class="energy-charts-section" id="energy-charts-section">
+        <div class="energy-charts-section" id="energy-charts-section" hidden>
           <!-- Populated by renderEnergyCharts() -->
         </div>
 
