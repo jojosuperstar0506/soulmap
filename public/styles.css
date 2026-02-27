@@ -4173,6 +4173,10 @@ select.input-cell-field {
   max-width: 580px;
   max-height: 88vh;
   background: var(--color-void);
+  /* Hard-set cream text — body inherits ink which is invisible on void.
+     Use hardcoded hex (#EDE3C8) to bypass any CSS variable cascade issues. */
+  color: #EDE3C8;
+  --color-white-bone: #EDE3C8; /* re-anchor the variable inside this dark context */
   border-radius: 14px 14px 0 0;
   overflow-y: auto;
   scrollbar-width: none;
