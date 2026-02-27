@@ -1945,30 +1945,42 @@
     if (nameEl) nameEl.textContent = state.profileName || 'My Chart';
     document.getElementById('app-user-type').textContent = (t('SOUL_TYPES')[state.soulTypeIndex] || {}).name || SOUL_TYPES[state.soulTypeIndex].name;
 
-    // Pre-render blueprint in background (view-app not visible yet)
+    // Pre-render blueprint (view-app not visible yet)
     renderAppBlueprint();
 
-    // Fetch AI narrative — loading phrases cycle while we wait
-    const narrative = await fetchNarrativeFromAPI(chart);
+    // Start narrative fetch in background — don't block the transition on it
+    const narrativePromise = fetchNarrativeFromAPI(chart);
+
+    // Show the splash phrase for a minimum of 2 seconds, then reveal the app
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     generatingView.stop();
+    showView('view-app');
+    switchTab('blueprint');
 
+    // Narrative arrives in the background — update the section when ready
+    const narrative = await narrativePromise;
     if (narrative) {
       setState({ narrativeFromAPI: narrative });
       saveCurrentProfile();
       updateNarrativeSection(narrative);
     }
-
-    // Reveal blueprint
-    showView('view-app');
-    switchTab('blueprint');
   }
 
   function runGeneration() {
     trackEvent('blueprint_generated');
     showView('view-generating');
-    generatingView.startLoading(state.profileName); // skip splash, go straight to loading
-    buildChart();                                    // start immediately — no second button needed
+
+    // Show a random marketing phrase for the brief loading window
+    const phrases  = t('SPLASH_PHRASES');
+    const phraseEl = document.getElementById('gen-splash-phrase');
+    if (phraseEl) phraseEl.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    const splashEl = document.getElementById('gen-splash');
+    const loadEl   = document.getElementById('gen-loading');
+    if (splashEl) splashEl.hidden = false;
+    if (loadEl)   loadEl.hidden   = true;
+
+    buildChart();
   }
 
   // ─── Helper utilities ────────────────────────────────────────────
@@ -4252,16 +4264,6 @@
     initProfileSwitcher();
     initReadingSheet();
     initGlossaryModal();
-
-    // Wire "Reveal My Blueprint" CTA inside #view-generating
-    const genCtaBtn = document.getElementById('btn-gen-cta');
-    if (genCtaBtn) {
-      genCtaBtn.addEventListener('click', () => {
-        haptic('medium');
-        generatingView.startLoading(state.profileName);
-        buildChart();
-      });
-    }
 
     // Migrate any legacy single-session → first named profile
     migrateOldSession();

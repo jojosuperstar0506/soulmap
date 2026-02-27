@@ -224,17 +224,14 @@
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <section id="view-generating" class="view">
 
-    <!-- Phase A: Brand splash (no API call yet) -->
+    <!-- Phase A: Brand splash -->
     <div class="gen-splash" id="gen-splash">
       <div class="gen-splash-phrase-wrap">
         <p class="gen-splash-phrase" id="gen-splash-phrase"></p>
       </div>
-      <button class="gen-cta" id="btn-gen-cta" type="button" hidden>
-        Reveal My Blueprint →
-      </button>
     </div>
 
-    <!-- Phase B: Loading (shown after CTA tap, while API fetches) -->
+    <!-- Phase B: Loading (hidden — kept for fallback) -->
     <div class="gen-loading" id="gen-loading" hidden>
       <div class="generating-emblem">
         <span class="generating-star">✦</span>
