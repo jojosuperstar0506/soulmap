@@ -36,6 +36,13 @@
     navigator.vibrate(style === 'medium' ? 15 : style === 'heavy' ? 25 : 8);
   }
 
+  // ─── Analytics helper ────────────────────────────────────────────
+  function trackEvent(name, props) {
+    try {
+      if (typeof window.va === 'function') window.va('event', { name, ...props });
+    } catch (_) {}
+  }
+
   // ─── BaZi lookup tables ──────────────────────────────────────────
 
   // Hidden stems per earthly branch (array of stem indices)
@@ -1238,12 +1245,15 @@
       });
 
       // Fire-and-forget email collection — only on first-time profile creation, never on edits
-      if (isNewProfile && email && email.includes('@')) {
-        fetch('/api/collect-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, name: (fd.get('profileName') || '').trim() }),
-        }).catch(() => {}); // swallow all errors — user experience unaffected
+      if (isNewProfile) {
+        trackEvent('profile_created', { gender: fd.get('gender') || 'unknown' });
+        if (email && email.includes('@')) {
+          fetch('/api/collect-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, name: (fd.get('profileName') || '').trim() }),
+          }).catch(() => {}); // swallow all errors — user experience unaffected
+        }
       }
 
       runGeneration();
@@ -1386,6 +1396,7 @@
   }
 
   function runGeneration() {
+    trackEvent('blueprint_generated');
     buildChart();
   }
 
@@ -2113,6 +2124,7 @@
     oldBtn.parentNode.replaceChild(newBtn, oldBtn);
     newBtn.addEventListener('click', () => {
       haptic('medium');
+      trackEvent('blueprint_revealed');
       dayunSection.hidden  = false;
       energySection.hidden = false;
       if (dayunDivider)  dayunDivider.hidden  = false;
@@ -2247,6 +2259,7 @@
   // ─── Tab Management ──────────────────────────────────────────────
   function switchTab(tabId) {
     haptic('light');
+    trackEvent('tab_switched', { tab: tabId });
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('tab-active'));
     document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.removeAttribute('aria-current'); });
     const pane = document.getElementById('tab-' + tabId);
@@ -2477,6 +2490,8 @@
       e.preventDefault();
       const q = input.value.trim();
       if (!q) return;
+
+      trackEvent('oracle_submitted', { question_length: q.length });
 
       // Collapse template cards once conversation begins
       if (templatesEl) templatesEl.style.display = 'none';
@@ -2918,6 +2933,7 @@
 
   function openVaultModal(item) {
     haptic('light');
+    trackEvent('vault_card_opened', { tradition: item.tradition || 'saved' });
     _modalItem = item;
     const modal     = document.getElementById('vault-modal');
     const tradition = item.isCitation ? (item._savedFrom || 'saved') : (item.tradition || '');
@@ -3096,6 +3112,7 @@
       btn.classList.add('vault-seg-btn--active');
       haptic('light');
       const seg = btn.dataset.seg;
+      trackEvent('vault_filter_changed', { segment: seg });
       if (seg === 'foryou') {
         pillsWrap.hidden = true;
         pillsWrap.innerHTML = '';
@@ -3193,6 +3210,7 @@
     } catch (_) {}
     document.getElementById('btn-spark-done').addEventListener('click', () => {
       haptic('medium');
+      trackEvent('spark_completed');
       state.streak++;
       try { localStorage.setItem('soulmap_streak', String(state.streak)); } catch (_) {}
       document.getElementById('spark-streak-num').textContent = state.streak;
