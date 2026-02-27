@@ -4224,6 +4224,74 @@ select.input-cell-field {
 
 .reading-sheet-body {
   padding: 1.25rem 1.25rem 2rem;
+  /* Base text color: cream on dark void bg.
+     Body inherits ink (#1E1610) = invisible on void — must override here. */
+  color: var(--color-white-bone);
+}
+
+/* Section labels inside reading sheet: psychic purple stamp */
+.reading-sheet-body .narrative-section-label,
+.reading-sheet-body h3 {
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-psychic);
+  margin: 1.25rem 0 0.65rem;
+}
+
+/* Main narrative title in reading sheet */
+.reading-sheet-body .narrative-main-title {
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  line-height: 0.95;
+  margin: 0 0 0.75rem;
+  color: var(--color-white-bone);
+}
+
+/* Core essence + season + all body text */
+.reading-sheet-body .narrative-core-essence,
+.reading-sheet-body .narrative-season,
+.reading-sheet-body p {
+  font-size: 0.875rem;
+  color: var(--color-white-bone);
+  line-height: 1.75;
+  opacity: 0.88;
+  margin: 0 0 0.5rem;
+}
+
+/* Classical quote */
+.reading-sheet-body .narrative-classical {
+  padding: 0.85rem 1rem;
+  border-left: 2px solid var(--color-cobalt);
+  margin: 0 0 1rem;
+}
+.reading-sheet-body .narrative-classical footer {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  color: var(--color-ghost);
+  margin-top: 0.5rem;
+  display: block;
+}
+
+/* Pillar cards (Work / Love / Growth) */
+.reading-sheet-body .narrative-pillar {
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-left: 2px solid;
+  background: rgba(237,227,200,0.04);
+}
+.reading-sheet-body .narrative-pillar-body {
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--color-white-bone);
+  opacity: 0.88;
+  margin: 0;
 }
 
 /* ─── Clickable term links (tap to explain BaZi concepts) ─────── */
