@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Noto+Serif+SC:wght@200;300;400;600;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260227d" />
+  <link rel="stylesheet" href="styles.css?v=20260227e" />
   <!-- Vercel Analytics Web SDK -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
@@ -279,11 +279,27 @@
               <p id="detail-type-sub" class="soul-portrait-sub">—</p>
             </div>
           </div>
-          <blockquote id="detail-tagline" class="blueprint-tagline">—</blockquote>
+          <p id="detail-tagline" class="blueprint-tagline">—</p>
         </div>
 
-        <!-- Dominant Ten God Badge -->
-        <div id="dominant-ten-god-badge" class="dominant-ten-god-badge"></div>
+        <!-- Hero Callout — Dominant Archetype + Day Master + Favorable + Zodiac -->
+        <div class="blueprint-hero-info">
+          <div id="dominant-ten-god-badge" class="dominant-ten-god-badge"></div>
+          <div class="hero-meta-trio">
+            <div class="hero-meta-item">
+              <button class="term-link hero-meta-label" data-term="day-master" type="button">Day Master <span class="term-info">ⓘ</span></button>
+              <span id="detail-destiny-structure" class="hero-meta-value">—</span>
+            </div>
+            <div class="hero-meta-item">
+              <button class="term-link hero-meta-label" data-term="element-balance" type="button">Favorable <span class="term-info">ⓘ</span></button>
+              <span id="detail-favorable-elements" class="hero-meta-value">—</span>
+            </div>
+            <div class="hero-meta-item">
+              <span class="hero-meta-label">Zodiac</span>
+              <span id="detail-zodiac" class="hero-meta-value">—</span>
+            </div>
+          </div>
+        </div>
 
         <!-- Decision Lens -->
         <div id="decision-lens" class="decision-lens"></div>
@@ -296,22 +312,6 @@
           <!-- Populated by renderFourPillars() -->
         </div>
         <button type="button" class="bazi-ref-toggle" id="btn-bazi-ref-toggle">＋ Show chart details</button>
-
-        <!-- Meta Row -->
-        <div class="blueprint-meta three-cols" style="margin-top:1rem">
-          <div class="blueprint-meta-item">
-            <button class="term-link blueprint-meta-label" data-term="day-master" type="button">Day Master <span class="term-info">ⓘ</span></button>
-            <span id="detail-destiny-structure">—</span>
-          </div>
-          <div class="blueprint-meta-item">
-            <button class="term-link blueprint-meta-label" data-term="element-balance" type="button">Favorable <span class="term-info">ⓘ</span></button>
-            <span id="detail-favorable-elements">—</span>
-          </div>
-          <div class="blueprint-meta-item">
-            <span class="blueprint-meta-label">Zodiac</span>
-            <span id="detail-zodiac">—</span>
-          </div>
-        </div>
 
         <!-- Five Elements Balance -->
         <div class="elements-bars" id="detail-elements-bars"></div>

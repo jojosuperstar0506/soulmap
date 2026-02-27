@@ -1274,19 +1274,44 @@ select.input-cell-field {
   letter-spacing: 0.05em;
 }
 
+/* Tagline: day master proclamation — Outfit 900 display, centered, no border.
+   Purpose is to DISPLAY the archetype essence, not quote it. */
 .blueprint-tagline {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 0.9rem;
-  color: var(--color-ash);
-  margin: 0 0 1.25rem;
-  padding: 0.75rem 1rem;
-  border-left: 2px solid var(--color-vermillion);
-  text-align: left;
-  line-height: 1.6;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 900;
+  font-size: clamp(1.05rem, 4.5vw, 1.45rem);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+  text-align: center;
+  margin: 0.5rem 0 1.5rem;
+  padding: 0 0.5rem;
+  border: none;
 }
 
-/* ─── Dominant Ten God Badge ─── */
+/* ─── Blueprint Hero Info Card — unified callout zone ─── */
+/* One card holds Dominant Archetype + Day Master + Favorable + Zodiac.
+   Purpose: immediate clarity. No BaZi knowledge required to read this. */
+.blueprint-hero-info {
+  margin-bottom: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-cobalt) 22%, transparent);
+  border-left: 3px solid var(--color-cobalt);
+  border-radius: 0 2px 2px 0;
+  background: color-mix(in srgb, var(--color-cobalt) 5%, var(--color-ground));
+  overflow: hidden;
+}
+
+/* Dominant archetype block inside the hero card — no own card shell */
+.blueprint-hero-info .dominant-ten-god-badge {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 0;
+  padding-bottom: 0.6rem;
+}
+
+/* ─── Dominant Ten God Badge (standalone fallback + base styles) ─── */
 .dominant-ten-god-badge {
   display: flex;
   flex-direction: column;
@@ -1308,7 +1333,8 @@ select.input-cell-field {
 }
 
 .dtg-name {
-  font-size: 1rem;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--color-ink);
   line-height: 1.2;
@@ -1321,34 +1347,84 @@ select.input-cell-field {
   margin-left: 0.25rem;
 }
 
+/* Brief: body weight — purpose is to explain, not to display */
 .dtg-brief {
+  font-family: var(--font-body);
   font-size: 0.78rem;
+  font-weight: 400;
   color: var(--color-ash);
   line-height: 1.55;
-  margin-top: 0.15rem;
+  margin-top: 0.2rem;
 }
 
+/* ─── Hero Meta Trio — Day Master · Favorable · Zodiac ─── */
+.hero-meta-trio {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid color-mix(in srgb, var(--color-cobalt) 15%, transparent);
+}
+
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem 0.75rem;
+  border-right: 1px solid color-mix(in srgb, var(--color-cobalt) 15%, transparent);
+}
+.hero-meta-item:last-child { border-right: none; }
+
+/* Label: DM Mono stamp — purpose is to identify/classify */
+.hero-meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.46rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-cobalt);
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+/* Value: Outfit 700 — purpose is to be read at a glance */
+.hero-meta-value {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+/* ─── Decision Lens — sharp dark callout ─── */
+/* Purpose: sharp insight. Dark ink bg + cream text = maximum contrast editorial.
+   No softness. This is the app's most distinctive piece of content. */
 .decision-lens {
-  background: var(--color-ground);
-  border-radius: 2px;
-  padding: 0.9rem 1.1rem;
-  margin: 0.4rem 0 0.9rem;
-  border-left: 3px solid var(--color-psychic);
+  background: var(--color-ink);
+  border-radius: 0;
+  padding: 1rem 1.1rem;
+  margin: 0 0 1.25rem;
 }
 .decision-lens:empty { display: none; }
+
+/* Label: DM Mono — stamps the category in psychic purple on dark */
 .decision-lens-label {
   display: block;
+  font-family: var(--font-mono);
   font-size: 0.53rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 500;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-psychic);
   margin-bottom: 0.45rem;
 }
+
+/* Text: Outfit 400 body — purpose is to be READ, not displayed;
+   cream on dark for editorial contrast */
 .decision-lens-text {
-  font-size: 0.80rem;
-  line-height: 1.65;
-  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--color-paper);
   margin: 0;
 }
 
@@ -4151,6 +4227,7 @@ select.input-cell-field {
 .blueprint-reveal-card,
 .blueprint-detail-visual,
 .blueprint-meta-item,
+.blueprint-hero-info,
 .dominant-ten-god-badge,
 .profile-btn,
 .profile-sheet-panel,
@@ -4176,9 +4253,10 @@ select.input-cell-field {
 }
 
 /* ─── Targeted readability fixes ───────────────────────────────── */
+/* Tagline is now Outfit 900 display — full ink, no opacity dimming */
 #detail-tagline {
-  color: var(--color-ink) !important;
-  opacity: 0.75;
+  color: var(--color-ink);
+  opacity: 1;
 }
 
 /* ─── Structural labels: psychic purple ────────────────────────── */
