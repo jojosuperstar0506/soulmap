@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260227b" />
+  <link rel="stylesheet" href="styles.css?v=20260227c" />
   <!-- Vercel Analytics Web SDK -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
@@ -187,6 +187,34 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- GENERATING — Brand splash + loading interstitial              -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <section id="view-generating" class="view">
+
+    <!-- Phase A: Brand splash (no API call yet) -->
+    <div class="gen-splash" id="gen-splash">
+      <div class="gen-splash-phrase-wrap">
+        <p class="gen-splash-phrase" id="gen-splash-phrase"></p>
+      </div>
+      <button class="gen-cta" id="btn-gen-cta" type="button" hidden>
+        Reveal My Blueprint →
+      </button>
+    </div>
+
+    <!-- Phase B: Loading (shown after CTA tap, while API fetches) -->
+    <div class="gen-loading" id="gen-loading" hidden>
+      <div class="generating-emblem">
+        <span class="generating-star">✦</span>
+        <div class="generating-ring generating-ring-1"></div>
+        <div class="generating-ring generating-ring-2"></div>
+      </div>
+      <p class="generating-for" id="generating-for">Reading your chart…</p>
+      <p class="generating-phrase" id="generating-phrase"></p>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- MAIN APP (Tab Container) -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <section id="view-app" class="view">
@@ -249,77 +277,19 @@
         <!-- Five Elements Balance -->
         <div class="elements-bars" id="detail-elements-bars"></div>
 
-        <!-- Narrative -->
+        <!-- Narrative — compact card; full reading opens in bottom sheet -->
         <div class="divider-labeled">
           <span class="divider-label-text">Your Narrative</span>
         </div>
-        <div class="detail-sections">
-          <section class="your-narrative">
-            <div class="narrative-header">
-              <h2 class="narrative-main-title">Your reading</h2>
-              <span class="badge-current">AI · CLAUDE</span>
+        <div class="reading-card" id="reading-card" role="button" tabindex="0" aria-label="Open your reading">
+          <div class="reading-card-left">
+            <span class="reading-card-icon">✦</span>
+            <div>
+              <p class="reading-card-label">Your Reading <span class="badge-current" style="vertical-align:middle">AI · CLAUDE</span></p>
+              <p class="reading-card-preview" id="reading-card-preview">Tap to reveal your reading…</p>
             </div>
-            <!-- Placeholder shown until API narrative is available -->
-            <div class="narrative-placeholder" id="narrative-placeholder">
-              <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
-              <p class="narrative-placeholder-text">AI reading coming soon · Showing static blueprint below</p>
-            </div>
-
-            <p id="detail-core-essence" class="narrative-core-essence">—</p>
-
-            <h3 class="narrative-section-label">Your current season</h3>
-            <p id="detail-season" class="narrative-season">—</p>
-
-            <h3 class="narrative-section-label">From the classics</h3>
-            <blockquote class="narrative-classical" id="blockquote-classical" cite="">
-              <p id="detail-classical-text">—</p>
-              <footer id="detail-classical-source">—</footer>
-            </blockquote>
-
-            <h3 class="narrative-section-label">What this means for you</h3>
-            <div class="narrative-pillars">
-              <div class="narrative-pillar narrative-pillar--work">
-                <div class="narrative-pillar-head">
-                  <span class="narrative-pillar-symbol">◇</span>
-                  <div class="narrative-pillar-labels">
-                    <span class="narrative-pillar-en">Work</span>
-                    <span class="narrative-pillar-cn">事业</span>
-                  </div>
-                </div>
-                <p class="narrative-pillar-body" id="detail-work">—</p>
-              </div>
-              <div class="narrative-pillar narrative-pillar--love">
-                <div class="narrative-pillar-head">
-                  <span class="narrative-pillar-symbol">◎</span>
-                  <div class="narrative-pillar-labels">
-                    <span class="narrative-pillar-en">Love</span>
-                    <span class="narrative-pillar-cn">感情</span>
-                  </div>
-                </div>
-                <p class="narrative-pillar-body" id="detail-love">—</p>
-              </div>
-              <div class="narrative-pillar narrative-pillar--growth">
-                <div class="narrative-pillar-head">
-                  <span class="narrative-pillar-symbol">✦</span>
-                  <div class="narrative-pillar-labels">
-                    <span class="narrative-pillar-en">Growth</span>
-                    <span class="narrative-pillar-cn">成长</span>
-                  </div>
-                </div>
-                <p class="narrative-pillar-body" id="detail-growth">—</p>
-              </div>
-            </div>
-          </section>
-
-          <section class="narrative-concern" id="section-concern" hidden>
-            <h3>What's on your mind</h3>
-            <p id="detail-concern">—</p>
-          </section>
-
-          <p class="narrative-refresh-hint">
-            <button type="button" class="btn btn-ghost btn-sm" id="btn-refresh-narrative">Refresh</button>
-            <span class="narrative-version-tag" id="narrative-version-tag" title="Static MVP">v7</span>
-          </p>
+          </div>
+          <span class="reading-card-chevron">›</span>
         </div>
 
         <!-- Annual Arc / 流年 This Year -->
@@ -489,8 +459,85 @@
     </div>
   </div>
 
+  <!-- Reading Sheet — full narrative in a slide-up bottom panel -->
+  <div class="reading-sheet-overlay" id="reading-sheet-overlay" hidden aria-modal="true" role="dialog" aria-label="Your Reading">
+    <div class="reading-sheet">
+      <div class="reading-sheet-handle"></div>
+      <div class="reading-sheet-header">
+        <h2 class="reading-sheet-title">Your Reading</h2>
+        <button class="reading-sheet-close" id="btn-close-reading-sheet" aria-label="Close">&times;</button>
+      </div>
+      <div class="reading-sheet-body">
+        <div class="narrative-header">
+          <h2 class="narrative-main-title">Your reading</h2>
+          <span class="badge-current">AI · CLAUDE</span>
+        </div>
+        <!-- Placeholder shown until API narrative is available -->
+        <div class="narrative-placeholder" id="narrative-placeholder">
+          <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+          <p class="narrative-placeholder-text">Generating your reading…</p>
+        </div>
+
+        <p id="detail-core-essence" class="narrative-core-essence">—</p>
+
+        <h3 class="narrative-section-label">Your current season</h3>
+        <p id="detail-season" class="narrative-season">—</p>
+
+        <h3 class="narrative-section-label">From the classics</h3>
+        <blockquote class="narrative-classical" id="blockquote-classical" cite="">
+          <p id="detail-classical-text">—</p>
+          <footer id="detail-classical-source">—</footer>
+        </blockquote>
+
+        <h3 class="narrative-section-label">What this means for you</h3>
+        <div class="narrative-pillars">
+          <div class="narrative-pillar narrative-pillar--work">
+            <div class="narrative-pillar-head">
+              <span class="narrative-pillar-symbol">◇</span>
+              <div class="narrative-pillar-labels">
+                <span class="narrative-pillar-en">Work</span>
+                <span class="narrative-pillar-cn">事业</span>
+              </div>
+            </div>
+            <p class="narrative-pillar-body" id="detail-work">—</p>
+          </div>
+          <div class="narrative-pillar narrative-pillar--love">
+            <div class="narrative-pillar-head">
+              <span class="narrative-pillar-symbol">◎</span>
+              <div class="narrative-pillar-labels">
+                <span class="narrative-pillar-en">Love</span>
+                <span class="narrative-pillar-cn">感情</span>
+              </div>
+            </div>
+            <p class="narrative-pillar-body" id="detail-love">—</p>
+          </div>
+          <div class="narrative-pillar narrative-pillar--growth">
+            <div class="narrative-pillar-head">
+              <span class="narrative-pillar-symbol">✦</span>
+              <div class="narrative-pillar-labels">
+                <span class="narrative-pillar-en">Growth</span>
+                <span class="narrative-pillar-cn">成长</span>
+              </div>
+            </div>
+            <p class="narrative-pillar-body" id="detail-growth">—</p>
+          </div>
+        </div>
+
+        <section class="narrative-concern" id="section-concern" hidden>
+          <h3>What's on your mind</h3>
+          <p id="detail-concern">—</p>
+        </section>
+
+        <p class="narrative-refresh-hint">
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-refresh-narrative">Refresh</button>
+          <span class="narrative-version-tag" id="narrative-version-tag" title="Static MVP">v7</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
   <script src="content/wisdom-vault.js?v=6"></script>
   <script src="content/classical-bazi-excerpts.js?v=1"></script>
-  <script src="app.js?v=20260227b"></script>
+  <script src="app.js?v=20260227c"></script>
 </body>
 </html>

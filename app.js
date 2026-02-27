@@ -1463,33 +1463,48 @@
     // Hide the "AI reading coming soon" placeholder
     const placeholder = document.getElementById('narrative-placeholder');
     if (placeholder) placeholder.style.display = 'none';
+    // Update reading card preview
+    const previewEl = document.getElementById('reading-card-preview');
+    if (previewEl) {
+      const text = narrative.coreEssence || '';
+      previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to reveal your reading\u2026');
+    }
   }
 
   async function buildChart() {
     const chart = calculateBaZi(state.birthDate, state.shichen);
     chart.daYun = calculateDaYun(chart, state.birthDate, state.gender);
-    // Reset narrativeFromAPI so static fallback shows while API fetches
     setState({ chart, soulTypeIndex: chart.dayMaster, narrativeFromAPI: null });
     saveCurrentProfile();
-    // Update both header labels
     const nameEl = document.getElementById('profile-btn-name');
     if (nameEl) nameEl.textContent = state.profileName || 'My Chart';
     document.getElementById('app-user-type').textContent = SOUL_TYPES[state.soulTypeIndex].name;
+
+    // Pre-render blueprint in background (view-app not visible yet)
     renderAppBlueprint();
-    showView('view-app');
-    switchTab('blueprint');
-    // Fetch AI narrative in background (blueprint already shown with static fallback)
+
+    // Fetch AI narrative — loading phrases cycle while we wait
     const narrative = await fetchNarrativeFromAPI(chart);
+
+    generatingView.stop();
+
     if (narrative) {
       setState({ narrativeFromAPI: narrative });
-      saveCurrentProfile();         // cache the narrative so it's instant on next load
+      saveCurrentProfile();
       updateNarrativeSection(narrative);
     }
+
+    // Reveal blueprint
+    showView('view-app');
+    switchTab('blueprint');
   }
 
   function runGeneration() {
     trackEvent('blueprint_generated');
-    buildChart();
+    // Show brand splash first — no API call yet
+    showView('view-generating');
+    generatingView.startSplash(state.profileName);
+    // buildChart() fires when user taps #btn-gen-cta (wired in init())
   }
 
   // ─── Helper utilities ────────────────────────────────────────────
@@ -2336,6 +2351,12 @@
       setEl('detail-classical-source', (na.classicalSource || '').trim() || '—');
       const block = document.getElementById('blockquote-classical');
       if (block) block.style.display = na.classicalQuote ? '' : 'none';
+      // Update reading card preview with AI narrative
+      const previewEl = document.getElementById('reading-card-preview');
+      if (previewEl) {
+        const text = na.coreEssence || '';
+        previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to reveal your reading\u2026');
+      }
     } else {
       // Show placeholder + static fallback
       if (placeholder) placeholder.style.display = '';
@@ -2350,6 +2371,12 @@
         if (classical) {
           setEl('detail-classical-text',   classical.text);
           setEl('detail-classical-source', classical.source + (classical.sourceEn ? '  ' + classical.sourceEn : ''));
+        }
+        // Update reading card preview with static fallback
+        const previewEl = document.getElementById('reading-card-preview');
+        if (previewEl) {
+          const text = coreEssence || '';
+          previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to reveal your reading\u2026');
         }
       }
     }
@@ -3371,6 +3398,36 @@
     });
   }
 
+  // ─── Reading Sheet ────────────────────────────────────────────────
+  function initReadingSheet() {
+    const overlay  = document.getElementById('reading-sheet-overlay');
+    const card     = document.getElementById('reading-card');
+    const closeBtn = document.getElementById('btn-close-reading-sheet');
+    if (!overlay || !card) return;
+
+    function open() {
+      haptic('light');
+      overlay.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      overlay.classList.add('reading-sheet-overlay--closing');
+      overlay.addEventListener('animationend', () => {
+        overlay.classList.remove('reading-sheet-overlay--closing');
+        overlay.hidden = true;
+        document.body.style.overflow = '';
+      }, { once: true });
+    }
+
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+    closeBtn?.addEventListener('click', close);
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  }
+
   // ─── Profile Switcher ─────────────────────────────────────────────
   function renderProfileList() {
     const list     = document.getElementById('profile-list');
@@ -3494,6 +3551,99 @@
     set('email',       state.email || '');
   }
 
+  // ─── Generating View (Brand Splash + Loading Interstitial) ──────
+
+  const SPLASH_PHRASES = [
+    '3,000 years of reading.\nComing up.',
+    '518,400 unique life patterns.\nOne ancient system that knew you\nbefore you knew yourself.',
+    'From the oldest astronomical tradition\non earth \u2014 we show you what it looks like.',
+    'Ancient pattern.\nModern clarity.',
+    'Your birth hour carries\na frequency the ancients mapped.',
+  ];
+
+  const LOADING_PHRASES = [
+    'The ancient pillars are consulting\u2026',
+    'Reading the energy of your birth hour\u2026',
+    'Mapping your decade rhythms\u2026',
+    'Identifying your favorable elements\u2026',
+    'Tracing your path across the celestial map\u2026',
+    'The oracle draws from classical wisdom\u2026',
+    'A blueprint written before you arrived\u2026',
+  ];
+
+  function initGeneratingView() {
+    let phraseTimer = null;
+    let splashIdx   = 0;
+    let loadingIdx  = 0;
+
+    function retriggerAnim(el) {
+      el.style.animation = 'none';
+      void el.offsetWidth; // force reflow
+      el.style.animation  = '';
+    }
+
+    function startSplash(name) {
+      splashIdx = 0;
+      const splashEl = document.getElementById('gen-splash');
+      const loadEl   = document.getElementById('gen-loading');
+      const ctaBtn   = document.getElementById('btn-gen-cta');
+      if (!splashEl) return;
+      splashEl.hidden = false;
+      if (loadEl)  loadEl.hidden  = true;
+      if (ctaBtn)  ctaBtn.hidden  = true;
+      cycleSplash();
+    }
+
+    function cycleSplash() {
+      clearTimeout(phraseTimer);
+      const el     = document.getElementById('gen-splash-phrase');
+      const ctaBtn = document.getElementById('btn-gen-cta');
+      if (!el) return;
+      retriggerAnim(el);
+      el.textContent = SPLASH_PHRASES[splashIdx % SPLASH_PHRASES.length];
+      splashIdx++;
+      // After first phrase completes: reveal CTA, then keep cycling phrases
+      if (splashIdx === 1) {
+        phraseTimer = setTimeout(() => {
+          if (ctaBtn) ctaBtn.hidden = false;
+          phraseTimer = setTimeout(cycleSplash, 3500);
+        }, 3500);
+      } else {
+        phraseTimer = setTimeout(cycleSplash, 3500);
+      }
+    }
+
+    function startLoading(name) {
+      clearTimeout(phraseTimer);
+      loadingIdx = 0;
+      const splashEl = document.getElementById('gen-splash');
+      const loadEl   = document.getElementById('gen-loading');
+      const forEl    = document.getElementById('generating-for');
+      if (splashEl) splashEl.hidden = true;
+      if (loadEl)   loadEl.hidden   = false;
+      if (forEl)    forEl.textContent = name
+        ? 'Reading \u2018' + name + '\u2019s chart\u2026'
+        : 'Reading your chart\u2026';
+      cycleLoading();
+    }
+
+    function cycleLoading() {
+      clearTimeout(phraseTimer);
+      const el = document.getElementById('generating-phrase');
+      if (!el) return;
+      retriggerAnim(el);
+      el.textContent = LOADING_PHRASES[loadingIdx % LOADING_PHRASES.length];
+      loadingIdx++;
+      phraseTimer = setTimeout(cycleLoading, 2600);
+    }
+
+    function stop() { clearTimeout(phraseTimer); }
+
+    return { startSplash, startLoading, stop };
+  }
+
+  const generatingView = initGeneratingView(); // module-level — must init before init()
+
   // ─── Init ────────────────────────────────────────────────────────
   function init() {
     initLanding();
@@ -3505,6 +3655,17 @@
     initStillPoint();
     initRefreshNarrative();
     initProfileSwitcher();
+    initReadingSheet();
+
+    // Wire "Reveal My Blueprint" CTA inside #view-generating
+    const genCtaBtn = document.getElementById('btn-gen-cta');
+    if (genCtaBtn) {
+      genCtaBtn.addEventListener('click', () => {
+        haptic('medium');
+        generatingView.startLoading(state.profileName);
+        buildChart();
+      });
+    }
 
     // Migrate any legacy single-session → first named profile
     migrateOldSession();

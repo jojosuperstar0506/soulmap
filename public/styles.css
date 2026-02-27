@@ -673,6 +673,16 @@ blockquote {
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 1.25rem;
+  transition: box-shadow 0.25s ease, transform 0.2s var(--spring-smooth), border-color 0.2s ease;
+}
+.input-group:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(160, 32, 240, 0.1);
+}
+.input-group:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(160, 32, 240, 0.18);
+  border-color: rgba(160, 32, 240, 0.3);
 }
 
 /* ── Individual cell ── */
@@ -712,12 +722,13 @@ blockquote {
   color: rgba(10, 8, 20, 0.45);
   margin-bottom: 0.25rem;
   cursor: default;
-  transition: color 0.15s ease;
+  transition: color 0.2s ease, letter-spacing 0.2s var(--spring-smooth);
 }
 
-/* Label turns psychic purple when cell is focused */
+/* Label turns psychic purple + expands when cell is focused — "float" feel */
 .input-cell:focus-within .input-cell-label {
   color: var(--color-psychic);
+  letter-spacing: 0.1em;
 }
 
 /* ── "Optional" badge beside label ── */
@@ -822,6 +833,138 @@ select.input-cell-field {
 }
 .btn-step-cta--generate:hover { background: #c42e22; }
 
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* GENERATING VIEW — Brand splash + loading interstitial          */
+/* ═══════════════════════════════════════════════════════════════ */
+
+#view-generating.view-active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Phase A: Brand splash ─── */
+.gen-splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem 1.5rem;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+  min-height: 60vh;
+}
+
+.gen-splash-phrase-wrap {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gen-splash-phrase {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  font-weight: 700;
+  color: var(--color-white-bone);
+  line-height: 1.4;
+  white-space: pre-line;
+  animation: gen-phrase-fade 0.6s var(--spring-smooth);
+}
+
+.gen-cta {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  min-height: 54px;
+  padding: 0 1.5rem;
+  background: var(--color-psychic);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  animation: gen-phrase-fade 0.5s var(--spring-smooth);
+}
+.gen-cta:hover { background: #8a1ad0; }
+.gen-cta:active { opacity: 0.85; transform: scale(0.99); }
+
+/* ─── Phase B: Loading state ─── */
+.gen-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 320px;
+  text-align: center;
+}
+
+.generating-emblem {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.generating-star {
+  font-size: 2rem;
+  color: var(--color-psychic);
+  z-index: 2;
+  position: relative;
+  animation: gen-star-pulse 2.4s ease-in-out infinite;
+}
+
+.generating-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--color-psychic);
+  animation: gen-ring-expand 2.4s ease-out infinite;
+}
+.generating-ring-2 { animation-delay: 1.2s; }
+
+@keyframes gen-star-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.1); opacity: 0.7; }
+}
+@keyframes gen-ring-expand {
+  0%   { transform: scale(0.5); opacity: 0.7; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+@keyframes gen-phrase-fade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.generating-for {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
+}
+
+.generating-phrase {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--color-ash);
+  line-height: 1.6;
+  min-height: 3rem;
+  animation: gen-phrase-fade 0.5s var(--spring-smooth);
+}
 
 /* ═══════════════════════════════════════════════════════════════ */
 /* BLUEPRINT REVEAL                                                */
@@ -3452,6 +3595,150 @@ select.input-cell-field {
   margin-top: 0.5rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* READING CARD + SHEET                                           */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Compact tappable reading card (blueprint tab summary) ─── */
+.reading-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.1rem;
+  cursor: pointer;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 2px;
+  margin-bottom: 1rem;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s var(--spring-smooth);
+  -webkit-tap-highlight-color: transparent;
+}
+.reading-card:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(160,32,240,0.4);
+  transform: translateY(-1px);
+}
+.reading-card:active { transform: scale(0.99); opacity: 0.85; }
+
+.reading-card-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+.reading-card-icon {
+  font-size: 1.1rem;
+  color: var(--color-psychic);
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+.reading-card-label {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-psychic);
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.reading-card-preview {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.83rem;
+  color: var(--color-ash);
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.reading-card-chevron {
+  font-size: 1.5rem;
+  color: var(--color-ghost);
+  flex-shrink: 0;
+  padding-left: 0.5rem;
+  line-height: 1;
+}
+
+/* ─── Reading bottom sheet ─── */
+.reading-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  background: rgba(10, 10, 15, 0.72);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: vaultModalIn 0.22s ease;
+}
+.reading-sheet-overlay[hidden] { display: none; }
+.reading-sheet-overlay--closing {
+  animation: vaultModalOut 0.25s var(--spring-smooth) forwards;
+}
+
+.reading-sheet {
+  width: 100%;
+  max-width: 580px;
+  max-height: 88vh;
+  background: var(--color-void);
+  border-radius: 14px 14px 0 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  animation: vaultCardUp 0.3s var(--spring-smooth);
+}
+.reading-sheet::-webkit-scrollbar { display: none; }
+
+.reading-sheet-overlay--closing .reading-sheet {
+  animation: vaultCardDown 0.25s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+
+.reading-sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+  margin: 0.75rem auto 0;
+}
+
+.reading-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem 0.75rem;
+  position: sticky;
+  top: 0;
+  background: var(--color-void);
+  z-index: 1;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.reading-sheet-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-white-bone);
+}
+.reading-sheet-close {
+  background: none;
+  border: none;
+  color: var(--color-ghost);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.15s ease;
+  line-height: 1;
+}
+.reading-sheet-close:hover { color: var(--color-white-bone); }
+
+.reading-sheet-body {
+  padding: 1.25rem 1.25rem 2rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════ */
