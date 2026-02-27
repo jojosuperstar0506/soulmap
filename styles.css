@@ -1312,15 +1312,18 @@ select.input-cell-field {
   border-radius: 2px;
   background: var(--color-ground);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Dominant archetype block inside the hero card — no own card shell */
 .blueprint-hero-info .dominant-ten-god-badge {
   background: transparent;
   border: none;
+  border-bottom: 1px solid var(--color-border);
   border-radius: 0;
   margin-bottom: 0;
-  padding: 0.85rem 1rem 0.6rem;
+  padding: 0.85rem 1rem 0.8rem;
 }
 
 /* ─── Dominant Ten God Badge (standalone fallback + base styles) ─── */
@@ -1369,20 +1372,18 @@ select.input-cell-field {
   margin-top: 0.2rem;
 }
 
-/* ─── Hero Meta Trio — Day Master · Favorable · Zodiac ─── */
-.hero-meta-trio {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--color-border);
-}
+/* ─── Hero Meta items — stacked vertical list ─── */
+/* .hero-meta-trio is no longer rendered; kept for reference only */
+.hero-meta-trio { display: none; }
 
 .hero-meta-item {
   display: flex;
   flex-direction: column;
-  padding: 0.6rem 0.75rem;
-  border-right: 1px solid var(--color-border);
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  width: 100%;
 }
-.hero-meta-item:last-child { border-right: none; }
+.hero-meta-item:last-child { border-bottom: none; }
 
 /* Label: DM Mono stamp — purpose is to identify/classify */
 .hero-meta-label {
@@ -1399,44 +1400,55 @@ select.input-cell-field {
 /* Value: Outfit 700 — purpose is to be read at a glance */
 .hero-meta-value {
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--color-ink);
   letter-spacing: -0.01em;
   line-height: 1.25;
+  margin-bottom: 0.1rem;
 }
 
-/* ─── Decision Lens — sharp dark callout ─── */
-/* Purpose: sharp insight. Dark ink bg + cream text = maximum contrast editorial.
-   No softness. This is the app's most distinctive piece of content. */
+/* Brief: Outfit 400 ghost — one-line explanation below the value */
+.hero-meta-brief {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--color-ghost);
+  line-height: 1.4;
+  margin-top: 0.1rem;
+}
+
+/* ─── Decision Lens — unified light callout (same register as hero-meta-item) ─── */
+/* Lives inside .blueprint-hero-info as a hero-meta-item; inherits its layout.
+   Only overrides: remove extra margin/bg (hero-meta-item already handles border/pad). */
 .decision-lens {
-  background: var(--color-ink);
+  background: transparent;
   border-radius: 0;
-  padding: 1rem 1.1rem;
-  margin: 0 0 1.25rem;
+  margin: 0;
+  /* padding/border-bottom handled by .hero-meta-item */
 }
 .decision-lens:empty { display: none; }
 
-/* Label: DM Mono — stamps the category in psychic purple on dark */
+/* Label: DM Mono — cobalt stamp, matches other hero-meta-labels */
 .decision-lens-label {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.53rem;
+  font-size: 0.46rem;
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--color-psychic);
-  margin-bottom: 0.45rem;
+  color: var(--color-cobalt);
+  margin-bottom: 0.2rem;
 }
 
-/* Text: Outfit 400 body — purpose is to be READ, not displayed;
-   cream on dark for editorial contrast */
+/* Text: Outfit 400 body on light bg — readable, not editorial-dark */
 .decision-lens-text {
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: 0.84rem;
-  line-height: 1.7;
-  color: var(--color-paper);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--color-ash);
   margin: 0;
 }
 
@@ -1948,15 +1960,20 @@ select.input-cell-field {
   padding: 0.15rem 0.55rem;
 }
 
+/* Override legacy ID rule — tagline is now Outfit 900 display, not Playfair quote */
 #detail-tagline {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 0.875rem;
-  color: var(--color-ash);
-  margin: 0 0 1rem;
-  padding: 0.65rem 0.9rem;
-  border-left: 2px solid var(--color-vermillion);
-  line-height: 1.6;
+  font-family: var(--font-body) !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+  font-size: clamp(1.05rem, 4.5vw, 1.45rem) !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.2 !important;
+  color: var(--color-ink) !important;
+  text-align: center !important;
+  margin: 0.5rem 0 1.5rem !important;
+  padding: 0 0.5rem !important;
+  border: none !important;
+  opacity: 1 !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════ */
