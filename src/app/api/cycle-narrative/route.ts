@@ -6,6 +6,7 @@ const client = new Anthropic({
 });
 
 interface CycleRequestBody {
+  lang?: string;
   chart?: {
     dayMaster?: string;
     dayMasterEl?: string;
@@ -53,6 +54,9 @@ const STAGE_LABELS: Record<string, string> = {
 };
 
 function buildCyclePrompt(body: CycleRequestBody): string {
+  const langInstruction = body.lang === 'zh'
+    ? '\n\nIMPORTANT: Respond entirely in Simplified Chinese (简体中文). All JSON field values must be in Chinese. Use natural, warm prose.'
+    : '';
   const { chart = {}, cycle = {} } = body;
   const dmMetaphor = DAY_MASTER_METAPHORS[chart.dayMaster || ''] || chart.dayMaster || 'unknown';
   const tenGodLabel = TEN_GOD_NAMES[cycle.stemTenGod || ''] || cycle.stemTenGod || '—';
@@ -99,7 +103,7 @@ Generate a JSON object with EXACTLY these fields:
 
 TONE: Warm, direct, insightful — like a wise friend. Never catastrophize. If scores are low, frame as "demanding" not "terrible." Always point toward what this season builds for the future.
 
-Return ONLY the JSON object, no other text.`;
+Return ONLY the JSON object, no other text.` + langInstruction;
 }
 
 export async function POST(req: NextRequest) {

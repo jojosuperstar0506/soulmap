@@ -43,6 +43,436 @@
     } catch (_) {}
   }
 
+  // ─── Internationalisation (i18n) ─────────────────────────────────
+  const I18N = {
+    en: {
+      // Landing
+      landing_tagline:       'Ancient Wisdom Meets Modern Navigation',
+      landing_stat1_label:   'years of ancient wisdom',
+      landing_stat2_label:   'unique life patterns',
+      landing_sub:           "From the oldest astronomical tradition on earth \u2014 it doesn\u2019t predict the future. It maps the terrain, so you know when to climb and when to rest.",
+      landing_cta:           'See My Blueprint',
+      // Onboarding
+      onboard_step1_title:   'Your Birth Chart',
+      onboard_step2_title:   'Your Life Context',
+      onboard_step1_desc:    'BaZi is anchored to your exact solar birth timestamp \u2014 precise enough to map your life in decade-long phases.',
+      onboard_step2_desc:    'A few more details help the AI speak to where you actually are right now.',
+      onboard_back_label:    'Back',
+      onboard_name_label:    'Name',
+      onboard_name_ph:       'e.g. Max, Mom, Sarah\u2026',
+      onboard_dob_label:     'Date of Birth',
+      onboard_time_label:    'Time of Birth',
+      onboard_time_hint:     'Not sure? Pick the closest.',
+      onboard_time_ph:       'Select time of birth',
+      onboard_gender_label:  'Gender at Birth',
+      onboard_gender_hint:   'Used for Luck Pillar direction.',
+      onboard_gender_ph:     'Select',
+      onboard_gender_male:   'Male',
+      onboard_gender_female: 'Female',
+      onboard_occ_label:     'Occupation',
+      onboard_occ_ph:        'Select',
+      onboard_occ_student:   'Student',
+      onboard_occ_pro:       'Professional',
+      onboard_occ_creative:  'Creative',
+      onboard_occ_entre:     'Entrepreneur',
+      onboard_occ_between:   'Between Things',
+      onboard_occ_other:     'Other',
+      onboard_rel_label:     'Relationship Status',
+      onboard_rel_ph:        'Select',
+      onboard_rel_single:    'Single',
+      onboard_rel_dating:    'Dating',
+      onboard_rel_in:        'In a Relationship',
+      onboard_rel_married:   'Married',
+      onboard_rel_comp:      "It\u2019s Complicated",
+      onboard_rel_prefer:    'Prefer Not to Say',
+      onboard_concern_label: "What\u2019s on your mind?",
+      onboard_concern_opt:   'Optional',
+      onboard_concern_ph:    'e.g. Am I on the right path? Career, love, purpose\u2026',
+      onboard_email_label:   'Email',
+      onboard_email_opt:     'Optional',
+      onboard_email_hint:    'Get updates and early access.',
+      onboard_email_ph:      'you@example.com',
+      onboard_btn_continue:  'Continue \u2192',
+      onboard_btn_generate:  'Generate My Blueprint \u2192',
+      // Tabs
+      tab_blueprint: 'Blueprint', tab_oracle: 'Oracle',
+      tab_vault: 'Wisdom Vault', tab_spark: 'Spark', tab_still: 'Still',
+      // Blueprint
+      bp_divider_narrative:  'Your Narrative',
+      bp_divider_pillars:    '\u56db\u67f1 \u00b7 Four Pillars',
+      bp_divider_annual:     '\u6d41\u5e74 \u00b7 This Year',
+      bp_divider_seasons:    '\u5927\u8fd0 \u00b7 Life Seasons',
+      bp_divider_energy:     'Energy per Season',
+      bp_reading_card_label: '\u2726 Tap to get your cosmic reading',
+      bp_reveal_btn:         '\u2726 Reveal Your Life Journey \u2192',
+      bp_reveal_hint:        'Life Seasons \u00b7 Lifetime Arc \u00b7 Energy Charts',
+      // Oracle
+      oracle_placeholder:        'Your chart is loaded. Tap a question above or ask your own \u2014 Claude will answer with your BaZi context.',
+      oracle_leave_warning:      'Answers clear when you leave this tab \u2014 tap \ud83d\udd16 Save on any reply to keep it.',
+      oracle_input_ph:           'Ask the Oracle\u2026',
+      oracle_send_btn:           'Send',
+      oracle_templates_header:   'Deep-Dive Readings',
+      oracle_error:              'The Oracle is unavailable right now. Please try again in a moment.',
+      // Vault
+      vault_seg_foryou: '\u2726 For You', vault_seg_theme: 'Theme', vault_seg_tradition: 'Tradition',
+      vault_save_btn: '\u2726 Save', vault_copy_btn: 'Copy', vault_copied: '\u2713 Copied',
+      // Spark
+      spark_streak:   '\u2726 {n} days of awareness',
+      spark_title:    "Today\u2019s Spark",
+      spark_done_btn: 'I reflected today',
+      spark_done_complete: 'Done! See you tomorrow.',
+      // Stillpoint
+      stillpoint_intro: 'Guided meditations matched to your elemental balance. Choose by element or by need.',
+      // Profile sheet
+      profile_sheet_title: 'Switch Profile',
+      profile_add_btn:     '+ Add new profile',
+      profile_lang_btn:    'Language / \u8bed\u8a00',
+      // Reading sheet
+      reading_sheet_title:   'Your Reading',
+      reading_generating:    'Generating your reading\u2026',
+      reading_personalized:  '\u2726 Personalized for you',
+      reading_reveal:        'Reveal your unique reading',
+      reading_current_season: 'Your current season',
+      reading_classics:       'From the classics',
+      reading_means:          'What this means for you',
+      reading_concern_title:  "What\u2019s on your mind",
+      reading_refresh_btn:    'Refresh',
+      // Generating view
+      loading_for_name:  "Reading \u2018{name}\u2019s chart\u2026",
+      loading_generic:   'Reading your chart\u2026',
+      // Arrays
+      LOADING_PHRASES: [
+        'The ancient pillars are consulting\u2026',
+        'Reading the energy of your birth hour\u2026',
+        'Mapping your decade rhythms\u2026',
+        'Identifying your favorable elements\u2026',
+        'Tracing your path across the celestial map\u2026',
+        'The oracle draws from classical wisdom\u2026',
+        'A blueprint written before you arrived\u2026',
+      ],
+      SPLASH_PHRASES: [
+        '3,000 years of reading.\nComing up.',
+        '518,400 unique life patterns.\nOne ancient system that knew you\nbefore you knew yourself.',
+        'From the oldest astronomical tradition\non earth \u2014 we show you what it looks like.',
+        'Ancient pattern.\nModern clarity.',
+        'Your birth hour carries\na frequency the ancients mapped.',
+      ],
+      SPARK_PROMPTS: [
+        'What are you holding onto that no longer serves you?',
+        'Who made you feel seen today?',
+        "What would you do if you weren\u2019t afraid?",
+        'Where did you find a moment of peace today?',
+        'What do you need to forgive yourself for?',
+      ],
+      SPARK_PRACTICES: [
+        'Take 5 breaths: count to 4 on each inhale and exhale.',
+        "Name 3 things you\u2019re grateful for \u2014 one for body, mind, and spirit.",
+        'Notice 5 things you can see, 4 you can touch, 3 you can hear.',
+      ],
+      SOUL_TYPES: [
+        { name: 'The Pioneer',  tagline: 'Tall tree \u2014 growth, ambition, upward drive. You build and lead with clarity.' },
+        { name: 'The Weaver',   tagline: 'Vine and flower \u2014 flexible, graceful, adaptive. You connect and nurture.' },
+        { name: 'The Radiant',  tagline: 'Sun \u2014 warmth, visibility, leadership. You light the way for others.' },
+        { name: 'The Luminary', tagline: 'Candle and star \u2014 gentle light, insight, intimacy. You see what others miss.' },
+        { name: 'The Mountain', tagline: 'Mountain \u2014 stability, reliability, immovable. You are the foundation.' },
+        { name: 'The Garden',   tagline: 'Fertile soil \u2014 nurturing, receptive, transformative. You help things grow.' },
+        { name: 'The Blade',    tagline: 'Sword \u2014 decisive, reforming, sharp. You cut through confusion.' },
+        { name: 'The Jewel',    tagline: 'Gem \u2014 refined, precious, sensitive. You value quality and depth.' },
+        { name: 'The Ocean',    tagline: 'Ocean \u2014 powerful, flowing, unstoppable. You adapt and persist.' },
+        { name: 'The Mist',     tagline: 'Still water runs deep. You absorb everything, reflecting the world with quiet clarity.' },
+      ],
+      ANNUAL_INSIGHTS: {
+        architect:  'Architect energy opens formal recognition \u2014 push for structure and clarity this year.',
+        harvest:    'Harvest star is active \u2014 patient effort compounds. Relationships become wealth channels.',
+        windfall:   'Windfall stirs \u2014 stay open to unexpected opportunity outside your usual path.',
+        challenger: 'Challenger pressure forges you. Channel friction into output, not reaction.',
+        muse:       'Muse energy flows \u2014 creative and expressive work gains real traction.',
+        maverick:   "Maverick sparks disruption. Question what no longer fits; don\u2019t defend the old.",
+        guardian:   'Guardian wraps this year in support. Lean on mentors \u2014 they will hold.',
+        mystic:     'Mystic depth deepens. Quiet insight arrives. Protect your inner space.',
+        mirror:     'Mirror energy brings peers into focus. Choose your circle with care.',
+        shadow:     'Shadow year: watch for risk escalation. Bold moves carry real downside.',
+        _default:   'A year of steady unfolding \u2014 tend to what matters most.',
+      },
+      ORACLE_TEMPLATES: [
+        { icon: '\u26a1', title: 'Career Crossroads',  desc: 'Work aligned with your fundamental nature' },
+        { icon: '\u25ce',  title: 'Relationship Lens',  desc: 'Love patterns and what you attract' },
+        { icon: '\u25c9',  title: '{year} Reading',     desc: 'What this year activates in your chart' },
+        { icon: '\u25d0',  title: 'Shadow Patterns',    desc: 'Recurring blind spots working against you' },
+        { icon: '\u2696',  title: 'Timing a Leap',      desc: 'Is this season right for a bold change?' },
+        { icon: '\u2726',  title: 'Health & Vitality',  desc: 'Your constitution and energy rhythms' },
+      ],
+      THEME_LABELS: {
+        healing: 'Healing & Renewal', courage: 'Courage & Strength', clarity: 'Clarity & Truth',
+        love: 'Love & Belonging', purpose: 'Purpose & Calling', stillness: 'Stillness & Peace',
+        resilience: 'Resilience & Endurance', change: 'Change & Letting Go',
+      },
+      VAULT_THEME_PILLS: [
+        { value: 'healing', label: 'Healing' }, { value: 'courage', label: 'Courage' },
+        { value: 'clarity', label: 'Clarity' }, { value: 'love', label: 'Love' },
+        { value: 'purpose', label: 'Purpose' }, { value: 'stillness', label: 'Stillness' },
+        { value: 'resilience', label: 'Resilience' }, { value: 'change', label: 'Change' },
+      ],
+      VAULT_TRADITION_PILLS: [
+        { value: 'daoism', label: 'Daoism' }, { value: 'buddhism', label: 'Buddhism' },
+        { value: 'stoicism', label: 'Stoicism' }, { value: 'christianity', label: 'Christianity' },
+        { value: 'judaism', label: 'Judaism' }, { value: 'islam', label: 'Islam' },
+        { value: 'confucianism', label: 'Confucianism' }, { value: 'sufi', label: 'Sufi' },
+        { value: 'greek', label: 'Greek' }, { value: 'vedic', label: 'Vedic' },
+        { value: 'chinese', label: 'I Ching' }, { value: 'saved', label: 'Saved' },
+      ],
+      MEDITATIONS: [
+        { icon: '\ud83e\udeb5', title: 'Wood \u2014 Growth & Vision',     desc: 'Visualization of roots and rising energy. 5\u201310 min.' },
+        { icon: '\ud83d\udd25', title: 'Fire \u2014 Warmth & Connection', desc: 'Heart-centered warmth. For when you feel disconnected.' },
+        { icon: '\ud83d\uddff', title: 'Earth \u2014 Grounding',          desc: 'Body scan and earth connection. For anxiety.' },
+        { icon: '\ud83e\ude99', title: 'Metal \u2014 Release & Clarity',  desc: 'Breath-focused, letting go. For clutter or indecision.' },
+        { icon: '\ud83d\udca7', title: 'Water \u2014 Flow & Surrender',   desc: 'Fluid movement visualization. For when you feel stuck.' },
+        { icon: '\u25ce',  title: 'Before a Big Decision',      desc: 'Grounding + clarity. 10 min.' },
+      ],
+    },
+
+    zh: {
+      // Landing
+      landing_tagline:       '\u53e4\u8001\u667a\u6167\uff0c\u7167\u4eae\u5f53\u4e0b',
+      landing_stat1_label:   '\u5e74\u7684\u53e4\u8001\u4f20\u627f',
+      landing_stat2_label:   '\u79cd\u72ec\u7279\u547d\u8fd0\u683c\u5c40',
+      landing_sub:           '\u6765\u81ea\u5730\u7403\u4e0a\u6700\u53e4\u8001\u7684\u661f\u8c61\u4f20\u7edf\u2014\u2014\u5b83\u4e0d\u9884\u6d4b\u672a\u6765\uff0c\u800c\u662f\u7ed8\u5236\u4eba\u751f\u5730\u5f62\uff0c\u8ba9\u4f60\u77e5\u9053\u4f55\u65f6\u6500\u767b\uff0c\u4f55\u65f6\u6b47\u606f\u3002',
+      landing_cta:           '\u67e5\u770b\u6211\u7684\u547d\u76d8',
+      // Onboarding
+      onboard_step1_title:   '\u4f60\u7684\u547d\u76d8',
+      onboard_step2_title:   '\u4f60\u7684\u4eba\u751f\u73b0\u72b6',
+      onboard_step1_desc:    '\u516b\u5b57\u4ee5\u4f60\u51fa\u751f\u7684\u7cbe\u786e\u592a\u9633\u65f6\u523b\u4e3a\u57fa\u7840\u2014\u2014\u7cbe\u786e\u5230\u8db3\u4ee5\u7528\u5341\u5e74\u4e3a\u5355\u4f4d\u7ed8\u5236\u4f60\u7684\u4eba\u751f\u8f68\u8ff9\u3002',
+      onboard_step2_desc:    '\u591a\u4e86\u89e3\u4e00\u4e9b\u4f60\u73b0\u5728\u7684\u72b6\u6001\uff0cAI\u624d\u80fd\u771f\u6b63\u4e0e\u4f60\u5f53\u4e0b\u6240\u5904\u7684\u4f4d\u7f6e\u5bf9\u8bdd\u3002',
+      onboard_back_label:    '\u8fd4\u56de',
+      onboard_name_label:    '\u59d3\u540d',
+      onboard_name_ph:       '\u4f8b\u5982\uff1a\u5c0f\u660e\u3001\u5988\u5988\u3001Sarah\u2026',
+      onboard_dob_label:     '\u51fa\u751f\u65e5\u671f',
+      onboard_time_label:    '\u51fa\u751f\u65f6\u8fb0',
+      onboard_time_hint:     '\u4e0d\u786e\u5b9a\uff1f\u9009\u6700\u63a5\u8fd1\u7684\u3002',
+      onboard_time_ph:       '\u9009\u62e9\u51fa\u751f\u65f6\u8fb0',
+      onboard_gender_label:  '\u51fa\u751f\u6027\u522b',
+      onboard_gender_hint:   '\u7528\u4e8e\u786e\u5b9a\u5927\u8fd0\u987a\u9006\u65b9\u5411\u3002',
+      onboard_gender_ph:     '\u8bf7\u9009\u62e9',
+      onboard_gender_male:   '\u7537',
+      onboard_gender_female: '\u5973',
+      onboard_occ_label:     '\u804c\u4e1a',
+      onboard_occ_ph:        '\u8bf7\u9009\u62e9',
+      onboard_occ_student:   '\u5b66\u751f',
+      onboard_occ_pro:       '\u804c\u573a\u4eba',
+      onboard_occ_creative:  '\u521b\u610f\u4ece\u4e1a\u8005',
+      onboard_occ_entre:     '\u521b\u4e1a\u8005',
+      onboard_occ_between:   '\u8fc7\u6e21\u671f\u4e2d',
+      onboard_occ_other:     '\u5176\u4ed6',
+      onboard_rel_label:     '\u611f\u60c5\u72b6\u6001',
+      onboard_rel_ph:        '\u8bf7\u9009\u62e9',
+      onboard_rel_single:    '\u5355\u8eab',
+      onboard_rel_dating:    '\u7ea6\u4f1a\u4e2d',
+      onboard_rel_in:        '\u604b\u7231\u4e2d',
+      onboard_rel_married:   '\u5df2\u5a5a',
+      onboard_rel_comp:      '\u5173\u7cfb\u590d\u6742',
+      onboard_rel_prefer:    '\u4e0d\u4fbf\u900f\u9732',
+      onboard_concern_label: '\u6700\u8fd1\u5728\u60f3\u4ec0\u4e48\uff1f',
+      onboard_concern_opt:   '\u9009\u586b',
+      onboard_concern_ph:    '\u4f8b\u5982\uff1a\u6211\u8d70\u5728\u6b63\u786e\u7684\u8def\u4e0a\u5417\uff1f\u4e8b\u4e1a\u3001\u611f\u60c5\u3001\u4eba\u751f\u65b9\u5411\u2026',
+      onboard_email_label:   '\u90ae\u7b71',
+      onboard_email_opt:     '\u9009\u586b',
+      onboard_email_hint:    '\u83b7\u53d6\u66f4\u65b0\u548c\u65e9\u671f\u4f53\u9a8c\u8d44\u683c\u3002',
+      onboard_email_ph:      'you@example.com',
+      onboard_btn_continue:  '\u7ee7\u7eed \u2192',
+      onboard_btn_generate:  '\u751f\u6210\u6211\u7684\u547d\u76d8\u84dd\u56fe \u2192',
+      // Tabs
+      tab_blueprint: '\u547d\u76d8', tab_oracle: '\u5360\u95ee',
+      tab_vault: '\u667a\u6167\u5b9d\u5e93', tab_spark: '\u65e5\u8bfe', tab_still: '\u9759\u5b9a',
+      // Blueprint
+      bp_divider_narrative:  '\u547d\u4e3b\u53d9\u4e8b',
+      bp_divider_pillars:    '\u56db\u67f1 \u00b7 Four Pillars',
+      bp_divider_annual:     '\u6d41\u5e74 \u00b7 This Year',
+      bp_divider_seasons:    '\u5927\u8fd0 \u00b7 Life Seasons',
+      bp_divider_energy:     '\u5404\u8fd0\u80fd\u91cf',
+      bp_reading_card_label: '\u2726 \u70b9\u51fb\u83b7\u53d6\u4f60\u7684\u6df1\u5ea6\u89e3\u8bfb',
+      bp_reveal_btn:         '\u2726 \u5c55\u5f00\u4f60\u7684\u4eba\u751f\u8f68\u8ff9 \u2192',
+      bp_reveal_hint:        '\u5927\u8fd0 \u00b7 \u4eba\u751f\u5f27\u7ebf \u00b7 \u80fd\u91cf\u56fe',
+      // Oracle
+      oracle_placeholder:      '\u4f60\u7684\u547d\u76d8\u5df2\u52a0\u8f7d\u3002\u70b9\u51fb\u4e0a\u65b9\u95ee\u9898\uff0c\u6216\u81ea\u7531\u63d0\u95ee\u2014\u2014AI\u5c06\u7ed3\u5408\u4f60\u7684\u516b\u5b57\u4e3a\u4f60\u89e3\u7b54\u3002',
+      oracle_leave_warning:    '\u79bb\u5f00\u6b64\u9875\u9762\u540e\uff0c\u5bf9\u8bdd\u5c06\u6e05\u7a7a\u2014\u2014\u70b9\u51fb\u56de\u590d\u4e0a\u7684 \ud83d\udd16 \u4fdd\u5b58 \u5373\u53ef\u7559\u5b58\u3002',
+      oracle_input_ph:         '\u5411\u5360\u95ee\u5b98\u63d0\u95ee\u2026',
+      oracle_send_btn:         '\u53d1\u9001',
+      oracle_templates_header: '\u6df1\u5ea6\u89e3\u8bfb',
+      oracle_error:            '\u5360\u95ee\u5b98\u6682\u65f6\u65e0\u6cd5\u56de\u5e94\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5\u3002',
+      // Vault
+      vault_seg_foryou: '\u2726 \u4e3a\u4f60\u7cbe\u9009', vault_seg_theme: '\u4e3b\u9898', vault_seg_tradition: '\u4f20\u7edf',
+      vault_save_btn: '\u2726 \u6536\u85cf', vault_copy_btn: '\u590d\u5236', vault_copied: '\u2713 \u5df2\u590d\u5236',
+      // Spark
+      spark_streak:   '\u2726 \u5df2\u8fde\u7eed\u89c9\u77e5 {n} \u5929',
+      spark_title:    '\u4eca\u65e5\u4e00\u8bfe',
+      spark_done_btn: '\u4eca\u65e5\u5df2\u7701\u601d',
+      spark_done_complete: '\u5f88\u597d\uff01\u660e\u5929\u89c1\u3002',
+      // Stillpoint
+      stillpoint_intro: '\u6839\u636e\u4f60\u7684\u4e94\u884c\u5e73\u8861\u5339\u914d\u7684\u5f15\u5bfc\u51a5\u60f3\uff0c\u6309\u5143\u7d20\u6216\u6309\u9700\u6c42\u9009\u62e9\u3002',
+      // Profile sheet
+      profile_sheet_title: '\u5207\u6362\u6863\u6848',
+      profile_add_btn:     '+ \u6dfb\u52a0\u65b0\u6863\u6848',
+      profile_lang_btn:    'Language / \u8bed\u8a00',
+      // Reading sheet
+      reading_sheet_title:    '\u4f60\u7684\u89e3\u8bfb',
+      reading_generating:     '\u6b63\u5728\u751f\u6210\u4f60\u7684\u89e3\u8bfb\u2026',
+      reading_personalized:   '\u2726 \u4e13\u5c5e\u4e8e\u4f60',
+      reading_reveal:         '\u5c55\u5f00\u4f60\u7684\u4e13\u5c5e\u89e3\u8bfb',
+      reading_current_season: '\u4f60\u5f53\u524d\u7684\u8fd0\u7a0b',
+      reading_classics:       '\u53e4\u5178\u540d\u53e5',
+      reading_means:          '\u8fd9\u5bf9\u4f60\u610f\u5473\u7740\u4ec0\u4e48',
+      reading_concern_title:  '\u4f60\u5fc3\u4e2d\u6240\u60f3',
+      reading_refresh_btn:    '\u91cd\u65b0\u751f\u6210',
+      // Generating view
+      loading_for_name: '\u6b63\u5728\u89e3\u8bfb\u300c{name}\u300d\u7684\u547d\u76d8\u2026',
+      loading_generic:  '\u6b63\u5728\u89e3\u8bfb\u4f60\u7684\u547d\u76d8\u2026',
+      // Arrays
+      LOADING_PHRASES: [
+        '\u53e4\u8001\u7684\u56db\u67f1\u6b63\u5728\u53c2\u7814\u4e2d\u2026',
+        '\u6b63\u5728\u89e3\u8bfb\u4f60\u51fa\u751f\u65f6\u8fb0\u7684\u80fd\u91cf\u2026',
+        '\u6b63\u5728\u7ed8\u5236\u4f60\u7684\u5341\u5e74\u5927\u8fd0\u8282\u5f8b\u2026',
+        '\u6b63\u5728\u8bc6\u522b\u4f60\u7684\u559c\u7528\u795e\u2026',
+        '\u6b63\u5728\u6cbf\u5929\u8c61\u56fe\u8ffd\u6e06\u4f60\u7684\u8f68\u8ff9\u2026',
+        '\u5360\u95ee\u5b98\u6b63\u4ece\u53e4\u5178\u667a\u6167\u4e2d\u6c72\u53d6\u7cbe\u534e\u2026',
+        '\u4e00\u4efd\u5728\u4f60\u964d\u751f\u4e4b\u524d\u4fbf\u5df2\u5199\u5c31\u7684\u84dd\u56fe\u2026',
+      ],
+      SPLASH_PHRASES: [
+        '\u4e09\u5343\u5e74\u7684\u547d\u7406\u667a\u6167\n\u5373\u5c06\u547c\u73b0\u3002',
+        '518,400 \u79cd\u72ec\u7279\u547d\u8fd0\u683c\u5c40\n\u4e00\u5957\u53e4\u8001\u4f53\u7cfb\uff0c\u65e9\u5df2\u9884\u77e5\u4e86\u4f60\u3002',
+        '\u6765\u81ea\u5730\u7403\u4e0a\u6700\u53e4\u8001\u7684\u661f\u8c61\u4f20\u7edf\n\u8ba9\u4f60\u770b\u89c1\u5b83\u7a76\u7adf\u662f\u4ec0\u4e48\u6837\u5b50\u3002',
+        '\u53e4\u8001\u7684\u89c4\u5f8b\u3002\n\u73b0\u4ee3\u7684\u6e05\u660e\u3002',
+        '\u4f60\u51fa\u751f\u7684\u90a3\u4e00\u523b\n\u643a\u5e26\u7740\u5148\u4eba\u5df2\u7136\u6d4b\u7ed8\u7684\u9891\u7387\u3002',
+      ],
+      SPARK_PROMPTS: [
+        '\u4f60\u6b63\u5728\u6267\u7740\u4ec0\u4e48\uff0c\u800c\u5b83\u5df2\u4e0d\u518d\u6ecb\u517b\u4f60\uff1f',
+        '\u4eca\u5929\u662f\u8c01\u8ba9\u4f60\u611f\u5230\u88ab\u771f\u6b63\u770b\u89c1\uff1f',
+        '\u5982\u679c\u4f60\u4e0d\u5bb3\u6015\uff0c\u4f60\u4f1a\u505a\u4ec0\u4e48\uff1f',
+        '\u4eca\u5929\u4f60\u5728\u54ea\u4e2a\u77ac\u95f4\u627e\u5230\u4e86\u5185\u5fc3\u7684\u5e73\u9759\uff1f',
+        '\u6709\u4ec0\u4e48\u662f\u4f60\u9700\u8981\u539f\u8c05\u81ea\u5df1\u7684\uff1f',
+      ],
+      SPARK_PRACTICES: [
+        '\u505a\u4e94\u6b21\u547c\u5438\uff1a\u5438\u6c14\u65f6\u9ed8\u6570\u56db\u62cd\uff0c\u547c\u6c14\u65f6\u540c\u6837\u6570\u56db\u62cd\u3002',
+        '\u8bf4\u51fa\u4e09\u4ef6\u4f60\u611f\u6069\u7684\u4e8b\u2014\u2014\u4e00\u4ef6\u5173\u4e8e\u8eab\u4f53\uff0c\u4e00\u4ef6\u5173\u4e8e\u5185\u5fc3\uff0c\u4e00\u4ef6\u5173\u4e8e\u7cbe\u795e\u3002',
+        '\u89c9\u5bdf\u6b64\u523b\uff1a5 \u4ef6\u4f60\u80fd\u770b\u5230\u7684\u4e8b\uff0c4 \u4ef6\u4f60\u80fd\u89e6\u78b0\u7684\uff0c3 \u4ef6\u4f60\u80fd\u542c\u5230\u7684\u3002',
+      ],
+      SOUL_TYPES: [
+        { name: '\u5f00\u62d3\u8005', tagline: '\u53c2\u5929\u5927\u6811\u2014\u2014\u6210\u957f\u3001\u5fd7\u5411\u3001\u5411\u4e0a\u7684\u751f\u547d\u529b\u3002\u4f60\u4ee5\u6e05\u660e\u4e4b\u5fc3\u5efa\u9020\u4e0e\u5f15\u9886\u3002' },
+        { name: '\u7ec7\u68a6\u8005', tagline: '\u85e4\u8513\u4e0e\u82b1\u6735\u2014\u2014\u67d4\u97e7\u3001\u4f18\u96c5\u3001\u5584\u4e8e\u9002\u5e94\u3002\u4f60\u8fde\u7ed3\u4eba\u5fc3\uff0c\u6ecb\u517b\u4e07\u7269\u3002' },
+        { name: '\u5149\u8000\u8005', tagline: '\u592a\u9633\u2014\u2014\u6e29\u6696\u3001\u53ef\u89c1\u3001\u9886\u5bfc\u529b\u3002\u4f60\u4e3a\u4ed6\u4eba\u7167\u4eae\u524d\u8def\u3002' },
+        { name: '\u660e\u706f\u8005', tagline: '\u70db\u706b\u4e0e\u661f\u5149\u2014\u2014\u67d4\u548c\u7684\u5149\uff0c\u6d1e\u89c1\uff0c\u4eb2\u5bc6\u611f\u3002\u4f60\u770b\u89c1\u522b\u4eba\u9519\u8fc7\u7684\u4e8b\u7269\u3002' },
+        { name: '\u78d0\u77f3\u8005', tagline: '\u5c71\u5cb3\u2014\u2014\u7a33\u5b9a\u3001\u53ef\u9760\u3001\u4e0d\u53ef\u6495\u52a8\u3002\u4f60\u662f\u4f17\u4eba\u7684\u57fa\u77f3\u3002' },
+        { name: '\u6c83\u571f\u8005', tagline: '\u80a5\u6c83\u7684\u571f\u58e4\u2014\u2014\u6ecb\u517b\u3001\u63a5\u7eb3\u3001\u8f6c\u5316\u3002\u4f60\u5e2e\u52a9\u4e07\u7269\u751f\u957f\u3002' },
+        { name: '\u5229\u5203\u8005', tagline: '\u5b9d\u5251\u2014\u2014\u679c\u51b3\u3001\u9769\u65b0\u3001\u950b\u5229\u3002\u4f60\u65a9\u65ad\u8ff7\u96fe\uff0c\u76f4\u8fbe\u672c\u8d28\u3002' },
+        { name: '\u73cd\u5b9d\u8005', tagline: '\u5b9d\u77f3\u2014\u2014\u7cbe\u70bc\u3001\u73cd\u8d35\u3001\u654f\u611f\u3002\u4f60\u73cd\u89c6\u54c1\u8d28\u4e0e\u6df1\u5ea6\u3002' },
+        { name: '\u5927\u6d0b\u8005', tagline: '\u6d77\u6d0b\u2014\u2014\u5f3a\u5927\u3001\u6d41\u52a8\u3001\u52bf\u4e0d\u53ef\u6321\u3002\u4f60\u5584\u4e8e\u9002\u5e94\uff0c\u575a\u97e7\u4e0d\u62d4\u3002' },
+        { name: '\u6668\u96fe\u8005', tagline: '\u9759\u6c34\u6df1\u6d41\u3002\u4f60\u5438\u7eb3\u4e00\u5207\uff0c\u4ee5\u6f84\u660e\u7684\u5185\u5fc3\u6620\u7167\u8fd9\u4e2a\u4e16\u754c\u3002' },
+      ],
+      ANNUAL_INSIGHTS: {
+        architect:  '\u6b63\u5b98\u5e74\uff1a\u6b63\u5f0f\u8ba4\u53ef\u7684\u673a\u9047\u5df2\u81f3\u2014\u2014\u4ee5\u7ed3\u6784\u4e0e\u6e05\u660e\u63a8\u52a8\u524d\u884c\u3002',
+        harvest:    '\u6b63\u8d22\u661f\u6d3b\u8dc3\u2014\u2014\u8010\u5fc3\u79ef\u7d2f\u7ec8\u6709\u56de\u62a5\uff0c\u4eba\u9645\u5173\u7cfb\u6210\u4e3a\u8d22\u5bcc\u901a\u9053\u3002',
+        windfall:   '\u504f\u8d22\u6d8c\u52a8\u2014\u2014\u4fdd\u6301\u5f00\u653e\uff0c\u610f\u5916\u673a\u9047\u5f80\u5f80\u6765\u81ea\u5bfb\u5e38\u8def\u4e4b\u5916\u3002',
+        challenger: '\u4e03\u6740\u78e8\u7ef4\u4f60\u3002\u5c06\u6469\u64e6\u8f6c\u5316\u4e3a\u8f93\u51fa\uff0c\u800c\u975e\u53cd\u5e94\u3002',
+        muse:       '\u98df\u795e\u6d41\u5e74\u2014\u2014\u521b\u610f\u4e0e\u8868\u8fbe\u4e4b\u8def\u8d70\u5f97\u683c\u5916\u987a\u7545\u3002',
+        maverick:   '\u4f24\u5b98\u89e6\u53d1\u53d8\u9769\u3002\u5ba1\u89c6\u5df2\u4e0d\u518d\u9002\u5408\u7684\u4e8b\u7269\uff0c\u4e0d\u5fc5\u56fa\u5b88\u65e7\u6709\u3002',
+        guardian:   '\u6b63\u5370\u62a4\u4f2a\u6b64\u5e74\u3002\u591a\u4f9d\u9760\u8d35\u4eba\u548c\u5e08\u957f\u2014\u2014\u4ed6\u4eec\u5c06\u652f\u6301\u4f60\u3002',
+        mystic:     '\u504f\u5370\u52a0\u6df1\u3002\u9759\u5bc1\u4e2d\u6d1e\u89c1\u6d8c\u73b0\u3002\u5b88\u62a4\u4f60\u7684\u5185\u5728\u7a7a\u95f4\u3002',
+        mirror:     '\u6bd4\u80a9\u4e4b\u5e74\uff1a\u540c\u4f34\u7684\u529b\u91cf\u8fdb\u5165\u7126\u70b9\u3002\u7528\u5fc3\u9009\u62e9\u4f60\u7684\u5708\u5b50\u3002',
+        shadow:     '\u52ab\u8d22\u5e74\uff1a\u8b66\u60d5\u98ce\u9669\u5347\u7ea7\u3002\u5927\u80c6\u7684\u884c\u52a8\u80cc\u540e\u6709\u771f\u5b9e\u7684\u4ee3\u4ef7\u3002',
+        _default:   '\u4e00\u4e2a\u7a33\u6b65\u5c55\u5f00\u7684\u5e74\u4efd\u2014\u2014\u4e13\u6ce8\u4e8e\u6700\u91cd\u8981\u7684\u4e8b\u3002',
+      },
+      ORACLE_TEMPLATES: [
+        { icon: '\u26a1', title: '\u4e8b\u4e1a\u6289\u62e9',   desc: '\u4e0e\u4f60\u672c\u8d28\u5951\u5408\u7684\u4e8b\u4e1a\u65b9\u5411' },
+        { icon: '\u25ce',  title: '\u611f\u60c5\u955c\u50cf',   desc: '\u4f60\u7684\u611f\u60c5\u6a21\u5f0f\u4e0e\u6240\u5438\u5f15\u7684\u4eba' },
+        { icon: '\u25c9',  title: '{year} \u6d41\u5e74', desc: '\u4eca\u5e74\u6fc0\u6d3b\u4e86\u4f60\u547d\u76d8\u4e2d\u7684\u4ec0\u4e48' },
+        { icon: '\u25d0',  title: '\u9634\u6697\u9762\u6a21\u5f0f', desc: '\u5728\u6697\u5904\u5bf9\u4f60\u8d77\u4f5c\u7528\u7684\u76f2\u70b9' },
+        { icon: '\u2696',  title: '\u884c\u52a8\u65f6\u673a',   desc: '\u5f53\u4e0b\u9002\u5408\u5927\u80c6\u6539\u53d8\u5417\uff1f' },
+        { icon: '\u2726',  title: '\u5065\u5eb7\u4e0e\u6d3b\u529b', desc: '\u4f60\u7684\u4f53\u8d28\u4e0e\u80fd\u91cf\u8282\u5f8b' },
+      ],
+      THEME_LABELS: {
+        healing: '\u7597\u6108\u4e0e\u66f4\u65b0', courage: '\u52c7\u6c14\u4e0e\u529b\u91cf', clarity: '\u6e05\u660e\u4e0e\u771f\u5b9e',
+        love: '\u7231\u4e0e\u5f52\u5c5e', purpose: '\u4f7f\u547d\u4e0e\u53ec\u5524', stillness: '\u9759\u5b9a\u4e0e\u5b89\u5b81',
+        resilience: '\u97e7\u6027\u4e0e\u6301\u4e45', change: '\u53d8\u5316\u4e0e\u653e\u4e0b',
+      },
+      VAULT_THEME_PILLS: [
+        { value: 'healing', label: '\u7597\u6108' }, { value: 'courage', label: '\u52c7\u6c14' },
+        { value: 'clarity', label: '\u6e05\u660e' }, { value: 'love', label: '\u7231' },
+        { value: 'purpose', label: '\u4f7f\u547d' }, { value: 'stillness', label: '\u9759\u5b9a' },
+        { value: 'resilience', label: '\u97e7\u6027' }, { value: 'change', label: '\u53d8\u5316' },
+      ],
+      VAULT_TRADITION_PILLS: [
+        { value: 'daoism', label: '\u9053\u5bb6' }, { value: 'buddhism', label: '\u4f5b\u6559' },
+        { value: 'stoicism', label: '\u65af\u591a\u845b' }, { value: 'christianity', label: '\u57fa\u7763\u6559' },
+        { value: 'judaism', label: '\u72b9\u592a\u6559' }, { value: 'islam', label: '\u4f0a\u65af\u5170' },
+        { value: 'confucianism', label: '\u5112\u5bb6' }, { value: 'sufi', label: '\u82cf\u83f2' },
+        { value: 'greek', label: '\u5e0c\u814a' }, { value: 'vedic', label: '\u5420\u9640' },
+        { value: 'chinese', label: '\u6613\u7ecf' }, { value: 'saved', label: '\u5df2\u6536\u85cf' },
+      ],
+      MEDITATIONS: [
+        { icon: '\ud83e\udeb5', title: '\u6728\u2014\u2014\u751f\u957f\u4e0e\u613f\u666f',  desc: '\u6839\u7cfb\u4e0e\u5347\u817e\u80fd\u91cf\u7684\u610f\u8c61\u5f15\u5bfc\u30025\u201310 \u5206\u949f\u3002' },
+        { icon: '\ud83d\udd25', title: '\u706b\u2014\u2014\u6e29\u6696\u4e0e\u8fde\u7ed3',  desc: '\u4ee5\u5fc3\u4e3a\u4e2d\u5fc3\u7684\u6e29\u6696\u51a5\u60f3\uff0c\u9002\u5408\u611f\u5230\u758f\u79bb\u65f6\u3002' },
+        { icon: '\ud83d\uddff', title: '\u571f\u2014\u2014\u624e\u6839\u843d\u5730',    desc: '\u8eab\u4f53\u626b\u63cf\u4e0e\u5927\u5730\u8fde\u7ed3\uff0c\u9002\u5408\u7126\u8651\u65f6\u3002' },
+        { icon: '\ud83e\ude99', title: '\u91d1\u2014\u2014\u91ca\u653e\u4e0e\u6e05\u660e',  desc: '\u4ee5\u547c\u5438\u4e3a\u4e3b\u7684\u653e\u4e0b\u51a5\u60f3\uff0c\u9002\u5408\u6df7\u4e71\u6216\u96be\u4ee5\u51b3\u65ad\u65f6\u3002' },
+        { icon: '\ud83d\udca7', title: '\u6c34\u2014\u2014\u6d41\u52a8\u4e0e\u81e3\u670d',  desc: '\u6d41\u52a8\u610f\u8c61\u5f15\u5bfc\uff0c\u9002\u5408\u611f\u5230\u505c\u6ede\u65f6\u3002' },
+        { icon: '\u25ce',  title: '\u91cd\u5927\u6289\u62e9\u524d\u7684\u51c6\u5907', desc: '\u624e\u6839\uff0b\u6e05\u660e\u300210 \u5206\u949f\u3002' },
+      ],
+    },
+  };
+
+  window.appLang = localStorage.getItem('soulmap_lang') || 'en';
+
+  function t(key) {
+    return (I18N[window.appLang] || I18N.en)[key] || (I18N.en)[key] || key;
+  }
+
+  function applyLang() {
+    document.documentElement.lang = window.appLang === 'zh' ? 'zh-Hans' : 'en';
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var val = t(el.dataset.i18n);
+      if (val && typeof val === 'string') el.textContent = val;
+    });
+    document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {
+      var val = t(el.dataset.i18nPh);
+      if (val) el.placeholder = val;
+    });
+    var btnEn = document.getElementById('lang-btn-en');
+    var btnZh = document.getElementById('lang-btn-zh');
+    if (btnEn) btnEn.classList.toggle('lang-btn--active', window.appLang === 'en');
+    if (btnZh) btnZh.classList.toggle('lang-btn--active', window.appLang === 'zh');
+  }
+
+  function vaultQuoteText(entry) {
+    if (window.appLang === 'zh' && entry.text_zh) return entry.text_zh;
+    return entry.text || '';
+  }
+
+  function initLangSwitcher() {
+    applyLang();
+    function setLang(lang) {
+      if (window.appLang === lang) return;
+      window.appLang = lang;
+      localStorage.setItem('soulmap_lang', lang);
+      applyLang();
+    }
+    var btnEn = document.getElementById('lang-btn-en');
+    var btnZh = document.getElementById('lang-btn-zh');
+    if (btnEn) btnEn.addEventListener('click', function() { setLang('en'); });
+    if (btnZh) btnZh.addEventListener('click', function() { setLang('zh'); });
+
+    var btnLangSwitch = document.getElementById('btn-lang-switch');
+    if (btnLangSwitch) {
+      btnLangSwitch.addEventListener('click', function() {
+        var next = window.appLang === 'en' ? 'zh' : 'en';
+        var msg = window.appLang === 'en'
+          ? 'Switching to Chinese will restart the session. Continue?'
+          : '\u5207\u6362\u4e3a\u82f1\u6587\u5c06\u91cd\u65b0\u5f00\u59cb\u4f1a\u8bdd\u3002\u662f\u5426\u7ee7\u7eed\uff1f';
+        if (confirm(msg)) {
+          localStorage.setItem('soulmap_lang', next);
+          window.location.reload();
+        }
+      });
+    }
+  }
+
   // ─── BaZi lookup tables ──────────────────────────────────────────
 
   // Hidden stems per earthly branch (array of stem indices)
@@ -620,7 +1050,7 @@
     const nameEl = document.getElementById('profile-btn-name');
     if (nameEl) nameEl.textContent = p.name || 'My Chart';
     const typeEl = document.getElementById('app-user-type');
-    if (typeEl) typeEl.textContent = SOUL_TYPES[chart.dayMaster].name;
+    if (typeEl) typeEl.textContent = (t('SOUL_TYPES')[chart.dayMaster] || {}).name || SOUL_TYPES[chart.dayMaster].name;
     // Re-curate "For You" now that state.chart is populated
     if (document.getElementById('wisdom-vault-list')) {
       renderWisdomVault(vaultFilterType, vaultFilterValue);
@@ -1401,6 +1831,7 @@
         currentConcern:        state.currentConcern || '',
         dayMasterStemIdx:      stemIdx,
         currentSeasonProfile,
+        lang:                  window.appLang || 'en',
       };
       const res = await fetch('/api/narrative', {
         method:  'POST',
@@ -1480,7 +1911,7 @@
     saveCurrentProfile();
     const nameEl = document.getElementById('profile-btn-name');
     if (nameEl) nameEl.textContent = state.profileName || 'My Chart';
-    document.getElementById('app-user-type').textContent = SOUL_TYPES[state.soulTypeIndex].name;
+    document.getElementById('app-user-type').textContent = (t('SOUL_TYPES')[state.soulTypeIndex] || {}).name || SOUL_TYPES[state.soulTypeIndex].name;
 
     // Pre-render blueprint in background (view-app not visible yet)
     renderAppBlueprint();
@@ -2109,6 +2540,7 @@
           health:       decade.health,
           interactions: (decade.interactions || []).map(i => i.type + ' with ' + i.withPillar + ' pillar'),
         },
+        lang: window.appLang || 'en',
       };
 
       const res = await fetch('/api/cycle-narrative', {
@@ -2258,7 +2690,7 @@
     };
     const themeEl = document.getElementById('annual-theme');
     if (themeEl) {
-      themeEl.textContent = ANNUAL_INSIGHTS[scores.stemTenGod] || 'A year of steady unfolding — tend to what matters most.';
+      themeEl.textContent = (t('ANNUAL_INSIGHTS')[scores.stemTenGod] || t('ANNUAL_INSIGHTS')._default);
     }
   }
 
@@ -2296,7 +2728,8 @@
   // ─── Main Blueprint Renderer ─────────────────────────────────────
   function renderAppBlueprint() {
     if (!state.chart) return;
-    const t       = SOUL_TYPES[state.soulTypeIndex];
+    const soulType     = SOUL_TYPES[state.soulTypeIndex];
+    const soulTypeI18n = t('SOUL_TYPES')[state.soulTypeIndex] || {};
     const n       = BLUEPRINT_NARRATIVE[state.soulTypeIndex] || null;
     const balance = state.chart.elementBalance;
 
@@ -2320,12 +2753,12 @@
       frameEl.classList.remove('portrait-loaded');
       imgEl.onload  = () => frameEl.classList.add('portrait-loaded');
       imgEl.onerror = () => frameEl.style.display = 'none';
-      imgEl.src = '/personas/persona-' + t.slug + '.png';
-      imgEl.alt = t.name;
+      imgEl.src = '/personas/persona-' + soulType.slug + '.png';
+      imgEl.alt = soulType.name;
     }
-    setEl('detail-type-name', t.name);
-    setEl('detail-type-sub', t.sub);
-    setEl('detail-tagline', t.tagline);
+    setEl('detail-type-name', soulTypeI18n.name || soulType.name);
+    setEl('detail-type-sub', soulType.sub);
+    setEl('detail-tagline', soulTypeI18n.tagline || soulType.tagline);
 
     // Dominant Ten God badge
     const badgeEl = document.getElementById('dominant-ten-god-badge');
@@ -2389,7 +2822,7 @@
       // Show placeholder + static fallback
       if (placeholder) placeholder.style.display = '';
       if (n) {
-        const coreEssence = 'Your core essence is ' + (n.shortName || t.name.replace(/^The /,'')) +
+        const coreEssence = 'Your core essence is ' + (n.shortName || soulType.name.replace(/^The /,'')) +
           ' — ' + n.essence + ' Born during ' + season.toLowerCase() + ', you carry the energy of that season.';
         setEl('detail-core-essence', coreEssence);
         setEl('detail-work',   n.work);
@@ -2414,7 +2847,7 @@
     const concernEl      = document.getElementById('detail-concern');
     if (state.currentConcern && concernSection && concernEl && n) {
       const truncated  = state.currentConcern.length > 120 ? state.currentConcern.slice(0, 117) + '...' : state.currentConcern;
-      concernEl.textContent = 'You shared: ' + truncated + ' — Your ' + t.element + ' nature is supported in ' + season + '. Trust your instincts.';
+      concernEl.textContent = 'You shared: ' + truncated + ' — Your ' + soulType.element + ' nature is supported in ' + season + '. Trust your instincts.';
       concernSection.hidden = false;
     } else if (concernSection) {
       concernSection.hidden = true;
@@ -2525,6 +2958,7 @@
         question,
         chartContext:        buildOracleChartContext(),
         conversationHistory: conversationHistory || [],
+        lang:                window.appLang || 'en',
       }),
     });
     const json = await res.json();
@@ -2630,23 +3064,23 @@
       const year  = new Date().getFullYear();
       const label = document.createElement('p');
       label.className = 'oracle-templates-label';
-      label.textContent = 'Deep-Dive Readings';
+      label.textContent = t('oracle_templates_header');
       templatesEl.appendChild(label);
 
       const grid = document.createElement('div');
       grid.className = 'oracle-templates-grid';
 
-      ORACLE_TEMPLATES.forEach(t => {
+      t('ORACLE_TEMPLATES').forEach(tmpl => {
         const btn   = document.createElement('button');
         btn.type    = 'button';
         btn.className = 'oracle-template-card';
-        const title    = t.title.replace('{year}', year);
-        const question = t.question.replace(/\{year\}/g, year);
+        const title    = tmpl.title.replace('{year}', year);
+        const question = tmpl.question.replace(/\{year\}/g, year);
         btn.innerHTML =
           '<span class="oracle-ai-badge">\u26a1 Ask AI</span>' +
-          '<span class="oracle-template-icon">'  + t.icon  + '</span>' +
+          '<span class="oracle-template-icon">'  + tmpl.icon  + '</span>' +
           '<span class="oracle-template-title">' + title   + '</span>' +
-          '<span class="oracle-template-desc">'  + t.desc  + '</span>';
+          '<span class="oracle-template-desc">'  + tmpl.desc  + '</span>';
         btn.addEventListener('click', () => {
           input.value = question;
           form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
@@ -2747,7 +3181,7 @@
         typing.remove();
         const errMsg = document.createElement('div');
         errMsg.className = 'msg assistant error';
-        errMsg.textContent = 'The Oracle is unavailable right now. Please try again in a moment.';
+        errMsg.textContent = t('oracle_error');
         messages.appendChild(errMsg);
         messages.scrollTop = messages.scrollHeight;
         console.warn('[SoulMap] Oracle API failed:', err);
@@ -3050,7 +3484,7 @@
       const theme     = x.theme || '';
       const saved     = isVaultQuoteSaved(x);
       const whyHtml   = x._why ? `<div class="vault-why">${escapeHtml(x._why)}</div>` : '';
-      const themeLabel = theme ? `<span class="vault-badge vault-badge--theme">${escapeHtml(THEME_LABELS[theme] || theme)}</span>` : '';
+      const themeLabel = theme ? `<span class="vault-badge vault-badge--theme">${escapeHtml(t('THEME_LABELS')[theme] || theme)}</span>` : '';
 
       return `<div class="vault-card" data-vault-idx="${idx}" role="button" tabindex="0">
         <div class="vault-card-header">
@@ -3060,7 +3494,7 @@
             ${saved ? '&#9993;' : '&#9993;'}
           </button>
         </div>
-        <p class="vault-card-text">${escapeHtml(x.text)}</p>
+        <p class="vault-card-text">${escapeHtml(vaultQuoteText(x))}</p>
         <div class="vault-card-source">${escapeHtml(x.source)}${x.author ? ' — ' + escapeHtml(x.author) : ''}</div>
         ${whyHtml}
       </div>`;
@@ -3117,8 +3551,8 @@
     const theme     = item.theme || '';
 
     document.getElementById('vm-tradition').textContent = tradition;
-    document.getElementById('vm-theme').textContent     = THEME_LABELS[theme] || theme;
-    document.getElementById('vm-quote').textContent     = item.text || '';
+    document.getElementById('vm-theme').textContent     = t('THEME_LABELS')[theme] || theme;
+    document.getElementById('vm-quote').textContent     = vaultQuoteText(item);
     document.getElementById('vm-source').textContent    = (item.source || '') + (item.author ? ' — ' + item.author : '');
 
     const whyEl = document.getElementById('vm-why');
@@ -3229,7 +3663,7 @@
 
     document.getElementById('vm-copy').addEventListener('click', () => {
       if (!_modalItem) return;
-      const text = `"${_modalItem.text}" — ${_modalItem.source || ''}`;
+      const text = `"${vaultQuoteText(_modalItem)}" — ${_modalItem.source || ''}`;
       navigator.clipboard.writeText(text).catch(() => {});
       const btn = document.getElementById('vm-copy');
       btn.textContent = '✓ Copied';
@@ -3296,12 +3730,14 @@
         renderWisdomVault('theme', 'all');
       } else if (seg === 'theme') {
         pillsWrap.hidden = false;
-        renderVaultPills(pillsWrap, VAULT_THEME_PILLS, 'theme', VAULT_THEME_PILLS[0].value);
-        renderWisdomVault('theme', VAULT_THEME_PILLS[0].value);
+        var themePills = t('VAULT_THEME_PILLS');
+        renderVaultPills(pillsWrap, themePills, 'theme', themePills[0].value);
+        renderWisdomVault('theme', themePills[0].value);
       } else if (seg === 'tradition') {
         pillsWrap.hidden = false;
-        renderVaultPills(pillsWrap, VAULT_TRADITION_PILLS, 'tradition', VAULT_TRADITION_PILLS[0].value);
-        renderWisdomVault('tradition', VAULT_TRADITION_PILLS[0].value);
+        var tradPills = t('VAULT_TRADITION_PILLS');
+        renderVaultPills(pillsWrap, tradPills, 'tradition', tradPills[0].value);
+        renderWisdomVault('tradition', tradPills[0].value);
       }
     });
 
@@ -3377,21 +3813,23 @@
 
     document.getElementById('spark-text').innerHTML =
       `<strong>${q.source}${q.author ? ' — ' + q.author : ''}</strong>` +
-      `<p style="margin-top:0.5rem;opacity:0.85">${q.text}</p>`;
-    document.getElementById('spark-prompt').textContent   = SPARK_PROMPTS[seed % SPARK_PROMPTS.length];
-    document.getElementById('spark-practice').textContent = SPARK_PRACTICES[seed % SPARK_PRACTICES.length];
+      `<p style="margin-top:0.5rem;opacity:0.85">${vaultQuoteText(q)}</p>`;
+    var prompts   = t('SPARK_PROMPTS');
+    var practices = t('SPARK_PRACTICES');
+    document.getElementById('spark-prompt').textContent   = prompts[seed % prompts.length];
+    document.getElementById('spark-practice').textContent = practices[seed % practices.length];
     try {
       const saved = localStorage.getItem('soulmap_streak');
       if (saved) state.streak = parseInt(saved, 10);
-      document.getElementById('spark-streak-num').textContent = state.streak;
+      document.getElementById('spark-streak').textContent = t('spark_streak').replace('{n}', state.streak);
     } catch (_) {}
     document.getElementById('btn-spark-done').addEventListener('click', () => {
       haptic('medium');
       trackEvent('spark_completed');
       state.streak++;
       try { localStorage.setItem('soulmap_streak', String(state.streak)); } catch (_) {}
-      document.getElementById('spark-streak-num').textContent = state.streak;
-      document.getElementById('btn-spark-done').textContent = 'Done! See you tomorrow.';
+      document.getElementById('spark-streak').textContent = t('spark_streak').replace('{n}', state.streak);
+      document.getElementById('btn-spark-done').textContent = t('spark_done_complete');
     });
   }
 
@@ -3406,7 +3844,7 @@
   ];
 
   function initStillPoint() {
-    document.getElementById('meditation-list').innerHTML = MEDITATIONS.map(m =>
+    document.getElementById('meditation-list').innerHTML = t('MEDITATIONS').map(m =>
       `<div class="meditation-item"><span class="icon">${m.icon}</span><div><div class="title">${m.title}</div><p class="desc">${m.desc}</p></div></div>`
     ).join('');
   }
@@ -3691,7 +4129,8 @@
       const ctaBtn = document.getElementById('btn-gen-cta');
       if (!el) return;
       retriggerAnim(el);
-      el.textContent = SPLASH_PHRASES[splashIdx % SPLASH_PHRASES.length];
+      var sp = t('SPLASH_PHRASES');
+      el.textContent = sp[splashIdx % sp.length];
       splashIdx++;
       // After first phrase completes: reveal CTA, then keep cycling phrases
       if (splashIdx === 1) {
@@ -3713,8 +4152,8 @@
       if (splashEl) splashEl.hidden = true;
       if (loadEl)   loadEl.hidden   = false;
       if (forEl)    forEl.textContent = name
-        ? 'Reading \u2018' + name + '\u2019s chart\u2026'
-        : 'Reading your chart\u2026';
+        ? t('loading_for_name').replace('{name}', name)
+        : t('loading_generic');
       cycleLoading();
     }
 
@@ -3723,7 +4162,8 @@
       const el = document.getElementById('generating-phrase');
       if (!el) return;
       retriggerAnim(el);
-      el.textContent = LOADING_PHRASES[loadingIdx % LOADING_PHRASES.length];
+      var lp = t('LOADING_PHRASES');
+      el.textContent = lp[loadingIdx % lp.length];
       loadingIdx++;
       phraseTimer = setTimeout(cycleLoading, 2600);
     }
@@ -3737,6 +4177,7 @@
 
   // ─── Init ────────────────────────────────────────────────────────
   function init() {
+    initLangSwitcher();
     initLanding();
     initOnboard();
     initTabs();

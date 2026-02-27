@@ -41,9 +41,10 @@ interface OracleRequestBody {
   question: string;
   chartContext?: ChartContext;
   conversationHistory?: Message[];
+  lang?: string;
 }
 
-function buildSystemPrompt(base: string, ctx?: ChartContext): string {
+function buildSystemPrompt(base: string, ctx?: ChartContext, lang?: string): string {
   const fav = (ctx?.favorableElements || []).join(', ') || 'not specified';
   const chartBlock = ctx ? [
     '',
@@ -67,7 +68,10 @@ function buildSystemPrompt(base: string, ctx?: ChartContext): string {
     'You are answering their specific question. Be direct, warm, grounded. Use the elemental metaphor name (Ancient Oak / Mist / Sword) — not type labels. Reference specific chart data when naturally relevant. Classical reference only when it fits naturally.',
   ].join('\n') : '';
 
-  return base + chartBlock;
+  const langInstruction = lang === 'zh'
+    ? '\n\nIMPORTANT: Always respond in Simplified Chinese (简体中文), regardless of the language used in the question.'
+    : '';
+  return base + chartBlock + langInstruction;
 }
 
 export async function POST(req: NextRequest) {
@@ -78,7 +82,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Question is required' }, { status: 400 });
     }
 
-    const systemPrompt = buildSystemPrompt(getSystemPrompt(), body.chartContext);
+    const systemPrompt = buildSystemPrompt(getSystemPrompt(), body.chartContext, body.lang);
 
     // Build message list: conversation history + new question
     const history: Message[] = (body.conversationHistory || []).slice(-10); // cap at 10 previous turns

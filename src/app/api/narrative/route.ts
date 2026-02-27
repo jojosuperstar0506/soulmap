@@ -47,11 +47,16 @@ interface NarrativeRequestBody {
   currentConcern?: string;
   dayMasterStemIdx?: number;
   currentSeasonProfile?: CurrentSeasonProfile;
+  lang?: string;
 }
 
 function buildUserMessage(body: NarrativeRequestBody): string {
   const fav = (body.favorableElements || []).join(', ') || 'not specified';
+  const langInstruction = body.lang === 'zh'
+    ? 'IMPORTANT: Respond entirely in Simplified Chinese (简体中文). All JSON field values must be in Chinese. Use natural, warm prose appropriate for a spiritual wellness app.'
+    : '';
   const lines = [
+    ...(langInstruction ? [langInstruction, ''] : []),
     'Generate a BaZi blueprint narrative for this person.',
     '',
     `Day Master: ${body.dayMaster || 'unknown'} — known as the ${body.dayMasterMetaphor || ''}`,

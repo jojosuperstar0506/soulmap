@@ -26,23 +26,28 @@
   <section id="view-landing" class="view view-active">
     <div class="landing-bg"></div>
     <div class="landing-content">
+      <div class="lang-switcher" id="lang-switcher">
+        <button class="lang-btn lang-btn--active" id="lang-btn-en" type="button">EN</button>
+        <span class="lang-divider" aria-hidden="true">/</span>
+        <button class="lang-btn" id="lang-btn-zh" type="button">中文</button>
+      </div>
       <h1 class="logo">SoulMap</h1>
-      <p class="tagline">Ancient Wisdom Meets Modern Navigation</p>
+      <p class="tagline" data-i18n="landing_tagline">Ancient Wisdom Meets Modern Navigation</p>
 
       <div class="landing-stats">
         <div class="landing-stat">
           <span class="stat-num">3,500+</span>
-          <span class="stat-label">years of ancient wisdom</span>
+          <span class="stat-label" data-i18n="landing_stat1_label">years of ancient wisdom</span>
         </div>
         <span class="stat-divider">·</span>
         <div class="landing-stat">
           <span class="stat-num">500,000+</span>
-          <span class="stat-label">unique life patterns</span>
+          <span class="stat-label" data-i18n="landing_stat2_label">unique life patterns</span>
         </div>
       </div>
 
-      <p class="sub">From the oldest astronomical tradition on earth — it doesn't predict the future. It maps the terrain, so you know when to climb and when to rest.</p>
-      <button type="button" class="btn btn-cta btn-landing" id="btn-start">See My Blueprint</button>
+      <p class="sub" data-i18n="landing_sub">From the oldest astronomical tradition on earth — it doesn't predict the future. It maps the terrain, so you know when to climb and when to rest.</p>
+      <button type="button" class="btn btn-cta btn-landing" id="btn-start" data-i18n="landing_cta">See My Blueprint</button>
     </div>
   </section>
 
@@ -55,9 +60,9 @@
     <nav class="onboard-nav">
       <button type="button" class="onboard-nav-back" id="btn-back-landing" aria-label="Go back">
         <span class="onboard-nav-chevron" aria-hidden="true">‹</span>
-        <span class="onboard-nav-back-label">Back</span>
+        <span class="onboard-nav-back-label" data-i18n="onboard_back_label">Back</span>
       </button>
-      <span class="onboard-nav-title" id="onboard-nav-title">Your Birth Chart</span>
+      <span class="onboard-nav-title" id="onboard-nav-title" data-i18n="onboard_step1_title">Your Birth Chart</span>
       <span class="onboard-nav-counter" id="onboard-nav-counter" aria-label="Step 1 of 2">1 of 2</span>
     </nav>
 
@@ -71,29 +76,29 @@
 
       <!-- ═══ STEP 1 — Birth Chart ═══ -->
       <div class="onboard-step onboard-step--active" id="onboard-step-1">
-        <p class="onboard-step-desc">BaZi is anchored to your exact solar birth timestamp — precise enough to map your life in decade-long phases.</p>
+        <p class="onboard-step-desc" data-i18n="onboard_step1_desc">BaZi is anchored to your exact solar birth timestamp — precise enough to map your life in decade-long phases.</p>
 
         <!-- Name -->
         <div class="input-group">
           <div class="input-cell">
-            <label class="input-cell-label" for="ob-name">Name</label>
+            <label class="input-cell-label" for="ob-name" data-i18n="onboard_name_label">Name</label>
             <input id="ob-name" type="text" name="profileName" class="input-cell-field"
-              placeholder="e.g. Max, Mom, Sarah…" required autocomplete="off" />
+              placeholder="e.g. Max, Mom, Sarah…" required autocomplete="off" data-i18n-ph="onboard_name_ph" />
           </div>
         </div>
 
         <!-- Birth details: DOB / Time / Gender -->
         <div class="input-group">
           <div class="input-cell">
-            <label class="input-cell-label" for="ob-dob">Date of Birth</label>
+            <label class="input-cell-label" for="ob-dob" data-i18n="onboard_dob_label">Date of Birth</label>
             <input id="ob-dob" type="date" name="birthDate" class="input-cell-field" required />
           </div>
           <div class="input-cell-divider"></div>
           <div class="input-cell">
-            <label class="input-cell-label" for="ob-shichen">Time of Birth</label>
-            <p class="input-cell-hint">Not sure? Pick the closest.</p>
+            <label class="input-cell-label" for="ob-shichen" data-i18n="onboard_time_label">Time of Birth</label>
+            <p class="input-cell-hint" data-i18n="onboard_time_hint">Not sure? Pick the closest.</p>
             <select id="ob-shichen" name="shichen" class="input-cell-field" required>
-              <option value="">Select time of birth</option>
+              <option value="" data-i18n="onboard_time_ph">Select time of birth</option>
               <option value="0">子时 Zǐ · 23:00–01:00</option>
               <option value="1">丑时 Chǒu · 01:00–03:00</option>
               <option value="2">寅时 Yín · 03:00–05:00</option>
@@ -110,50 +115,50 @@
           </div>
           <div class="input-cell-divider"></div>
           <div class="input-cell">
-            <label class="input-cell-label" for="ob-gender">Gender at Birth</label>
-            <p class="input-cell-hint">Used for Luck Pillar direction.</p>
+            <label class="input-cell-label" for="ob-gender" data-i18n="onboard_gender_label">Gender at Birth</label>
+            <p class="input-cell-hint" data-i18n="onboard_gender_hint">Used for Luck Pillar direction.</p>
             <select id="ob-gender" name="gender" class="input-cell-field" required>
-              <option value="">Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="" data-i18n="onboard_gender_ph">Select</option>
+              <option value="male" data-i18n="onboard_gender_male">Male</option>
+              <option value="female" data-i18n="onboard_gender_female">Female</option>
             </select>
           </div>
         </div>
 
-        <button type="button" class="btn-step-cta btn-step-cta--continue" id="btn-step1-continue">
+        <button type="button" class="btn-step-cta btn-step-cta--continue" id="btn-step1-continue" data-i18n="onboard_btn_continue">
           Continue →
         </button>
       </div><!-- /step-1 -->
 
       <!-- ═══ STEP 2 — Life Context ═══ -->
       <div class="onboard-step" id="onboard-step-2">
-        <p class="onboard-step-desc">A few more details help the AI speak to where you actually are right now.</p>
+        <p class="onboard-step-desc" data-i18n="onboard_step2_desc">A few more details help the AI speak to where you actually are right now.</p>
 
         <!-- Occupation + Relationship -->
         <div class="input-group">
           <div class="input-cell">
-            <label class="input-cell-label" for="ob-occupation">Occupation</label>
+            <label class="input-cell-label" for="ob-occupation" data-i18n="onboard_occ_label">Occupation</label>
             <select id="ob-occupation" name="occupation" class="input-cell-field" required>
-              <option value="">Select</option>
-              <option value="student">Student</option>
-              <option value="professional">Professional</option>
-              <option value="creative">Creative</option>
-              <option value="entrepreneur">Entrepreneur</option>
-              <option value="between">Between Things</option>
-              <option value="other">Other</option>
+              <option value="" data-i18n="onboard_occ_ph">Select</option>
+              <option value="student" data-i18n="onboard_occ_student">Student</option>
+              <option value="professional" data-i18n="onboard_occ_pro">Professional</option>
+              <option value="creative" data-i18n="onboard_occ_creative">Creative</option>
+              <option value="entrepreneur" data-i18n="onboard_occ_entre">Entrepreneur</option>
+              <option value="between" data-i18n="onboard_occ_between">Between Things</option>
+              <option value="other" data-i18n="onboard_occ_other">Other</option>
             </select>
           </div>
           <div class="input-cell-divider"></div>
           <div class="input-cell">
-            <label class="input-cell-label" for="ob-relationship">Relationship Status</label>
+            <label class="input-cell-label" for="ob-relationship" data-i18n="onboard_rel_label">Relationship Status</label>
             <select id="ob-relationship" name="relationship" class="input-cell-field" required>
-              <option value="">Select</option>
-              <option value="single">Single</option>
-              <option value="dating">Dating</option>
-              <option value="relationship">In a Relationship</option>
-              <option value="married">Married</option>
-              <option value="complicated">It's Complicated</option>
-              <option value="prefer-not">Prefer Not to Say</option>
+              <option value="" data-i18n="onboard_rel_ph">Select</option>
+              <option value="single" data-i18n="onboard_rel_single">Single</option>
+              <option value="dating" data-i18n="onboard_rel_dating">Dating</option>
+              <option value="relationship" data-i18n="onboard_rel_in">In a Relationship</option>
+              <option value="married" data-i18n="onboard_rel_married">Married</option>
+              <option value="complicated" data-i18n="onboard_rel_comp">It's Complicated</option>
+              <option value="prefer-not" data-i18n="onboard_rel_prefer">Prefer Not to Say</option>
             </select>
           </div>
         </div>
@@ -162,23 +167,23 @@
         <div class="input-group">
           <div class="input-cell">
             <label class="input-cell-label" for="ob-concern">
-              What's on your mind? <span class="input-cell-optional">Optional</span>
+              <span data-i18n="onboard_concern_label">What's on your mind?</span> <span class="input-cell-optional" data-i18n="onboard_concern_opt">Optional</span>
             </label>
             <textarea id="ob-concern" name="currentConcern" class="input-cell-field input-cell-field--textarea"
-              rows="3" placeholder="e.g. Am I on the right path? Career, love, purpose…"></textarea>
+              rows="3" placeholder="e.g. Am I on the right path? Career, love, purpose…" data-i18n-ph="onboard_concern_ph"></textarea>
           </div>
           <div class="input-cell-divider"></div>
           <div class="input-cell">
             <label class="input-cell-label" for="ob-email">
-              Email <span class="input-cell-optional">Optional</span>
+              <span data-i18n="onboard_email_label">Email</span> <span class="input-cell-optional" data-i18n="onboard_email_opt">Optional</span>
             </label>
-            <p class="input-cell-hint">Get updates and early access.</p>
+            <p class="input-cell-hint" data-i18n="onboard_email_hint">Get updates and early access.</p>
             <input id="ob-email" type="email" name="email" class="input-cell-field"
-              placeholder="you@example.com" autocomplete="email" />
+              placeholder="you@example.com" autocomplete="email" data-i18n-ph="onboard_email_ph" />
           </div>
         </div>
 
-        <button type="submit" class="btn-step-cta btn-step-cta--generate">
+        <button type="submit" class="btn-step-cta btn-step-cta--generate" data-i18n="onboard_btn_generate">
           Generate My Blueprint →
         </button>
       </div><!-- /step-2 -->
@@ -279,13 +284,13 @@
 
         <!-- Narrative — compact card; full reading opens in bottom sheet -->
         <div class="divider-labeled">
-          <span class="divider-label-text">Your Narrative</span>
+          <span class="divider-label-text" data-i18n="bp_divider_narrative">Your Narrative</span>
         </div>
         <div class="reading-card" id="reading-card" role="button" tabindex="0" aria-label="Open your reading">
           <div class="reading-card-left">
             <span class="reading-card-icon">✦</span>
             <div>
-              <p class="reading-card-label">✦ Tap to get your cosmic reading</p>
+              <p class="reading-card-label" data-i18n="bp_reading_card_label">✦ Tap to get your cosmic reading</p>
               <p class="reading-card-preview" id="reading-card-preview" hidden></p>
             </div>
           </div>
@@ -307,10 +312,8 @@
 
         <!-- Reveal gate: Life Seasons + Energy Charts hidden until tapped -->
         <div id="reveal-seasons-wrap" class="reveal-seasons-wrap" hidden>
-          <button class="btn-reveal-seasons" id="btn-reveal-seasons" type="button">
-            <span>✦</span> Reveal Your Life Journey <span class="reveal-arrow">→</span>
-          </button>
-          <p class="reveal-hint">Life Seasons · Lifetime Arc · Energy Charts</p>
+          <button class="btn-reveal-seasons" id="btn-reveal-seasons" type="button" data-i18n="bp_reveal_btn">✦ Reveal Your Life Journey →</button>
+          <p class="reveal-hint" data-i18n="bp_reveal_hint">Life Seasons · Lifetime Arc · Energy Charts</p>
         </div>
 
         <!-- Life Seasons / 大运 -->
@@ -326,7 +329,7 @@
 
         <!-- Energy Aspects Charts -->
         <div class="divider-labeled" id="energy-divider">
-          <span class="divider-label-text">Energy per Season</span>
+          <span class="divider-label-text" data-i18n="bp_divider_energy">Energy per Season</span>
         </div>
         <div class="energy-charts-section" id="energy-charts-section">
           <!-- Populated by renderEnergyCharts() -->
@@ -341,17 +344,17 @@
         <div id="oracle-templates" class="oracle-templates"></div>
         <div class="oracle-chat" id="oracle-chat">
           <div class="oracle-placeholder" id="oracle-placeholder">
-            <p>Your chart is loaded. Tap a question above or ask your own — Claude will answer with your BaZi context.</p>
+            <p data-i18n="oracle_placeholder">Your chart is loaded. Tap a question above or ask your own — Claude will answer with your BaZi context.</p>
           </div>
           <div class="oracle-leave-warning" id="oracle-leave-warning" hidden>
-            Answers clear when you leave this tab — tap 🔖 Save on any reply to keep it.
+            <span data-i18n="oracle_leave_warning">Answers clear when you leave this tab — tap 🔖 Save on any reply to keep it.</span>
             <button type="button" class="oracle-leave-dismiss" id="btn-dismiss-oracle-warning" aria-label="Dismiss">✕</button>
           </div>
           <div class="oracle-messages" id="oracle-messages"></div>
         </div>
         <form class="oracle-input-form" id="oracle-form">
-          <textarea id="oracle-input" rows="2" placeholder="Ask the Oracle…" required></textarea>
-          <button type="submit" class="btn btn-primary">Send</button>
+          <textarea id="oracle-input" rows="2" placeholder="Ask the Oracle…" required data-i18n-ph="oracle_input_ph"></textarea>
+          <button type="submit" class="btn btn-primary" data-i18n="oracle_send_btn">Send</button>
         </form>
       </div>
 
@@ -362,9 +365,9 @@
 
         <!-- Vault filter: 3-tab segmented control + dynamic pill row -->
         <div class="vault-seg-control" id="vault-seg-control">
-          <button class="vault-seg-btn vault-seg-btn--active" data-seg="foryou" type="button">✦ For You</button>
-          <button class="vault-seg-btn" data-seg="theme" type="button">Theme</button>
-          <button class="vault-seg-btn" data-seg="tradition" type="button">Tradition</button>
+          <button class="vault-seg-btn vault-seg-btn--active" data-seg="foryou" type="button" data-i18n="vault_seg_foryou">✦ For You</button>
+          <button class="vault-seg-btn" data-seg="theme" type="button" data-i18n="vault_seg_theme">Theme</button>
+          <button class="vault-seg-btn" data-seg="tradition" type="button" data-i18n="vault_seg_tradition">Tradition</button>
         </div>
         <div class="vault-filter-row vault-filter-pills" id="vault-filter-pills" hidden></div>
 
@@ -375,15 +378,15 @@
       <!-- TAB 4: Daily Spark -->
       <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-spark" class="tab-pane">
-        <div class="spark-streak" id="spark-streak">✦ <span id="spark-streak-num">0</span> days of awareness</div>
+        <div class="spark-streak" id="spark-streak"></div>
         <div class="spark-card">
-          <h3>Today's Spark</h3>
+          <h3 data-i18n="spark_title">Today's Spark</h3>
           <p class="spark-date" id="spark-date">—</p>
           <p class="spark-affinity" id="spark-affinity" style="display:none"></p>
           <div class="spark-text" id="spark-text"></div>
           <div class="spark-prompt" id="spark-prompt"></div>
           <div class="spark-practice" id="spark-practice"></div>
-          <button type="button" class="btn btn-primary" id="btn-spark-done">I reflected today</button>
+          <button type="button" class="btn btn-primary" id="btn-spark-done" data-i18n="spark_done_btn">I reflected today</button>
         </div>
       </div>
 
@@ -391,7 +394,7 @@
       <!-- TAB 5: Still Point -->
       <!-- ─────────────────────────────────────────────────────────── -->
       <div id="tab-stillpoint" class="tab-pane">
-        <p class="stillpoint-intro">Guided meditations matched to your elemental balance. Choose by element or by need.</p>
+        <p class="stillpoint-intro" data-i18n="stillpoint_intro">Guided meditations matched to your elemental balance. Choose by element or by need.</p>
         <div class="meditation-list" id="meditation-list"></div>
       </div>
 
@@ -400,23 +403,23 @@
     <nav class="app-tabs" aria-label="Main">
       <button type="button" class="tab-btn active" data-tab="blueprint" aria-current="page">
         <span class="tab-icon">◇</span>
-        <span>Blueprint</span>
+        <span data-i18n="tab_blueprint">Blueprint</span>
       </button>
       <button type="button" class="tab-btn" data-tab="oracle">
         <span class="tab-icon">◈</span>
-        <span>Oracle</span>
+        <span data-i18n="tab_oracle">Oracle</span>
       </button>
       <button type="button" class="tab-btn" data-tab="wisdom-vault">
         <span class="tab-icon">☰</span>
-        <span>Wisdom Vault</span>
+        <span data-i18n="tab_vault">Wisdom Vault</span>
       </button>
       <button type="button" class="tab-btn" data-tab="spark">
         <span class="tab-icon">✦</span>
-        <span>Spark</span>
+        <span data-i18n="tab_spark">Spark</span>
       </button>
       <button type="button" class="tab-btn" data-tab="stillpoint">
         <span class="tab-icon">◎</span>
-        <span>Still</span>
+        <span data-i18n="tab_still">Still</span>
       </button>
     </nav>
   </section><!-- /view-app -->
@@ -428,13 +431,14 @@
     <div class="profile-sheet-backdrop" id="profile-sheet-backdrop"></div>
     <div class="profile-sheet-panel">
       <div class="profile-sheet-header">
-        <span class="profile-sheet-title">Switch Profile</span>
+        <span class="profile-sheet-title" data-i18n="profile_sheet_title">Switch Profile</span>
         <button id="btn-close-sheet" class="btn btn-ghost btn-sm" type="button" aria-label="Close">✕</button>
       </div>
       <ul class="profile-list" id="profile-list" role="list"></ul>
-      <button id="btn-add-profile" class="btn btn-primary profile-add-btn" type="button">
+      <button id="btn-add-profile" class="btn btn-primary profile-add-btn" type="button" data-i18n="profile_add_btn">
         + Add new profile
       </button>
+      <button id="btn-lang-switch" class="btn btn-ghost profile-lang-btn" type="button" data-i18n="profile_lang_btn">Language / 语言</button>
     </div>
   </div>
 
@@ -463,32 +467,32 @@
     <div class="reading-sheet">
       <div class="reading-sheet-handle"></div>
       <div class="reading-sheet-header">
-        <h2 class="reading-sheet-title">Your Reading</h2>
+        <h2 class="reading-sheet-title" data-i18n="reading_sheet_title">Your Reading</h2>
         <button class="reading-sheet-close" id="btn-close-reading-sheet" aria-label="Close">&times;</button>
       </div>
       <div class="reading-sheet-body">
         <div class="narrative-header">
-          <h2 class="narrative-main-title">Reveal your unique reading</h2>
-          <span class="badge-current">✦ Personalized for you</span>
+          <h2 class="narrative-main-title" data-i18n="reading_reveal">Reveal your unique reading</h2>
+          <span class="badge-current" data-i18n="reading_personalized">✦ Personalized for you</span>
         </div>
         <!-- Placeholder shown until API narrative is available -->
         <div class="narrative-placeholder" id="narrative-placeholder">
           <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
-          <p class="narrative-placeholder-text">Generating your reading…</p>
+          <p class="narrative-placeholder-text" data-i18n="reading_generating">Generating your reading…</p>
         </div>
 
         <p id="detail-core-essence" class="narrative-core-essence">—</p>
 
-        <h3 class="narrative-section-label">Your current season</h3>
+        <h3 class="narrative-section-label" data-i18n="reading_current_season">Your current season</h3>
         <p id="detail-season" class="narrative-season">—</p>
 
-        <h3 class="narrative-section-label">From the classics</h3>
+        <h3 class="narrative-section-label" data-i18n="reading_classics">From the classics</h3>
         <blockquote class="narrative-classical" id="blockquote-classical" cite="">
           <p id="detail-classical-text">—</p>
           <footer id="detail-classical-source">—</footer>
         </blockquote>
 
-        <h3 class="narrative-section-label">What this means for you</h3>
+        <h3 class="narrative-section-label" data-i18n="reading_means">What this means for you</h3>
         <div class="narrative-pillars">
           <div class="narrative-pillar narrative-pillar--work">
             <div class="narrative-pillar-head">
@@ -523,12 +527,12 @@
         </div>
 
         <section class="narrative-concern" id="section-concern" hidden>
-          <h3>What's on your mind</h3>
+          <h3 data-i18n="reading_concern_title">What's on your mind</h3>
           <p id="detail-concern">—</p>
         </section>
 
         <p class="narrative-refresh-hint">
-          <button type="button" class="btn btn-ghost btn-sm" id="btn-refresh-narrative">Refresh</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-refresh-narrative" data-i18n="reading_refresh_btn">Refresh</button>
           <span class="narrative-version-tag" id="narrative-version-tag" title="Static MVP">v7</span>
         </p>
       </div>
