@@ -692,11 +692,15 @@ blockquote {
   border-top: 1px solid var(--color-border);
 }
 
+/* Divider label: Playfair 900 italic — accent emphasis, brand purple */
 .divider-label-text {
-  font-size: 0.625rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-ghost);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 0.88rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-psychic);
   white-space: nowrap;
 }
 
@@ -1293,12 +1297,12 @@ select.input-cell-field {
 /* ─── Blueprint Hero Info Card — unified callout zone ─── */
 /* One card holds Dominant Archetype + Day Master + Favorable + Zodiac.
    Purpose: immediate clarity. No BaZi knowledge required to read this. */
+/* Hero info card: clean cream — element colors live in the content, not the container */
 .blueprint-hero-info {
   margin-bottom: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--color-cobalt) 22%, transparent);
-  border-left: 3px solid var(--color-cobalt);
-  border-radius: 0 2px 2px 0;
-  background: color-mix(in srgb, var(--color-cobalt) 5%, var(--color-ground));
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: var(--color-ground);
   overflow: hidden;
 }
 
@@ -1308,7 +1312,7 @@ select.input-cell-field {
   border: none;
   border-radius: 0;
   margin-bottom: 0;
-  padding-bottom: 0.6rem;
+  padding: 0.85rem 1rem 0.6rem;
 }
 
 /* ─── Dominant Ten God Badge (standalone fallback + base styles) ─── */
@@ -1361,14 +1365,14 @@ select.input-cell-field {
 .hero-meta-trio {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid color-mix(in srgb, var(--color-cobalt) 15%, transparent);
+  border-top: 1px solid var(--color-border);
 }
 
 .hero-meta-item {
   display: flex;
   flex-direction: column;
   padding: 0.6rem 0.75rem;
-  border-right: 1px solid color-mix(in srgb, var(--color-cobalt) 15%, transparent);
+  border-right: 1px solid var(--color-border);
 }
 .hero-meta-item:last-child { border-right: none; }
 
@@ -3074,8 +3078,8 @@ select.input-cell-field {
 .annual-arc {
   padding: 0.9rem 1rem;
   margin-bottom: 0.5rem;
-  background: rgba(30,22,16,0.03);
-  border: 1px solid color-mix(in srgb, var(--color-gold) 30%, transparent);
+  background: var(--color-ground);
+  border: 1px solid var(--color-border);
   border-radius: 2px;
 }
 
@@ -3178,25 +3182,19 @@ select.input-cell-field {
 
 .dayun-card:hover {
   background: var(--color-surface-raised);
-  border-color: rgba(123,95,160,0.4);
+  border-color: rgba(30,22,16,0.25);
 }
 
 .dayun-card:active {
   opacity: 0.75;
 }
 
-/* Psychic purple top accent line — unified structural chrome */
-.dayun-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--color-psychic);
-}
+/* No top stripe — clean card, color lives in the content */
+.dayun-card::before { display: none; }
 
-/* Active (current) card gets psychic purple border */
+/* Active card: subtle ink emphasis */
 .dayun-card-active {
-  border-color: var(--color-psychic);
+  border-color: rgba(30,22,16,0.3);
 }
 
 /* ─── Row system inside each card ─── */
@@ -3959,8 +3957,8 @@ select.input-cell-field {
   justify-content: space-between;
   padding: 1rem 1.1rem;
   cursor: pointer;
-  background: rgba(123, 95, 160, 0.06);
-  border: 1px solid rgba(123, 95, 160, 0.4);
+  background: var(--color-ground);
+  border: 1px solid var(--color-border);
   border-radius: 2px;
   margin-bottom: 1rem;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s var(--spring-smooth);
