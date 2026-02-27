@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260227c" />
+  <link rel="stylesheet" href="styles.css?v=20260228a" />
   <!-- Vercel Analytics Web SDK -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
@@ -239,7 +239,7 @@
           <div class="soul-portrait-frame" id="soul-portrait-frame">
             <img id="blueprint-detail-visual" class="soul-portrait-img" src="" alt="Soul portrait" />
             <div class="soul-portrait-text">
-              <h2 id="detail-type-name" class="soul-portrait-name">—</h2>
+              <h2 id="detail-type-name" class="soul-portrait-name" data-term="soul-type" style="cursor:pointer" title="Tap to learn more">—</h2>
               <p id="detail-type-sub" class="soul-portrait-sub">—</p>
             </div>
           </div>
@@ -251,7 +251,7 @@
 
         <!-- Four Pillars / 四柱 -->
         <div class="divider-labeled">
-          <span class="divider-label-text">四柱 · Four Pillars</span>
+          <button class="term-link divider-label-text" data-term="four-pillars" type="button">四柱 · Four Pillars <span class="term-info">ⓘ</span></button>
         </div>
         <div id="bazi-pillars-section" class="bazi-table">
           <!-- Populated by renderFourPillars() -->
@@ -261,11 +261,11 @@
         <!-- Meta Row -->
         <div class="blueprint-meta three-cols" style="margin-top:1rem">
           <div class="blueprint-meta-item">
-            <span class="blueprint-meta-label">Day Master</span>
+            <button class="term-link blueprint-meta-label" data-term="day-master" type="button">Day Master <span class="term-info">ⓘ</span></button>
             <span id="detail-destiny-structure">—</span>
           </div>
           <div class="blueprint-meta-item">
-            <span class="blueprint-meta-label">Favorable</span>
+            <button class="term-link blueprint-meta-label" data-term="element-balance" type="button">Favorable <span class="term-info">ⓘ</span></button>
             <span id="detail-favorable-elements">—</span>
           </div>
           <div class="blueprint-meta-item">
@@ -294,7 +294,7 @@
 
         <!-- Annual Arc / 流年 This Year -->
         <div class="divider-labeled">
-          <span class="divider-label-text">流年 · This Year</span>
+          <button class="term-link divider-label-text" data-term="annual-arc" type="button">流年 · This Year <span class="term-info">ⓘ</span></button>
         </div>
         <div id="annual-arc" class="annual-arc">
           <div class="annual-arc-header">
@@ -315,7 +315,7 @@
 
         <!-- Life Seasons / 大运 -->
         <div class="divider-labeled" id="dayun-divider">
-          <span class="divider-label-text">大运 · Life Seasons</span>
+          <button class="term-link divider-label-text" data-term="life-seasons" type="button">大运 · Life Seasons <span class="term-info">ⓘ</span></button>
         </div>
         <div class="dayun-section" id="dayun-section">
           <div class="dayun-strip" id="dayun-strip">
@@ -341,8 +341,7 @@
         <div id="oracle-templates" class="oracle-templates"></div>
         <div class="oracle-chat" id="oracle-chat">
           <div class="oracle-placeholder" id="oracle-placeholder">
-            <p>Life Oracle combines your BaZi chart with classical wisdom. Ask anything about career, timing, relationships, or growth.</p>
-            <p><em>In the full app, an AI agent (Claude) would answer with your chart context. This is a static demo.</em></p>
+            <p>Your chart is loaded. Tap a question above or ask your own — Claude will answer with your BaZi context.</p>
           </div>
           <div class="oracle-leave-warning" id="oracle-leave-warning" hidden>
             Answers clear when you leave this tab — tap 🔖 Save on any reply to keep it.
@@ -536,8 +535,20 @@
     </div>
   </div>
 
+  <!-- Glossary modal — reuses vault-modal-overlay + vault-modal-card CSS -->
+  <div id="glossary-modal" class="vault-modal-overlay" hidden aria-modal="true" role="dialog" aria-label="Term definition">
+    <div class="vault-modal-card glossary-card">
+      <button id="glossary-modal-close" class="vault-modal-close" aria-label="Close">×</button>
+      <div class="glossary-header">
+        <span class="glossary-cn" id="gm-cn"></span>
+        <h3 class="glossary-en" id="gm-en"></h3>
+      </div>
+      <p class="glossary-body" id="gm-body"></p>
+    </div>
+  </div>
+
   <script src="content/wisdom-vault.js?v=6"></script>
   <script src="content/classical-bazi-excerpts.js?v=1"></script>
-  <script src="app.js?v=20260227c"></script>
+  <script src="app.js?v=20260228a"></script>
 </body>
 </html>

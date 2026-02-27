@@ -1469,6 +1469,8 @@
       const text = narrative.coreEssence || '';
       previewEl.textContent = text.length > 90 ? text.slice(0, 87) + '\u2026' : (text || 'Tap to unlock your personalized reading \u2192');
     }
+    // Sync card CTA state now that narrative has arrived
+    updateReadingCardState();
   }
 
   async function buildChart() {
@@ -1514,6 +1516,31 @@
   function setEl(id, text) {
     const el = document.getElementById(id);
     if (el && text != null) el.textContent = text;
+  }
+
+  // Update reading card visual state: pulsing CTA when unclaimed, calm when claimed
+  function updateReadingCardState() {
+    const card = document.getElementById('reading-card');
+    if (!card) return;
+    const claimed = !!(state.narrativeFromAPI && state.narrativeFromAPI.coreEssence);
+    card.classList.toggle('reading-card--unclaimed', !claimed);
+    const labelEl = card.querySelector('.reading-card-label');
+    if (labelEl) {
+      if (!claimed) {
+        labelEl.innerHTML = '\u2726 Generate AI Reading <span class="reading-card-badge">Personalized</span>';
+      } else {
+        labelEl.innerHTML = '\u2726 Your Cosmic Reading <span class="reading-card-badge">Personalized</span>';
+      }
+    }
+    const previewEl = document.getElementById('reading-card-preview');
+    if (previewEl && !claimed) {
+      previewEl.textContent = 'Tap to unlock your personalized narrative \u2192';
+    }
+  }
+
+  // Produce a clickable term-link label for the BaZi grid
+  function termLabel(cn, en, termId) {
+    return `<button class="term-link" data-term="${termId}" type="button"><span>${cn}</span><span class="bazi-label-en">${en}</span><span class="term-info">\u24d8</span></button>`;
   }
 
   // ─── Four Pillars Renderer (row-based grid) ───────────────────────
@@ -1581,67 +1608,67 @@
     const rows = [
       // Row 0 — header
       `<div class="bazi-row bazi-row-header bazi-row-core">
-        <div class="bazi-label"><span>日期</span><span class="bazi-label-en">Pillar</span></div>
+        <div class="bazi-label">${termLabel('日期', 'Pillar', 'four-pillars')}</div>
         ${PILLAR_LABELS_CN.map((cn, i) => `<div class="bazi-col-head${i===2?' bazi-day-head':''}">${cn}<span class="bazi-col-en">${PILLAR_LABELS_EN[i]}</span></div>`).join('')}
       </div>`,
 
       // Row 1 — 主星 Ten God
       `<div class="bazi-row bazi-row-core">
-        <div class="bazi-label"><span>主星</span><span class="bazi-label-en">10 Gods</span></div>
+        <div class="bazi-label">${termLabel('主星', '10 Gods', 'ten-gods')}</div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-tengod${i===2?' bazi-day':''}">${TEN_GOD_NAMES[d.tg]}<span class="bazi-tg-en">${TEN_GOD_EN[d.tg]}</span></div>`).join('')}
       </div>`,
 
       // Row 2 — 天干 Heavenly Stems
       `<div class="bazi-row bazi-row-core">
-        <div class="bazi-label"><span>天干</span><span class="bazi-label-en">Stems</span></div>
+        <div class="bazi-label">${termLabel('天干', 'Stems', 'heavenly-stems')}</div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${stemCell(d).replace('<div class="bazi-cell">','<div class="bazi-cell">')}</div>`).join('')}
       </div>`,
 
       // Row 3 — 地支 Earthly Branches
       `<div class="bazi-row bazi-row-core">
-        <div class="bazi-label"><span>地支</span><span class="bazi-label-en">Branches</span></div>
+        <div class="bazi-label">${termLabel('地支', 'Branches', 'earthly-branches')}</div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${branchCell(d)}</div>`).join('')}
       </div>`,
 
       // Row 4 — 藏干 Hidden Stems (first reference row — thick top border)
       `<div class="bazi-row bazi-row-ref bazi-row-ref-first">
-        <div class="bazi-label"><span>藏干</span><span class="bazi-label-en">Hidden</span></div>
+        <div class="bazi-label">${termLabel('藏干', 'Hidden', 'hidden-stems')}</div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${hiddenCell(d)}</div>`).join('')}
       </div>`,
 
       // Row 5 — 副星 Sub Stars (ten gods of hidden stems)
       `<div class="bazi-row bazi-row-ref">
-        <div class="bazi-label"><span>副星</span><span class="bazi-label-en">Sub Stars</span></div>
+        <div class="bazi-label">${termLabel('副星', 'Sub Stars', 'sub-stars')}</div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${subStarCell(d)}</div>`).join('')}
       </div>`,
 
       // Row 6 — 星运 12 Growth Stage (stem in its branch)
       `<div class="bazi-row bazi-row-ref">
-        <div class="bazi-label"><span>星运</span><span class="bazi-label-en">Stage</span></div>
+        <div class="bazi-label">${termLabel('星运', 'Stage', 'growth-stage')}</div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.stage}</div>`).join('')}
       </div>`,
 
       // Row 7 — 自坐 Self-seat (day master in each branch)
       `<div class="bazi-row bazi-row-ref">
-        <div class="bazi-label"><span>自坐</span><span class="bazi-label-en">Self</span></div>
+        <div class="bazi-label">${termLabel('自坐', 'Self', 'self-seat')}</div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.selfSeat}</div>`).join('')}
       </div>`,
 
       // Row 8 — 空亡 Empty/Void
       `<div class="bazi-row bazi-row-ref">
-        <div class="bazi-label"><span>空亡</span><span class="bazi-label-en">Void</span></div>
+        <div class="bazi-label">${termLabel('空亡', 'Void', 'void-emptiness')}</div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.kongwang}</div>`).join('')}
       </div>`,
 
       // Row 9 — 纳音 Nayin (last row when no spirits)
       `<div class="bazi-row bazi-row-ref${hasSha ? '' : ' bazi-row-last'}">
-        <div class="bazi-label"><span>纳音</span><span class="bazi-label-en">Nayin</span></div>
+        <div class="bazi-label">${termLabel('纳音', 'Nayin', 'nayin')}</div>
         ${pData.map((d, i) => `<div class="bazi-cell bazi-cell-small${i===2?' bazi-day':''}">${d.nayin}</div>`).join('')}
       </div>`,
 
       // Row 10 — 神煞 Spirit Killers (only shown when at least one pillar has sha)
       ...(hasSha ? [`<div class="bazi-row bazi-row-ref bazi-row-last">
-        <div class="bazi-label"><span>神煞</span><span class="bazi-label-en">Spirits</span></div>
+        <div class="bazi-label">${termLabel('神煞', 'Spirits', 'spirit-killers')}</div>
         ${pData.map((d, i) => `<div class="${i===2?'bazi-day':''}">${shaCell(d)}</div>`).join('')}
       </div>`] : [])
     ];
@@ -2308,9 +2335,11 @@
       const dtgCN   = TEN_GOD_NAMES[dtgIdx] || '';
       const dtgBrief = TEN_GOD_BRIEF[dtgIdx] || '';
       badgeEl.innerHTML =
-        `<span class="dtg-label">Dominant Archetype</span>` +
+        `<button class="term-link" data-term="dominant-archetype" type="button" style="display:block;text-align:left;width:100%">` +
+        `<span class="dtg-label">Dominant Archetype <span class="term-info">\u24d8</span></span>` +
         `<span class="dtg-name">${dtgName} <span class="dtg-cn">${dtgCN}</span></span>` +
-        `<span class="dtg-brief">${dtgBrief}</span>`;
+        `<span class="dtg-brief">${dtgBrief}</span>` +
+        `</button>`;
     }
 
     // Meta
@@ -2324,7 +2353,7 @@
     if (barsEl) {
       barsEl.innerHTML = Object.entries(balance).map(([k, v]) =>
         `<div class="element-row">
-          <span>${ELEMENT_NAMES[k]}</span>
+          <button class="term-link" data-term="element-balance" type="button" style="display:inline;font-size:inherit">${ELEMENT_NAMES[k]}</button>
           <div class="bar"><div class="fill" style="width:${v}%;background:${ELEMENT_HEX[k]}"></div></div>
           <span>${v}%</span>
         </div>`
@@ -2398,6 +2427,9 @@
     renderDaYun();
     renderEnergyCharts();
     initBlueprintReveal();
+
+    // Sync reading card visual state (pulsing CTA if no AI narrative yet)
+    updateReadingCardState();
   }
 
   // ─── Tab Management ──────────────────────────────────────────────
@@ -2611,6 +2643,7 @@
         const title    = t.title.replace('{year}', year);
         const question = t.question.replace(/\{year\}/g, year);
         btn.innerHTML =
+          '<span class="oracle-ai-badge">\u26a1 Ask AI</span>' +
           '<span class="oracle-template-icon">'  + t.icon  + '</span>' +
           '<span class="oracle-template-title">' + title   + '</span>' +
           '<span class="oracle-template-desc">'  + t.desc  + '</span>';
@@ -3550,6 +3583,65 @@
     set('email',       state.email || '');
   }
 
+  // ─── BaZi Glossary ────────────────────────────────────────────
+  const GLOSSARY = {
+    'four-pillars':     { cn: '四柱',   en: 'Four Pillars',          body: 'Your Four Pillars are the core of a BaZi chart — four units of time (Year, Month, Day, Hour), each with a Heavenly Stem and Earthly Branch. Together they form your eight characters (八字). Ancient scholars believed this blueprint encodes your elemental nature, relationships, timing, and life path.' },
+    'day-master':       { cn: '日主',   en: 'Day Master',             body: 'Your Day Master is the Heavenly Stem of your Day Pillar — it represents you. It describes your fundamental nature: how you think, feel, and engage with the world. All other elements in your chart are interpreted in relation to how they support, challenge, or transform your Day Master.' },
+    'ten-gods':         { cn: '十神',   en: 'Ten Gods',               body: 'The Ten Gods describe how every other element in your chart relates to your Day Master. Each of the ten relationships — Companion, Rob Wealth, Eating God, Hurting Officer, Indirect/Direct Wealth, Seven Killings, Direct Officer, Indirect/Direct Resource — carries its own theme around creativity, power, money, or relationships.' },
+    'heavenly-stems':   { cn: '天干',   en: 'Heavenly Stems',         body: 'Heavenly Stems are the ten primary energies of BaZi — the Yang and Yin expressions of each of the five elements (Wood, Fire, Earth, Metal, Water). They appear at the top of each pillar, representing the visible and active surface of that period\'s energy. Your Day Stem is your Day Master — the most personal of all.' },
+    'earthly-branches': { cn: '地支',   en: 'Earthly Branches',       body: 'Earthly Branches are the twelve cyclical phases of time, corresponding to the twelve zodiac animals. They hold complex energy packages including primary and hidden stems, encoding how elemental energy matures, peaks, and transforms. Branches reveal the deeper, more hidden aspects of each pillar.' },
+    'hidden-stems':     { cn: '藏干',   en: 'Hidden Stems',           body: 'Hidden Stems are the sub-elements concealed within each Earthly Branch. While the Branch shows one visible energy, these hidden roots reveal additional layers — secondary motivations or latent talents. Some BaZi masters consider hidden stems the most important part of the chart, because they describe what\'s actually driving your visible personality.' },
+    'sub-stars':        { cn: '副星',   en: 'Sub Stars',              body: 'Sub Stars apply the Ten God framework to the Hidden Stems within each Branch. They represent secondary energetic themes — less obvious than your main Ten Gods but still active. Sub Stars often reveal talents or patterns that emerge in close relationships or under specific life pressures.' },
+    'growth-stage':     { cn: '星运',   en: 'Twelve Growth Stages',   body: 'The Twelve Growth Stages describe the life cycle of elemental energy — from birth through growth, peak, decline, and rest. Applied to your pillars, they reveal whether each element in your chart is flourishing or receding. A strong stage means that energy is readily available to you; a weak stage means it operates quietly in the background.' },
+    'self-seat':        { cn: '自坐',   en: 'Self-Seat',              body: 'Self-Seat applies the Twelve Growth Stages to your Day Master specifically — showing how your core element sits within each Branch in your chart. A strong self-seat means that pillar\'s period feels natural and energizing for you. A weak self-seat can indicate a chapter where you\'re working against your grain.' },
+    'void-emptiness':   { cn: '空亡',   en: 'Void / Empty',           body: 'Void marks certain Branches as "empty" relative to a given pair of Stems. When a pillar falls in void, its energy is weakened — like potential that doesn\'t fully manifest. Voids often indicate areas where effort slips away or takes longer to materialize. Some masters read them as spiritual openings: less worldly attachment, more inner clarity.' },
+    'nayin':            { cn: '纳音',   en: 'Nayin',                  body: 'Nayin is an ancient layer of BaZi that assigns each stem-branch pair a material metaphor — like "Sea Gold," "Thunder Fire," or "Mountain Head Earth." These 30 archetypes describe the deeper resonance of a period, showing how cosmic energy interacts with the physical world. Nayin was more central in classical texts and adds texture to timing interpretations.' },
+    'spirit-killers':   { cn: '神煞',   en: 'Spirit Stars',           body: 'Spirit Stars are special markers derived from combinations of stems and branches. They carry archetypal meanings: 天乙贵人 (Heavenly Noble) signals divine protection and helpful people, 桃花 (Peach Blossom) marks romantic magnetism, 驿马 (Traveling Horse) signals movement and career change. These stars amplify certain energies and events within your chart.' },
+    'life-seasons':     { cn: '大运',   en: 'Life Seasons',           body: 'Life Seasons are 10-year periods of luck energy that overlay your natal chart like changing weather. Each decade activates a new stem and branch, shifting which elements are energized in your life and what themes come forward. Unlike your fixed natal chart, the Life Seasons show how your chart evolves as you move through different chapters.' },
+    'annual-arc':       { cn: '流年',   en: 'Annual Arc',             body: 'The Annual Arc shows the current year\'s stem and branch energy overlaid onto your chart. Each calendar year brings a specific elemental flavor that interacts with your natal chart and current Life Season. Your four domain scores (Wealth, Career, Love, Health) show where this year\'s energy is most harmonious or challenging for your particular chart.' },
+    'element-balance':  { cn: '五行',   en: 'Five Element Balance',   body: 'Your element balance shows how much Wood, Fire, Earth, Metal, and Water appear across your four pillars. Because your Day Master has a specific element, some elements nourish it while others drain or control it. The balance reveals which energies are naturally strong in your life — and which ones trigger growth or challenge when they appear in timing cycles.' },
+    'soul-type':        { cn: '日主原型', en: 'Soul Type',            body: 'Your Soul Type translates your Day Master element into a living archetype with its own name and story. Each of the ten Day Masters has a signature way of engaging with the world — for example, Yang Wood is "The Architect," direct in growth and vision, while Yin Water is "The Mystic," fluid and introspective. Your Soul Type is the most accessible translation of your core energetic identity.' },
+    'dominant-archetype':{ cn: '主星原型', en: 'Dominant Archetype',  body: 'Your Dominant Archetype is the Ten God that appears most powerfully in your chart. While you have all ten relationships in some form, the dominant one shapes how you naturally operate — it\'s the energetic role you step into most comfortably. A dominant Direct Officer type tends toward structure and responsibility; a dominant Eating God type is driven by creativity and self-expression.' },
+  };
+
+  function initGlossaryModal() {
+    const modal    = document.getElementById('glossary-modal');
+    if (!modal) return;
+    const closeBtn = document.getElementById('glossary-modal-close');
+
+    function open(termId) {
+      const entry = GLOSSARY[termId];
+      if (!entry) return;
+      haptic('light');
+      document.getElementById('gm-cn').textContent   = entry.cn;
+      document.getElementById('gm-en').textContent   = entry.en;
+      document.getElementById('gm-body').textContent = entry.body;
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      modal.classList.add('vault-modal-overlay--closing');
+      modal.addEventListener('animationend', () => {
+        modal.classList.remove('vault-modal-overlay--closing');
+        modal.hidden = true;
+        document.body.style.overflow = '';
+      }, { once: true });
+    }
+
+    // Delegated click — catches any [data-term] anywhere in the document
+    document.addEventListener('click', e => {
+      const el = e.target.closest('[data-term]');
+      if (el) { e.stopPropagation(); open(el.dataset.term); }
+    });
+
+    closeBtn?.addEventListener('click', close);
+    modal.addEventListener('click', e => { if (e.target === modal) close(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+  }
+
   // ─── Generating View (Brand Splash + Loading Interstitial) ──────
 
   const SPLASH_PHRASES = [
@@ -3655,6 +3747,7 @@
     initRefreshNarrative();
     initProfileSwitcher();
     initReadingSheet();
+    initGlossaryModal();
 
     // Wire "Reveal My Blueprint" CTA inside #view-generating
     const genCtaBtn = document.getElementById('btn-gen-cta');

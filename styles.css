@@ -3788,6 +3788,109 @@ select.input-cell-field {
   padding: 1.25rem 1.25rem 2rem;
 }
 
+/* ─── Clickable term links (tap to explain BaZi concepts) ─────── */
+.term-link {
+  display: inline;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgba(160, 32, 240, 0.35);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s ease, color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.term-link:hover {
+  color: var(--color-psychic);
+  text-decoration-color: rgba(160, 32, 240, 0.7);
+}
+.term-info {
+  font-size: 0.65em;
+  color: rgba(160, 32, 240, 0.5);
+  vertical-align: super;
+  margin-left: 0.15em;
+  font-style: normal;
+  transition: color 0.15s ease;
+}
+.term-link:hover .term-info { color: var(--color-psychic); }
+
+/* ─── Glossary modal (reuses .vault-modal-overlay + .vault-modal-card) ─── */
+.glossary-card {
+  padding: 1.5rem 1.5rem 2rem;
+  max-width: 420px;
+}
+.glossary-header {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.75rem;
+}
+.glossary-cn {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--color-psychic);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+.glossary-en {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-ghost);
+  margin: 0;
+}
+.glossary-body {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--color-ash);
+  line-height: 1.75;
+}
+
+/* ─── Reading card: unclaimed / pulsing CTA state ─────────────── */
+@keyframes reading-card-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(160, 32, 240, 0);
+    border-color: rgba(160, 32, 240, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 18px 2px rgba(160, 32, 240, 0.18);
+    border-color: rgba(160, 32, 240, 0.65);
+  }
+}
+.reading-card--unclaimed {
+  animation: reading-card-glow 2.4s ease-in-out infinite;
+  border-width: 1.5px;
+}
+.reading-card--unclaimed .reading-card-icon {
+  animation: gen-star-pulse 2.4s ease-in-out infinite;
+}
+
+/* ─── Oracle AI badge on template cards ─────────────────────────── */
+.oracle-template-card { position: relative; }
+.oracle-ai-badge {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.55rem;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-cobalt);
+  background: rgba(58, 125, 68, 0.1);
+  border: 1px solid rgba(58, 125, 68, 0.25);
+  border-radius: 20px;
+  padding: 0.15em 0.5em;
+  pointer-events: none;
+}
+
 /* ═══════════════════════════════════════════════════════════════ */
 /* ALL LIGHT CARD SURFACES — comprehensive dark text context      */
 /* Every surface with --color-ground / --color-surface-raised     */
