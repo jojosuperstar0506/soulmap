@@ -30,6 +30,12 @@
   };
   const STEM_ELEMENT = [0,0,1,1,2,2,3,3,4,4]; // 0=wood 1=fire 2=earth 3=metal 4=water
 
+  // ─── Haptic feedback helper ───────────────────────────────────────
+  function haptic(style) {
+    if (!navigator.vibrate) return;   // silent no-op on iOS Safari
+    navigator.vibrate(style === 'medium' ? 15 : style === 'heavy' ? 25 : 8);
+  }
+
   // ─── BaZi lookup tables ──────────────────────────────────────────
 
   // Hidden stems per earthly branch (array of stem indices)
@@ -2167,6 +2173,7 @@
 
   // ─── Tab Management ──────────────────────────────────────────────
   function switchTab(tabId) {
+    haptic('light');
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('tab-active'));
     document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.removeAttribute('aria-current'); });
     const pane = document.getElementById('tab-' + tabId);
@@ -2781,6 +2788,7 @@
   let _modalItem = null;
 
   function openVaultModal(item) {
+    haptic('light');
     _modalItem = item;
     const modal     = document.getElementById('vault-modal');
     const tradition = item.isCitation ? (item._savedFrom || 'saved') : (item.tradition || '');
@@ -2806,15 +2814,76 @@
 
   function closeVaultModal() {
     const modal = document.getElementById('vault-modal');
-    modal.hidden = true;
-    document.body.style.overflow = '';
-    _modalItem = null;
+    if (modal.hidden) return;
+    if (modal.classList.contains('vault-modal-overlay--closing')) return;
+
+    modal.classList.add('vault-modal-overlay--closing');
+    modal.addEventListener('animationend', function handler(e) {
+      if (e.target !== modal) return;   // ignore child card animation bubbling up
+      modal.removeEventListener('animationend', handler);
+      modal.classList.remove('vault-modal-overlay--closing');
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      _modalItem = null;
+    });
   }
 
   function _updateModalSaveBtn(btn, item) {
     const saved = isVaultQuoteSaved(item);
     btn.textContent = saved ? '✓ Saved' : '🔖 Save';
     btn.classList.toggle('vault-modal-save--saved', saved);
+  }
+
+  function _setupSwipeDismiss(card, overlay) {
+    let startY = 0, currentDY = 0, isDragging = false;
+
+    card.addEventListener('touchstart', e => {
+      if (card.scrollTop > 2) return;        // don't interfere when card is scrolled
+      startY = e.touches[0].clientY;
+      isDragging = true;
+      currentDY = 0;
+      card.style.animation = 'none';         // free transform from entry keyframe
+    }, { passive: true });
+
+    card.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      const dy = e.touches[0].clientY - startY;
+      if (dy < 0) {                          // upward drag — hand back to scroll
+        isDragging = false;
+        card.style.transform = '';
+        card.style.animation = '';
+        overlay.style.opacity = '';
+        return;
+      }
+      currentDY = dy;
+      card.style.transform = `translateY(${dy}px)`;
+      overlay.style.opacity = Math.max(0, 1 - dy / 200);
+    }, { passive: true });
+
+    card.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      if (currentDY > 80) {
+        card.style.transform = '';
+        card.style.animation = '';
+        overlay.style.opacity = '';
+        closeVaultModal();
+      } else {
+        // snap back with spring
+        card.style.transition = `transform 0.4s var(--spring-bounce)`;
+        card.style.transform = 'translateY(0)';
+        overlay.style.transition = 'opacity 0.3s ease';
+        overlay.style.opacity = '1';
+        card.addEventListener('transitionend', function cleanup() {
+          card.removeEventListener('transitionend', cleanup);
+          card.style.transition = '';
+          card.style.transform = '';
+          card.style.animation = '';
+          overlay.style.transition = '';
+          overlay.style.opacity = '';
+        });
+      }
+    }, { passive: true });
   }
 
   function initVaultModal() {
@@ -2828,6 +2897,7 @@
 
     document.getElementById('vm-save').addEventListener('click', () => {
       if (!_modalItem) return;
+      haptic('medium');
       if (isVaultQuoteSaved(_modalItem)) unsaveVaultQuote(_modalItem);
       else saveVaultQuote(_modalItem);
       _updateModalSaveBtn(document.getElementById('vm-save'), _modalItem);
@@ -2843,6 +2913,8 @@
       btn.textContent = '✓ Copied';
       setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
     });
+
+    _setupSwipeDismiss(modal.querySelector('.vault-modal-card'), modal);
   }
 
   function initWisdomVault() {
@@ -2938,6 +3010,7 @@
       document.getElementById('spark-streak-num').textContent = state.streak;
     } catch (_) {}
     document.getElementById('btn-spark-done').addEventListener('click', () => {
+      haptic('medium');
       state.streak++;
       try { localStorage.setItem('soulmap_streak', String(state.streak)); } catch (_) {}
       document.getElementById('spark-streak-num').textContent = state.streak;
