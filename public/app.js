@@ -1128,6 +1128,7 @@
       currentConcern:   state.currentConcern || '',
       createdAt:        idx >= 0 ? profiles[idx].createdAt : Date.now(),
       narrativeFromAPI:    state.narrativeFromAPI || null,
+      narrativeLang:       state.narrativeFromAPI ? (window.appLang || 'en') : null,
       narrativePillarsStr: (state.narrativeFromAPI && state.chart)
                              ? (state.chart.pillarsStr || null)
                              : null,
@@ -1161,7 +1162,8 @@
       soulTypeIndex:    chart.dayMaster,
       profileId:        p.id,
       profileName:      p.name || 'My Chart',
-      narrativeFromAPI: (p.narrativeFromAPI && p.narrativePillarsStr && chart.pillarsStr === p.narrativePillarsStr)
+      narrativeFromAPI: (p.narrativeFromAPI && p.narrativePillarsStr && chart.pillarsStr === p.narrativePillarsStr
+                          && (p.narrativeLang || 'en') === (window.appLang || 'en'))
                           ? p.narrativeFromAPI
                           : null,
       savedOracleItems: p.savedOracleItems || [],
@@ -4452,6 +4454,16 @@
       renderAppBlueprint();
       showView('view-app');
       switchTab('blueprint');
+      // Auto-fetch narrative if missing (e.g. language changed since last session)
+      if (state.chart && !state.narrativeFromAPI) {
+        fetchNarrativeFromAPI(state.chart).then(narrative => {
+          if (narrative) {
+            setState({ narrativeFromAPI: narrative });
+            saveCurrentProfile();
+            updateNarrativeSection(narrative);
+          }
+        });
+      }
     }
     // else: stay on view-landing (default)
   }
