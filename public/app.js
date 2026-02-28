@@ -3305,17 +3305,39 @@
       // Disable send while waiting
       if (sendBtn) sendBtn.disabled = true;
 
-      // Typing indicator
+      // Typing indicator with cycling marketing phrase
       const typing = document.createElement('div');
       typing.className = 'msg assistant typing';
-      typing.innerHTML = '<span></span><span></span><span></span>';
+      const _phrases = t('LOADING_PHRASES');
+      let _pi = Math.floor(Math.random() * _phrases.length);
+      typing.innerHTML = `
+        <p class="typing-phrase">${_phrases[_pi]}</p>
+        <div class="typing-dots"><span></span><span></span><span></span></div>`;
       messages.appendChild(typing);
       messages.scrollTop = messages.scrollHeight;
+
+      // Cycle through phrases while waiting
+      const _typingInterval = setInterval(() => {
+        const el = typing.querySelector('.typing-phrase');
+        if (el && typing.parentNode) {
+          el.style.opacity = '0';
+          setTimeout(() => {
+            if (el.parentNode) {
+              _pi = (_pi + 1) % _phrases.length;
+              el.textContent = _phrases[_pi];
+              el.style.opacity = '';
+            }
+          }, 350);
+        } else {
+          clearInterval(_typingInterval);
+        }
+      }, 3200);
 
       try {
         const answer = await fetchOracleAnswer(q, conversationHistory);
 
-        // Remove typing indicator, show real reply
+        // Remove typing indicator + stop phrase cycling
+        clearInterval(_typingInterval);
         typing.remove();
         const reply = document.createElement('div');
         reply.className = 'msg assistant';
@@ -3364,6 +3386,7 @@
         if (parsed) addCitationToVault(parsed);
 
       } catch (err) {
+        clearInterval(_typingInterval);
         typing.remove();
         const errMsg = document.createElement('div');
         errMsg.className = 'msg assistant error';
