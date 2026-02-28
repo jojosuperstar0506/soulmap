@@ -255,16 +255,16 @@
         'You attract mentors and protection \u2014 others invest in you because they see your potential.',
       ],
       DECISION_LENS: [
-        "You calibrate heavily against others \u2014 what peers are doing, what the field expects, whether your move will be legible to those you respect. This makes you unusually good at reading a room, and sometimes late to trust a direction others haven't validated yet. Watch for: delaying a decision because you haven't seen someone else make it first.",
-        "You move fast and trust your instincts \u2014 which has served you. The risk is underweighting the cost of a move that can't be undone, or optimizing for the bold read when the patient one was right. Watch for: framing caution as timidity when it's actually accurate.",
-        "New possibilities reliably feel more alive than current commitments \u2014 not because of restlessness, but because your mind genuinely generates better options under constraint. The pattern to catch: surfacing new alternatives right at the moment of commitment. Watch for: mistaking the discomfort of closing as a signal the option isn't right.",
-        "You're skilled at seeing what's wrong with the conventional option. This is a genuine asset \u2014 except when it becomes harder to commit to something imperfect than to keep looking for the better path. Watch for: using critical thinking to defer rather than to decide.",
-        "You're tuned for opportunity \u2014 you notice upside quickly and move toward it naturally. The structural blind spot is underweighting the cost of moves that pull you off your core direction. Watch for: the decision that looks like expansion but is actually distraction.",
-        "You have a long horizon and genuine patience \u2014 you're comfortable with investments that take time. The pattern to watch is the inverse: sometimes what looks like patient cultivation is actually avoidance of a decision that's already overdue. Watch for: \"not the right time\" becoming a permanent posture.",
-        "You sharpen through resistance \u2014 you're at your best when something is pushing back. The risk is framing every decision as a test of resolve, which makes it harder to distinguish between friction that's formative and friction that's just wrong. Watch for: staying in something difficult because leaving feels like losing.",
-        "You trust structure, process, and proven precedent. This makes you reliable and often right. The structural pattern: your threshold for \"enough information to decide\" is higher than most situations actually require. Watch for: the decision you've made in practice but haven't made in form.",
-        "You trust deep knowing over surface evidence \u2014 and your inner sense is often accurate. The risk is that genuine insight and avoidance of the difficult can feel identical from the inside. Watch for: \"I'm not ready\" as a cover for \"I don't want to choose.\"",
-        "You decide well when you feel supported \u2014 and you're skilled at building the conditions for good decisions. The pattern to watch: over-consulting. Bringing in more perspectives beyond what the decision actually requires. Watch for: the point where more input becomes a substitute for commitment.",
+        "You calibrate against what peers are doing — great at reading a room, sometimes slow to trust what others haven't validated. Watch for: delaying decisions until you've seen someone else make them first.",
+        "You move fast and trust your instincts — the risk is underweighting what can't be undone. Watch for: framing caution as timidity when it's actually accurate.",
+        "New possibilities feel more alive than current commitments — your mind generates better options under constraint. Watch for: surfacing alternatives at the exact moment of commitment.",
+        "You spot what's wrong with the conventional option — a genuine asset, until searching becomes easier than deciding. Watch for: using critical thinking to defer rather than to decide.",
+        "You're tuned for opportunity — you notice upside quickly and move toward it naturally. Watch for: decisions that look like expansion but are actually distraction.",
+        "You have a long horizon and genuine patience — sometimes cultivation masks an overdue decision. Watch for: \"not the right time\" becoming a permanent posture.",
+        "You sharpen through resistance — but not all friction is formative. Watch for: staying in something difficult because leaving feels like losing.",
+        "You trust structure, process, and precedent — reliable and often right. Watch for: the decision you've made in practice but haven't made in form.",
+        "You trust deep knowing over surface evidence — and it's often accurate. Watch for: \"I'm not ready\" as a cover for \"I don't want to choose.\"",
+        "You decide well when supported — skilled at building conditions for good decisions. Watch for: over-consulting past the point where input substitutes for commitment.",
       ],
     },
 
@@ -605,16 +605,16 @@
 
   // Decision Lens — structural decision pattern per dominant Ten God (indexed 0–9: Mirror Shadow Muse Maverick Windfall Harvest Challenger Architect Mystic Guardian)
   const DECISION_LENS = [
-    'You calibrate heavily against others — what peers are doing, what the field expects, whether your move will be legible to those you respect. This makes you unusually good at reading a room, and sometimes late to trust a direction others haven\'t validated yet. Watch for: delaying a decision because you haven\'t seen someone else make it first.',
-    'You move fast and trust your instincts — which has served you. The risk is underweighting the cost of a move that can\'t be undone, or optimizing for the bold read when the patient one was right. Watch for: framing caution as timidity when it\'s actually accurate.',
-    'New possibilities reliably feel more alive than current commitments — not because of restlessness, but because your mind genuinely generates better options under constraint. The pattern to catch: surfacing new alternatives right at the moment of commitment. Watch for: mistaking the discomfort of closing as a signal the option isn\'t right.',
-    'You\'re skilled at seeing what\'s wrong with the conventional option. This is a genuine asset — except when it becomes harder to commit to something imperfect than to keep looking for the better path. Watch for: using critical thinking to defer rather than to decide.',
-    'You\'re tuned for opportunity — you notice upside quickly and move toward it naturally. The structural blind spot is underweighting the cost of moves that pull you off your core direction. Watch for: the decision that looks like expansion but is actually distraction.',
-    'You have a long horizon and genuine patience — you\'re comfortable with investments that take time. The pattern to watch is the inverse: sometimes what looks like patient cultivation is actually avoidance of a decision that\'s already overdue. Watch for: "not the right time" becoming a permanent posture.',
-    'You sharpen through resistance — you\'re at your best when something is pushing back. The risk is framing every decision as a test of resolve, which makes it harder to distinguish between friction that\'s formative and friction that\'s just wrong. Watch for: staying in something difficult because leaving feels like losing.',
-    'You trust structure, process, and proven precedent. This makes you reliable and often right. The structural pattern: your threshold for "enough information to decide" is higher than most situations actually require. Watch for: the decision you\'ve made in practice but haven\'t made in form.',
-    'You trust deep knowing over surface evidence — and your inner sense is often accurate. The risk is that genuine insight and avoidance of the difficult can feel identical from the inside. Watch for: "I\'m not ready" as a cover for "I don\'t want to choose."',
-    'You decide well when you feel supported — and you\'re skilled at building the conditions for good decisions. The pattern to watch: over-consulting. Bringing in more perspectives beyond what the decision actually requires. Watch for: the point where more input becomes a substitute for commitment.',
+    'You calibrate against what peers are doing — great at reading a room, sometimes slow to trust what others haven\'t validated. Watch for: delaying decisions until you\'ve seen someone else make them first.',
+    'You move fast and trust your instincts — the risk is underweighting what can\'t be undone. Watch for: framing caution as timidity when it\'s actually accurate.',
+    'New possibilities feel more alive than current commitments — your mind generates better options under constraint. Watch for: surfacing alternatives at the exact moment of commitment.',
+    'You spot what\'s wrong with the conventional option — a genuine asset, until searching becomes easier than deciding. Watch for: using critical thinking to defer rather than to decide.',
+    'You\'re tuned for opportunity — you notice upside quickly and move toward it naturally. Watch for: decisions that look like expansion but are actually distraction.',
+    'You have a long horizon and genuine patience — sometimes cultivation masks an overdue decision. Watch for: "not the right time" becoming a permanent posture.',
+    'You sharpen through resistance — but not all friction is formative. Watch for: staying in something difficult because leaving feels like losing.',
+    'You trust structure, process, and precedent — reliable and often right. Watch for: the decision you\'ve made in practice but haven\'t made in form.',
+    'You trust deep knowing over surface evidence — and it\'s often accurate. Watch for: "I\'m not ready" as a cover for "I don\'t want to choose."',
+    'You decide well when supported — skilled at building conditions for good decisions. Watch for: over-consulting past the point where input substitutes for commitment.',
   ];
 
   // Element → traditional affinity for wisdom vault matching
@@ -4249,6 +4249,7 @@
     'element-balance':  { cn: '五行',   en: 'Five Element Balance',   body: 'Your element balance shows how much Wood, Fire, Earth, Metal, and Water appear across your four pillars. Because your Day Master has a specific element, some elements nourish it while others drain or control it. The balance reveals which energies are naturally strong in your life — and which ones trigger growth or challenge when they appear in timing cycles.' },
     'soul-type':        { cn: '日主原型', en: 'Soul Type',            body: 'Your Soul Type translates your Day Master element into a living archetype with its own name and story. Each of the ten Day Masters has a signature way of engaging with the world — for example, Yang Wood is "The Architect," direct in growth and vision, while Yin Water is "The Mystic," fluid and introspective. Your Soul Type is the most accessible translation of your core energetic identity.' },
     'dominant-archetype':{ cn: '主星原型', en: 'Dominant Archetype',  body: 'Your Dominant Archetype is the Ten God that appears most powerfully in your chart. While you have all ten relationships in some form, the dominant one shapes how you naturally operate — it\'s the energetic role you step into most comfortably. A dominant Direct Officer type tends toward structure and responsibility; a dominant Eating God type is driven by creativity and self-expression.' },
+    'zodiac':            { cn: '西方星座', en: 'Western Zodiac',       body: 'Your Western zodiac sign is determined by the position of the Sun at the moment of your birth. While BaZi uses the Chinese lunar calendar and elemental cycles, your Sun sign adds a complementary lens — describing how your core identity radiates outward and how you tend to be seen by others.' },
   };
 
   function initGlossaryModal() {

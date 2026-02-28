@@ -1286,19 +1286,19 @@ select.input-cell-field {
   letter-spacing: 0.05em;
 }
 
-/* Tagline: day master proclamation — Outfit 900 display, centered, no border.
-   Purpose is to DISPLAY the archetype essence, not quote it. */
+/* Tagline: day master proclamation — Playfair 900 italic, centered, no border.
+   Purpose is to DISPLAY the archetype essence as an editorial headline. */
 .blueprint-tagline {
-  font-family: var(--font-body);
-  font-style: normal;
+  font-family: var(--font-display);
+  font-style: italic;
   font-weight: 900;
-  font-size: clamp(1.05rem, 4.5vw, 1.45rem);
-  line-height: 1.2;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.1rem, 4.8vw, 1.55rem);
+  line-height: 1.25;
+  letter-spacing: 0;
   color: var(--color-ink);
   text-align: center;
   margin: 0.5rem 0 1.5rem;
-  padding: 0 0.5rem;
+  padding: 0 0.75rem;
   border: none;
 }
 
@@ -1960,18 +1960,18 @@ select.input-cell-field {
   padding: 0.15rem 0.55rem;
 }
 
-/* Override legacy ID rule — tagline is now Outfit 900 display, not Playfair quote */
+/* Override legacy ID rule — tagline is now Playfair 900 italic editorial headline */
 #detail-tagline {
-  font-family: var(--font-body) !important;
-  font-style: normal !important;
+  font-family: var(--font-display) !important;
+  font-style: italic !important;
   font-weight: 900 !important;
-  font-size: clamp(1.05rem, 4.5vw, 1.45rem) !important;
-  letter-spacing: -0.03em !important;
-  line-height: 1.2 !important;
+  font-size: clamp(1.1rem, 4.8vw, 1.55rem) !important;
+  letter-spacing: 0 !important;
+  line-height: 1.25 !important;
   color: var(--color-ink) !important;
   text-align: center !important;
   margin: 0.5rem 0 1.5rem !important;
-  padding: 0 0.5rem !important;
+  padding: 0 0.75rem !important;
   border: none !important;
   opacity: 1 !important;
 }
