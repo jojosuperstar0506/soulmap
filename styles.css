@@ -4368,14 +4368,26 @@ select.input-cell-field {
   text-decoration-color: rgba(123, 95, 160, 0.7);
 }
 .term-info {
-  font-size: 0.65em;
-  color: rgba(123, 95, 160, 0.5);
-  vertical-align: super;
-  margin-left: 0.15em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  line-height: 1;
+  width: 1.3em;
+  height: 1.3em;
+  color: var(--color-psychic);
+  background: rgba(123, 95, 160, 0.12);
+  border: 1px solid rgba(123, 95, 160, 0.35);
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-left: 0.3em;
   font-style: normal;
-  transition: color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
-.term-link:hover .term-info { color: var(--color-psychic); }
+.term-link:hover .term-info {
+  background: rgba(123, 95, 160, 0.22);
+  color: var(--color-psychic);
+}
 
 /* ─── Glossary modal (reuses .vault-modal-overlay + .vault-modal-card) ─── */
 .glossary-card {
