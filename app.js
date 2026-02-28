@@ -105,7 +105,7 @@
       bp_divider_annual:     '\u6d41\u5e74 \u00b7 This Year',
       bp_divider_seasons:    '\u5927\u8fd0 \u00b7 Life Seasons',
       bp_divider_energy:     'Energy per Season',
-      bp_reading_card_label: '\u2726 Get your reading',
+      bp_reading_card_label: '518,400 Unique Life Patterns \u2014 Unlock Yours',
       bp_reveal_btn:         '\u2726 Reveal Your Life Journey',
       bp_reveal_hint:        'Life Seasons \u00b7 Lifetime Arc \u00b7 Energy Charts',
       // Oracle
@@ -2084,9 +2084,9 @@
     const labelEl = card.querySelector('.reading-card-label');
     if (labelEl) {
       if (!claimed) {
-        labelEl.innerHTML = '\u2726 Get your reading <span class="reading-card-badge">Personalized</span>';
+        labelEl.innerHTML = '518,400 Unique Life Patterns \u2014 Unlock Yours';
       } else {
-        labelEl.innerHTML = '\u2726 Get your reading <span class="reading-card-badge">Personalized</span>';
+        labelEl.innerHTML = '518,400 Unique Life Patterns \u2014 Unlock Yours';
       }
     }
     const previewEl = document.getElementById('reading-card-preview');
