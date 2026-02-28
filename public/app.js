@@ -105,7 +105,7 @@
       bp_divider_annual:     '\u6d41\u5e74 \u00b7 This Year',
       bp_divider_seasons:    '\u5927\u8fd0 \u00b7 Life Seasons',
       bp_divider_energy:     'Energy per Season',
-      bp_reading_card_label: 'CLICK ME \u00b7 \u2726 Get your reading',
+      bp_reading_card_label: 'CLICK ME \u00b7 518,400 unique persona patterns, FIND YOURS',
       bp_reveal_btn:         'CLICK ME \u00b7 \u2726 Reveal Your Life Journey \u203a',
       bp_reveal_hint:        'Life Seasons \u00b7 Lifetime Arc \u00b7 Energy Charts',
       // Oracle
@@ -332,7 +332,7 @@
       bp_divider_annual:     '\u6d41\u5e74 \u00b7 This Year',
       bp_divider_seasons:    '\u5927\u8fd0 \u00b7 Life Seasons',
       bp_divider_energy:     '\u5404\u8fd0\u80fd\u91cf',
-      bp_reading_card_label: '\u70b9\u6211 \u00b7 \u2726 \u83b7\u53d6\u4f60\u7684\u89e3\u8bfb',
+      bp_reading_card_label: '\u70b9\u6211 \u00b7 518,400 \u79cd\u72ec\u7279\u547d\u76d8\u683c\u5c40\uff0c\u627e\u5230\u4f60\u7684\u90a3\u4e00\u4e2a',
       bp_reveal_btn:         '\u70b9\u6211 \u00b7 \u2726 \u5c55\u5f00\u4f60\u7684\u4eba\u751f\u8f68\u8ff9 \u203a',
       bp_reveal_hint:        '\u5927\u8fd0 \u00b7 \u4eba\u751f\u5f27\u7ebf \u00b7 \u80fd\u91cf\u56fe',
       // Oracle
