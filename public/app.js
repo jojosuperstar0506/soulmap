@@ -106,7 +106,7 @@
       bp_divider_seasons:    '\u5927\u8fd0 \u00b7 Life Seasons',
       bp_divider_energy:     'Energy per Season',
       bp_reading_card_label: '518,400 Unique Life Patterns \u2014 Unlock Yours',
-      bp_reveal_btn:         '\u2726 Reveal Your Life Journey',
+      bp_reveal_btn:         '\u2726 Reveal Your Life Journey \u203a',
       bp_reveal_hint:        'Life Seasons \u00b7 Lifetime Arc \u00b7 Energy Charts',
       // Oracle
       oracle_placeholder:        'Your chart is loaded. Tap a question above or ask your own \u2014 Claude will answer with your BaZi context.',
@@ -329,7 +329,7 @@
       bp_divider_seasons:    '\u5927\u8fd0 \u00b7 Life Seasons',
       bp_divider_energy:     '\u5404\u8fd0\u80fd\u91cf',
       bp_reading_card_label: '\u2726 \u70b9\u51fb\u83b7\u53d6\u4f60\u7684\u6df1\u5ea6\u89e3\u8bfb',
-      bp_reveal_btn:         '\u2726 \u5c55\u5f00\u4f60\u7684\u4eba\u751f\u8f68\u8ff9',
+      bp_reveal_btn:         '\u2726 \u5c55\u5f00\u4f60\u7684\u4eba\u751f\u8f68\u8ff9 \u203a',
       bp_reveal_hint:        '\u5927\u8fd0 \u00b7 \u4eba\u751f\u5f27\u7ebf \u00b7 \u80fd\u91cf\u56fe',
       // Oracle
       oracle_placeholder:      '\u4f60\u7684\u547d\u76d8\u5df2\u52a0\u8f7d\u3002\u70b9\u51fb\u4e0a\u65b9\u95ee\u9898\uff0c\u6216\u81ea\u7531\u63d0\u95ee\u2014\u2014AI\u5c06\u7ed3\u5408\u4f60\u7684\u516b\u5b57\u4e3a\u4f60\u89e3\u7b54\u3002',
