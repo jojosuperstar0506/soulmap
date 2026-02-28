@@ -2522,50 +2522,12 @@
     const current = ci >= 0 ? daYun[ci] : null;
     const peakAvg = peak ? Math.round((peak.wealth + peak.love + peak.career + peak.health) / 4) : 0;
 
-    const insightHtml = `<div class="arc-insights">
-      ${current && (current.seasonType === 'testing' || current.seasonType === 'storm') ? `
-        <div class="arc-insight-card arc-insight-now">
-          <div class="arc-insight-emoji">${current.seasonEmoji}</div>
-          <div>
-            <div class="arc-insight-label">Current Season</div>
-            <div class="arc-insight-value">${current.stemChar}${current.branchChar} · Age ${current.startAge}–${current.endAge}</div>
-            <div class="arc-insight-sub">${DAYUN_STEM_DESC[current.stemIndex] || ''}</div>
-          </div>
-        </div>` : current ? `
-        <div class="arc-insight-card arc-insight-now">
-          <div class="arc-insight-emoji">${current.seasonEmoji}</div>
-          <div>
-            <div class="arc-insight-label">Current Season</div>
-            <div class="arc-insight-value">${current.stemChar}${current.branchChar} · Age ${current.startAge}–${current.endAge}</div>
-            <div class="arc-insight-sub">${DAYUN_STEM_DESC[current.stemIndex] || ''}</div>
-          </div>
-        </div>` : ''}
-      ${turningPoint ? `
-        <div class="arc-insight-card arc-insight-turn">
-          <div class="arc-insight-emoji">↑</div>
-          <div>
-            <div class="arc-insight-label">Turning Point</div>
-            <div class="arc-insight-value">Age ${turningPoint.startAge} · ${turningPoint.stemChar}${turningPoint.branchChar}</div>
-            <div class="arc-insight-sub">All tracks rise here</div>
-          </div>
-        </div>` : ''}
-      <div class="arc-insight-card arc-insight-peak">
-        <div class="arc-insight-emoji">🌟</div>
-        <div>
-          <div class="arc-insight-label">Lifetime Peak</div>
-          <div class="arc-insight-value">${peak.stemChar}${peak.branchChar} · Age ${peak.startAge}–${peak.endAge}</div>
-          <div class="arc-insight-sub">Average score ${peakAvg}/100</div>
-        </div>
-      </div>
-    </div>`;
-
     // ── Assemble into section ────────────────────────────────────
     section.innerHTML = `
       <div class="arc-chart-header">
         <div class="arc-legend">${legendHtml}</div>
       </div>
       <div class="arc-chart-container" id="arc-svg-wrap"></div>
-      ${insightHtml}
       <div id="cycle-detail-panel" class="cycle-detail-panel" style="display:none"></div>
     `;
     document.getElementById('arc-svg-wrap').appendChild(svg);
