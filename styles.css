@@ -1338,15 +1338,16 @@ select.input-cell-field {
   border-radius: 2px;
 }
 
-/* dtg-label = hero-meta-label: same DM Mono cobalt stamp */
+/* dtg-label matches hero-meta-label as *rendered* (term-link resets font+color to inherit).
+   Use inherit so Dominant Archetype label looks identical to Day Master / Favorable / Zodiac */
 .dtg-label {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 0.46rem;
-  font-weight: 500;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--color-cobalt);
+  color: var(--color-ink);
   margin-bottom: 0.2rem;
 }
 
@@ -1438,15 +1439,15 @@ select.input-cell-field {
 }
 .decision-lens:empty { display: none; }
 
-/* Label: DM Mono — cobalt stamp, matches other hero-meta-labels */
+/* Label: inherit font+color to match how term-link renders Day Master/Favorable/Zodiac */
 .decision-lens-label {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 0.46rem;
-  font-weight: 500;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--color-cobalt);
+  color: var(--color-ink);
   margin-bottom: 0.2rem;
 }
 
