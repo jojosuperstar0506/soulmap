@@ -1286,15 +1286,15 @@ select.input-cell-field {
   letter-spacing: 0.05em;
 }
 
-/* Tagline: day master proclamation — Playfair 900 italic, centered, no border.
-   Purpose is to DISPLAY the archetype essence as an editorial headline. */
+/* Tagline: day master proclamation — Outfit 800, large bold label register.
+   Matches "WATER SOUL · EARTH SEASON" reference: heavy, centered, no serif. */
 .blueprint-tagline {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 900;
-  font-size: clamp(1.1rem, 4.8vw, 1.55rem);
-  line-height: 1.25;
-  letter-spacing: 0;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 800;
+  font-size: clamp(1.15rem, 5vw, 1.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   color: var(--color-ink);
   text-align: center;
   margin: 0.5rem 0 1.5rem;
@@ -1338,38 +1338,46 @@ select.input-cell-field {
   border-radius: 2px;
 }
 
+/* dtg-label = hero-meta-label: same DM Mono cobalt stamp */
 .dtg-label {
+  display: block;
   font-family: var(--font-mono);
-  font-size: 0.48rem;
+  font-size: 0.46rem;
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-cobalt);
+  margin-bottom: 0.2rem;
 }
 
+/* dtg-name = hero-meta-value: same Outfit 700 ink value size */
 .dtg-name {
+  display: block;
   font-family: var(--font-body);
-  font-size: 1.05rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--color-ink);
-  line-height: 1.2;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.1rem;
 }
 
 .dtg-cn {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 400;
   color: var(--color-ghost);
-  margin-left: 0.25rem;
+  margin-left: 0.2rem;
 }
 
-/* Brief: body weight — purpose is to explain, not to display */
+/* dtg-brief = decision-lens-text: same Outfit 400 ash body */
 .dtg-brief {
+  display: block;
   font-family: var(--font-body);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 400;
   color: var(--color-ash);
-  line-height: 1.55;
-  margin-top: 0.2rem;
+  line-height: 1.65;
+  margin-top: 0;
 }
 
 /* ─── Hero Meta items — stacked vertical list ─── */
@@ -1960,14 +1968,14 @@ select.input-cell-field {
   padding: 0.15rem 0.55rem;
 }
 
-/* Override legacy ID rule — tagline is now Playfair 900 italic editorial headline */
+/* Override legacy ID rule — tagline is now Outfit 800 bold label (WATER SOUL style) */
 #detail-tagline {
-  font-family: var(--font-display) !important;
-  font-style: italic !important;
-  font-weight: 900 !important;
-  font-size: clamp(1.1rem, 4.8vw, 1.55rem) !important;
-  letter-spacing: 0 !important;
-  line-height: 1.25 !important;
+  font-family: var(--font-body) !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+  font-size: clamp(1.15rem, 5vw, 1.6rem) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.2 !important;
   color: var(--color-ink) !important;
   text-align: center !important;
   margin: 0.5rem 0 1.5rem !important;
