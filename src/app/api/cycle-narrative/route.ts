@@ -25,7 +25,7 @@ interface CycleRequestBody {
     years?: string;
     wealth?: number;
     love?: number;
-    career?: number;
+    mind?: number;
     health?: number;
     interactions?: string[];
   };
@@ -97,8 +97,8 @@ THIS DECADE (${cycle.ageRange || '?'}, ${cycle.years || '?'}):
 SCORES (calibrate tone — low = demanding, not terrible):
 - Love: ${cycle.love ?? '?'}/100
 - Wealth: ${cycle.wealth ?? '?'}/100
-- Career: ${cycle.career ?? '?'}/100
 - Health: ${cycle.health ?? '?'}/100
+- Mind: ${cycle.mind ?? '?'}/100
 
 INSTRUCTIONS:
 Generate a JSON object with EXACTLY these fields. Be concise — short sentences land harder than long ones.
@@ -107,9 +107,10 @@ Generate a JSON object with EXACTLY these fields. Be concise — short sentences
   "seasonName": A 2-4 word poetic name for this decade that captures its felt quality (e.g. "The Quiet Decade", "The Building Years", "The Pressure Season") — do NOT use any BaZi term names,
   "theme": One sentence, max 12 words. What is this decade fundamentally asking for or offering?,
   "summary": 2-3 sentences. Describe the decade's quality behaviorally — what kind of energy is available, what it tends to ask for, what it naturally builds toward. Warm and direct. You may use the person's nature metaphor (${dmMetaphor}) once if it fits naturally.,
-  "wealthNote": 1-2 sentences. What does wealth movement look like practically this decade — steady, sporadic, through creativity, through consolidation? Calibrate to the score (${cycle.wealth ?? '?'}/100).,
+  "wealthNote": 1-2 sentences. How do money and professional momentum move this decade — steady income, creative opportunity, speculative gains, career recognition, or consolidation? Calibrate to the score (${cycle.wealth ?? '?'}/100).,
   "relationshipsNote": 1-2 sentences. What is the quality of connection and intimacy this decade? What does love ask for or offer? Calibrate to the score (${cycle.love ?? '?'}/100).,
   "healthNote": 1-2 sentences. What is the vitality quality and what does the body need? Calibrate to the score (${cycle.health ?? '?'}/100).,
+  "mentalNote": 1-2 sentences. What is the inner weather this decade — clarity, restlessness, peace, pressure, expansion, contraction? What does the mind need? Calibrate to the score (${cycle.mind ?? '?'}/100).,
   "lifeLessonThisSeason": 1 sentence. What does life keep teaching through this configuration?,
   "growthEdge": 1 sentence. Where is the useful discomfort?,
   "shadowWork": 1 sentence. What unconscious pattern tends to surface this decade?

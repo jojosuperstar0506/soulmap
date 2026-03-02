@@ -1585,7 +1585,7 @@
       Object.assign(decade, scores);
 
       // Season classification from average score
-      const avg = (scores.wealth + scores.love + scores.career + scores.health) / 4;
+      const avg = (scores.wealth + scores.love + scores.mind + scores.health) / 4;
       decade.seasonType  = avg >= 75 ? 'golden' : avg >= 58 ? 'growth' : avg >= 45 ? 'stable' : avg >= 32 ? 'testing' : 'storm';
       decade.seasonEmoji = { golden:'🌟', growth:'🌱', stable:'⚖️', testing:'🔥', storm:'⛈️' }[decade.seasonType];
 
@@ -1596,7 +1596,7 @@
 
   // ─── Lifetime Arc Scoring Engine ─────────────────────────────────
   /**
-   * Compute Wealth, Love, Career, Health scores (0-100) for a 大运 decade.
+   * Compute Wealth, Love, Mind, Health scores (0-100) for a 大运 decade.
    * Uses Ten Gods, Twelve Stage, branch interactions, and Day Master strength.
    */
   function scoreCycle(decade, chart, gender) {
@@ -1641,9 +1641,10 @@
     const hasTravel   = YIMA_MAP[yearBr]   === decade.branchIndex;             // 驿马
     const hasHealer   = (monBr + 1) % 12  === decade.branchIndex;             // 天医
 
-    // ── WEALTH ────────────────────────────────────────────────────
+    // ── WEALTH (money + professional direction) ────────────────────
     let wealth = 50;
     if (stemTenGod === 'harvest' || stemTenGod === 'windfall') wealth += 12;
+    if (stemTenGod === 'architect') wealth += 6; // professional recognition → wealth
     if (stemTenGod === 'muse')     wealth += 8;
     if (stemTenGod === 'maverick') wealth += 6;
     if (useful.includes(stemEl))   wealth += 8;
@@ -1670,6 +1671,9 @@
                    nurture:-2, conception:-4, retreat:-4, stillness:-6, vault:-6, void:-8 };
     wealth += wVit[twelveStage] ?? 0;
     wealth += monClashDir > 0 ? 8 : monClashDir < 0 ? -8 : 0;
+    // 神煞 spirit bonuses for wealth
+    if (hasNoble)  wealth += 6; // 天乙贵人 → doors open, helpful patrons
+    if (hasTravel) wealth += 8; // 驿马 → opportunity, movement, relocation luck
     wealth = Math.max(5, Math.min(95, Math.round(wealth)));
 
     // ── LOVE (= Relationships) ────────────────────────────────────
@@ -1703,31 +1707,36 @@
     if (hasRomance) love += 12; // 桃花 → magnetic attraction
     love = Math.max(5, Math.min(95, Math.round(love)));
 
-    // ── CAREER ───────────────────────────────────────────────────
-    let career = 50;
-    const cBonus = { architect:12, challenger:8, muse:8, maverick:5, windfall:4,
-                     harvest:3, mirror:0, shadow:-8, guardian:2, mystic:4 };
-    career += cBonus[stemTenGod] ?? 0;
-    if (useful.includes(stemEl))  career += 8;
-    if (harmful.includes(stemEl)) career -= 6;
+    // ── MIND (inner clarity, emotional stability, peace of mind) ──
+    let mind = 50;
+    const mBonus = { guardian:14, muse:12, mystic:10, mirror:4, architect:2,
+                     harvest:0, windfall:-2, shadow:-6, maverick:-8, challenger:-12 };
+    mind += mBonus[stemTenGod] ?? 0;
+    if (useful.includes(stemEl))  mind += 8;
+    if (harmful.includes(stemEl)) mind -= 6;
     for (const hs of hiddenStems) {
-      const w = hs.r === 'main' ? 4 : hs.r === 'secondary' ? 2 : 1;
-      career += (cBonus[hs.tenGod] ?? 0) * (w / 4);
-      if (useful.includes(hs.element))  career += w;
-      if (harmful.includes(hs.element)) career -= w;
+      const w = hs.r === 'main' ? 6 : hs.r === 'secondary' ? 4 : 2;
+      if (['guardian','mystic','muse'].includes(hs.tenGod)) mind += w;
+      if (['challenger','maverick'].includes(hs.tenGod))    mind -= Math.floor(w * 0.7);
+      if (useful.includes(hs.element))  mind += Math.floor(w * 0.5);
+      if (harmful.includes(hs.element)) mind -= Math.floor(w * 0.5);
     }
+    const mVit = { zenith:8, ascension:6, rising:4, awakening:6, waning:-2, initiation:0,
+                   nurture:4, conception:2, retreat:-6, stillness:-8, vault:-4, void:-10 };
+    mind += mVit[twelveStage] ?? 0;
+    // Clashes disrupt inner peace more than physical health
+    const clashCountMind = interactions.filter(i => i.type === 'clash').length;
+    const harmCountMind  = interactions.filter(i => i.type === 'harm').length;
+    mind -= clashCountMind * 10;
+    mind -= harmCountMind  * 6;
+    // Weak DM under challenger pressure with no guardian/mystic support → extra drain
     if (stemTenGod === 'challenger' && isWeak) {
-      const hasGuardian = hiddenStems.some(h => h.tenGod === 'guardian' || h.tenGod === 'mystic');
-      if (!hasGuardian) career -= 12;
+      const hasProtection = hiddenStems.some(h => h.tenGod === 'guardian' || h.tenGod === 'mystic');
+      if (!hasProtection) mind -= 8;
     }
-    const cVit = { zenith:8, ascension:6, rising:4, awakening:2, waning:0, initiation:-2,
-                   nurture:-2, conception:-4, retreat:-4, stillness:-6, vault:-6, void:-8 };
-    career += cVit[twelveStage] ?? 0;
-    career += monClashDir > 0 ? 8 : monClashDir < 0 ? -10 : 0;
-    // 神煞 spirit bonuses for career
-    if (hasNoble)  career += 8;  // 天乙贵人 → helpful patrons, doors open
-    if (hasTravel) career += 10; // 驿马 → movement, opportunity, relocation luck
-    career = Math.max(5, Math.min(95, Math.round(career)));
+    // 神煞 spirit bonus for mind
+    if (hasNoble) mind += 8; // 天乙贵人 → guardian presence, sense of being supported
+    mind = Math.max(5, Math.min(95, Math.round(mind)));
 
     // ── HEALTH ───────────────────────────────────────────────────
     let health = 50;
@@ -1754,7 +1763,7 @@
     if (hasHealer) health += 8; // 天医 → recovery support, vitality boost
     health = Math.max(5, Math.min(95, Math.round(health)));
 
-    return { wealth, love, career, health, stemTenGod, twelveStage, interactions };
+    return { wealth, love, mind, health, stemTenGod, twelveStage, interactions };
   }
 
   // ─── View Management ─────────────────────────────────────────────
@@ -2345,8 +2354,8 @@
   const ARC_TRACKS = [
     { key:'love',   label:'Love',   cn:'感情', color:'#E8372A' }, /* --arc-love: var(--color-vermillion) */
     { key:'wealth', label:'Wealth', cn:'财运', color:'#D4AF37' }, /* --arc-wealth: var(--color-gold) */
-    { key:'career', label:'Career', cn:'事业', color:'#1A4DB5' }, /* --arc-career: var(--color-cyan) */
     { key:'health', label:'Health', cn:'健康', color:'#3A7D44' }, /* --arc-health: var(--color-cobalt) */
+    { key:'mind',   label:'Mind',   cn:'心境', color:'#9370DB' }, /* --arc-mind: purple */
   ];
 
   let _cycleDetailIdx = null; // which season is currently open/selected
@@ -2354,8 +2363,8 @@
   // Compute insight summary from daYun array
   function computeArcInsights(daYun) {
     const peak = daYun.reduce((best, d) => {
-      const avg  = (d.wealth + d.love + d.career + d.health) / 4;
-      const bAvg = (best.wealth + best.love + best.career + best.health) / 4;
+      const avg  = (d.wealth + d.love + d.mind + d.health) / 4;
+      const bAvg = (best.wealth + best.love + best.mind + best.health) / 4;
       return avg > bAvg ? d : best;
     });
     const currentIdx = daYun.findIndex(d => d.isCurrent);
@@ -2364,7 +2373,7 @@
       for (let i = currentIdx + 1; i < daYun.length; i++) {
         const prev = daYun[i - 1];
         if (daYun[i].wealth > prev.wealth && daYun[i].love > prev.love
-            && daYun[i].career > prev.career && daYun[i].health > prev.health) {
+            && daYun[i].mind > prev.mind && daYun[i].health > prev.health) {
           turningPoint = daYun[i];
           break;
         }
@@ -2530,7 +2539,7 @@
     // ── Insight cards ────────────────────────────────────────────
     const { peak, turningPoint, currentIdx: ci } = insights;
     const current = ci >= 0 ? daYun[ci] : null;
-    const peakAvg = peak ? Math.round((peak.wealth + peak.love + peak.career + peak.health) / 4) : 0;
+    const peakAvg = peak ? Math.round((peak.wealth + peak.love + peak.mind + peak.health) / 4) : 0;
 
     // ── Assemble into section ────────────────────────────────────
     section.innerHTML = `
@@ -2611,7 +2620,7 @@
           <div class="cycle-narrative-domains">
             <div><strong>💰 Wealth</strong><p>${narrative.wealthNote}</p></div>
             <div><strong>❤️ Love</strong><p>${narrative.relationshipsNote}</p></div>
-            <div><strong>💼 Career</strong><p>${narrative.careerNote || narrative.wealthNote}</p></div>
+            <div><strong>🧘 Mind</strong><p>${narrative.mentalNote}</p></div>
             <div><strong>💪 Health</strong><p>${narrative.healthNote}</p></div>
           </div>
           <div class="cycle-lesson">
@@ -2648,7 +2657,7 @@
         <div class="cycle-scores">
           ${scoreBar('Love',   decade.love,   '#E8372A')}
           ${scoreBar('Wealth', decade.wealth, '#D4AF37')}
-          ${scoreBar('Career', decade.career, '#1A4DB5')}
+          ${scoreBar('Mind',   decade.mind,   '#9370DB')}
           ${scoreBar('Health', decade.health, '#3A7D44')}
         </div>
         <div class="cycle-season-desc">${DAYUN_STEM_DESC[decade.stemIndex] || ''}</div>
@@ -2718,7 +2727,7 @@
           years:        decade.startYear + '-' + decade.endYear,
           wealth:       decade.wealth,
           love:         decade.love,
-          career:       decade.career,
+          mind:         decade.mind,
           health:       decade.health,
           interactions: (decade.interactions || []).map(i => i.type + ' with ' + i.withPillar + ' pillar'),
         },
@@ -2754,7 +2763,7 @@
   window.fetchCycleNarrative = fetchCycleNarrative;
 
   // ─── Annual Year Scoring (流年) ───────────────────────────────────
-  /** Score the current annual pillar across Wealth / Love / Career / Health */
+  /** Score the current annual pillar across Wealth / Love / Health / Mind */
   function scoreAnnualYear(chart) {
     const ap = chart.annualPillar;
     if (!ap) return null;
@@ -2781,10 +2790,11 @@
     const hasTravel  = YIMA_MAP[yearBr]   === ap.branch;
     const hasHealer  = (monBr + 1) % 12  === ap.branch;
 
-    // Wealth
+    // Wealth (broadened: money + professional direction)
     let wealth = 50;
     if (stemTenGod === 'harvest' || stemTenGod === 'windfall') wealth += 12;
-    if (stemTenGod === 'muse')   wealth += 8;
+    if (stemTenGod === 'muse')      wealth += 8;
+    if (stemTenGod === 'architect') wealth += 6;
     if (useful.includes(stemEl))  wealth += 10;
     if (harmful.includes(stemEl)) wealth -= 8;
     for (const hs of hiddenStems) {
@@ -2792,6 +2802,8 @@
       if (useful.includes(hs.element))  wealth += hs.r === 'main' ? 4 : 2;
       if (harmful.includes(hs.element)) wealth -= hs.r === 'main' ? 4 : 2;
     }
+    if (hasNoble)  wealth += 6;
+    if (hasTravel) wealth += 8;
     if (dayClash) wealth -= 12;
     wealth = Math.max(5, Math.min(95, Math.round(wealth)));
 
@@ -2807,16 +2819,19 @@
     if (dayClash)   love -= 18;
     love = Math.max(5, Math.min(95, Math.round(love)));
 
-    // Career
-    let career = 50;
-    const cBonus = { architect:12, challenger:8, muse:8, maverick:5, windfall:4,
-                     harvest:3, mirror:0, shadow:-8, guardian:2, mystic:4 };
-    career += cBonus[stemTenGod] ?? 0;
-    if (useful.includes(stemEl))  career += 8;
-    if (harmful.includes(stemEl)) career -= 6;
-    if (hasNoble)  career += 8;
-    if (hasTravel) career += 10;
-    career = Math.max(5, Math.min(95, Math.round(career)));
+    // Mind (inner clarity, emotional stability, peace of mind)
+    let mind = 50;
+    const mBonus = { guardian:14, muse:12, mystic:10, mirror:4, architect:2,
+                     harvest:0, windfall:-2, shadow:-6, maverick:-8, challenger:-12 };
+    mind += mBonus[stemTenGod] ?? 0;
+    if (useful.includes(stemEl))  mind += 8;
+    if (harmful.includes(stemEl)) mind -= 6;
+    const mVit = { zenith:8, ascension:6, rising:4, awakening:6, waning:-2, initiation:0,
+                   nurture:4, conception:2, retreat:-6, stillness:-8, vault:-4, void:-10 };
+    mind += mVit[twelveStage] ?? 0;
+    if (hasNoble) mind += 8;
+    if (dayClash) mind -= 12;
+    mind = Math.max(5, Math.min(95, Math.round(mind)));
 
     // Health
     let health = 50;
@@ -2831,7 +2846,7 @@
     if (hasHealer) health += 8;
     health = Math.max(5, Math.min(95, Math.round(health)));
 
-    return { wealth, love, career, health, stemTenGod, twelveStage };
+    return { wealth, love, mind, health, stemTenGod, twelveStage };
   }
 
   /** Render the 流年 "This Year" card in the Blueprint tab */
@@ -2847,7 +2862,7 @@
 
     const domains = [
       { key:'wealth', label:'Wealth', color:'var(--color-gold)' },
-      { key:'career', label:'Career', color:'var(--color-cobalt)' },
+      { key:'mind',   label:'Mind',   color:'#9370DB' },
       { key:'love',   label:'Love',   color:'var(--color-vermillion)' },
       { key:'health', label:'Health', color:'var(--color-cyan)' },
     ];
@@ -4285,7 +4300,7 @@
     'nayin':            { cn: '纳音',   en: 'Nayin',                  body: 'Nayin is an ancient layer of BaZi that assigns each stem-branch pair a material metaphor — like "Sea Gold," "Thunder Fire," or "Mountain Head Earth." These 30 archetypes describe the deeper resonance of a period, showing how cosmic energy interacts with the physical world. Nayin was more central in classical texts and adds texture to timing interpretations.' },
     'spirit-killers':   { cn: '神煞',   en: 'Spirit Stars',           body: 'Spirit Stars are special markers derived from combinations of stems and branches. They carry archetypal meanings: 天乙贵人 (Heavenly Noble) signals divine protection and helpful people, 桃花 (Peach Blossom) marks romantic magnetism, 驿马 (Traveling Horse) signals movement and career change. These stars amplify certain energies and events within your chart.' },
     'life-seasons':     { cn: '大运',   en: 'Life Seasons',           body: 'Life Seasons are 10-year periods of luck energy that overlay your natal chart like changing weather. Each decade activates a new stem and branch, shifting which elements are energized in your life and what themes come forward. Unlike your fixed natal chart, the Life Seasons show how your chart evolves as you move through different chapters.' },
-    'annual-arc':       { cn: '流年',   en: 'Annual Arc',             body: 'The Annual Arc shows the current year\'s stem and branch energy overlaid onto your chart. Each calendar year brings a specific elemental flavor that interacts with your natal chart and current Life Season. Your four domain scores (Wealth, Career, Love, Health) show where this year\'s energy is most harmonious or challenging for your particular chart.' },
+    'annual-arc':       { cn: '流年',   en: 'Annual Arc',             body: 'The Annual Arc shows the current year\'s stem and branch energy overlaid onto your chart. Each calendar year brings a specific elemental flavor that interacts with your natal chart and current Life Season. Your four domain scores (Wealth, Love, Health, Mind) show where this year\'s energy is most harmonious or challenging for your particular chart.' },
     'element-balance':  { cn: '五行',   en: 'Five Element Balance',   body: 'Your element balance shows how much Wood, Fire, Earth, Metal, and Water appear across your four pillars. Because your Day Master has a specific element, some elements nourish it while others drain or control it. The balance reveals which energies are naturally strong in your life — and which ones trigger growth or challenge when they appear in timing cycles.' },
     'soul-type':        { cn: '日主原型', en: 'Soul Type',            body: 'Your Soul Type translates your Day Master element into a living archetype with its own name and story. Each of the ten Day Masters has a signature way of engaging with the world — for example, Yang Wood is "The Architect," direct in growth and vision, while Yin Water is "The Mystic," fluid and introspective. Your Soul Type is the most accessible translation of your core energetic identity.' },
     'dominant-archetype':{ cn: '主星原型', en: 'Dominant Archetype',  body: 'Your Dominant Archetype is the Ten God that appears most powerfully in your chart. While you have all ten relationships in some form, the dominant one shapes how you naturally operate — it\'s the energetic role you step into most comfortably. A dominant Direct Officer type tends toward structure and responsibility; a dominant Eating God type is driven by creativity and self-expression.' },
