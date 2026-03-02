@@ -2620,7 +2620,7 @@
           <div class="cycle-narrative-domains">
             <div><strong>💰 Wealth</strong><p>${narrative.wealthNote}</p></div>
             <div><strong>❤️ Love</strong><p>${narrative.relationshipsNote}</p></div>
-            <div><strong>🧘 Mind</strong><p>${narrative.mentalNote}</p></div>
+            <div><strong>🧘 Mind</strong><p>${narrative.mentalNote || ''}</p></div>
             <div><strong>💪 Health</strong><p>${narrative.healthNote}</p></div>
           </div>
           <div class="cycle-lesson">
