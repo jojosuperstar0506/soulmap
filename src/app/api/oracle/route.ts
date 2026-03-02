@@ -62,8 +62,6 @@ function buildSystemPrompt(base: string, ctx?: ChartContext, lang?: string, turn
     `Relationship Status: ${ctx.relationship || 'not specified'}`,
     `Current Concern: ${ctx.currentConcern || 'not specified'}`,
     '---',
-    `This person is in the life season: ${ctx.luckPillarStr || 'not available'}. Use this to understand the character and timing of their current decade.`,
-    `The current year energy is: ${ctx.annualPillarStr || 'not available'}. Use this to understand what this year is structurally asking for.`,
     '',
     'You are answering their specific question. Be direct, warm, grounded. Use the elemental metaphor name (Ancient Oak / Mist / Sword) where it fits — but only once, not as a repeated anchor. NEVER say "your chart", "your Day Master", "your element balance", "favorable elements", "useful gods", or name any Ten God in your response. The chart data is your compass — use it to understand them deeply, but speak about their life, their situation, their patterns and timing directly. Describe what you see, not what the chart says.',
     '',
