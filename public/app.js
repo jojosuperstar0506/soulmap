@@ -3293,6 +3293,13 @@
       if (w) w.hidden = true;
     }, { once: true });
 
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const q = input.value.trim();
