@@ -2623,9 +2623,11 @@
             <div><strong>🧘 Mind</strong><p>${narrative.mentalNote || ''}</p></div>
             <div><strong>💪 Health</strong><p>${narrative.healthNote}</p></div>
           </div>
-          <div class="cycle-lesson">
-            <p><strong>Life Lesson:</strong> ${narrative.lifeLessonThisSeason}</p>
-          </div>
+          ${narrative.soulAction
+            ? `<div class="cycle-action"><p>${narrative.soulAction}</p></div>`
+            : narrative.lifeLessonThisSeason
+              ? `<div class="cycle-lesson"><p><strong>Life Lesson:</strong> ${narrative.lifeLessonThisSeason}</p></div>`
+              : ''}
         </div>`
       : decade._narrativeError
         ? `<div class="cycle-narrative-loading">

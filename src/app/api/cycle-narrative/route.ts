@@ -111,9 +111,7 @@ Generate a JSON object with EXACTLY these fields. Be concise — short sentences
   "relationshipsNote": 1-2 sentences. What is the quality of connection and intimacy this decade? What does love ask for or offer? Calibrate to the score (${cycle.love ?? '?'}/100).,
   "healthNote": 1-2 sentences. What is the vitality quality and what does the body need? Calibrate to the score (${cycle.health ?? '?'}/100).,
   "mentalNote": 1-2 sentences. What is the inner weather this decade — clarity, restlessness, peace, pressure, expansion, contraction? What does the mind need? Calibrate to the score (${cycle.mind ?? '?'}/100).,
-  "lifeLessonThisSeason": 1 sentence. What does life keep teaching through this configuration?,
-  "growthEdge": 1 sentence. Where is the useful discomfort?,
-  "shadowWork": 1 sentence. What unconscious pattern tends to surface this decade?
+  "soulAction": 2-3 sentences. First name the core lesson this decade keeps teaching — the pattern life is asking them to see. Then pivot to action: the single most important thing they should do, start, stop, or protect. Be razor-specific — not "be patient" but "stop saying yes to projects that don't scare you." Not therapy language. Not generic wisdom. This should land like a truth they've been circling but haven't said out loud.
 }
 
 STRICT OUTPUT RULES — these apply to every word you write:
