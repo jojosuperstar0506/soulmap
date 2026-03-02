@@ -1110,11 +1110,11 @@
     const profiles = loadProfiles();
     const idx = profiles.findIndex(p => p.id === state.profileId);
     // Persist per-cycle narratives keyed by pillar label (e.g. "甲寅")
-    // V2 key invalidates old jargon-heavy cached narratives from before 2026-02-27
-    const daYunNarrativesV2 = {};
+    // V3 key invalidates V2 narratives that lack soulAction + mentalNote fields
+    const daYunNarrativesV3 = {};
     if (state.chart && state.chart.daYun) {
       state.chart.daYun.forEach(d => {
-        if (d.narrative) daYunNarrativesV2[d.label] = d.narrative;
+        if (d.narrative) daYunNarrativesV3[d.label] = d.narrative;
       });
     }
     const profileData = {
@@ -1132,7 +1132,7 @@
       narrativePillarsStr: (state.narrativeFromAPI && state.chart)
                              ? (state.chart.pillarsStr || null)
                              : null,
-      daYunNarrativesV2:   Object.keys(daYunNarrativesV2).length ? daYunNarrativesV2 : null,
+      daYunNarrativesV3:   Object.keys(daYunNarrativesV3).length ? daYunNarrativesV3 : null,
       savedOracleItems:    state.savedOracleItems || [],
       savedVaultCitations: state.savedVaultCitations || [],
     };
@@ -1145,10 +1145,10 @@
   function activateProfile(p) {
     const chart = calculateBaZi(p.birthDate, p.shichen);
     chart.daYun = calculateDaYun(chart, p.birthDate, p.gender || 'female');
-    // Restore persisted cycle narratives (V2 key = behavioral language, post 2026-02-27)
-    if (p.daYunNarrativesV2 && chart.daYun) {
+    // Restore persisted cycle narratives (V3 key = soulAction + mentalNote schema)
+    if (p.daYunNarrativesV3 && chart.daYun) {
       chart.daYun.forEach(d => {
-        if (p.daYunNarrativesV2[d.label]) d.narrative = p.daYunNarrativesV2[d.label];
+        if (p.daYunNarrativesV3[d.label]) d.narrative = p.daYunNarrativesV3[d.label];
       });
     }
     setState({
