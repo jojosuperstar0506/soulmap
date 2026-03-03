@@ -228,12 +228,12 @@
         { value: 'chinese', label: 'I Ching' }, { value: 'saved', label: 'Saved' },
       ],
       MEDITATIONS: [
-        { icon: '\ud83e\udeb5', title: 'Wood \u2014 Growth & Vision',     desc: 'Visualization of roots and rising energy. 5\u201310 min.' },
-        { icon: '\ud83d\udd25', title: 'Fire \u2014 Warmth & Connection', desc: 'Heart-centered warmth. For when you feel disconnected.' },
-        { icon: '\ud83d\uddff', title: 'Earth \u2014 Grounding',          desc: 'Body scan and earth connection. For anxiety.' },
-        { icon: '\ud83e\ude99', title: 'Metal \u2014 Release & Clarity',  desc: 'Breath-focused, letting go. For clutter or indecision.' },
-        { icon: '\ud83d\udca7', title: 'Water \u2014 Flow & Surrender',   desc: 'Fluid movement visualization. For when you feel stuck.' },
-        { icon: '\u25ce',  title: 'Before a Big Decision',      desc: 'Grounding + clarity. 10 min.' },
+        { icon: '\ud83e\udeb5', title: 'Wood \u2014 Growth & Vision',     desc: 'Comprehensive mindfulness practice. 19 min.', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/03_Complete_Meditation_Instructions.mp3' },
+        { icon: '\ud83d\udd25', title: 'Fire \u2014 Warmth & Connection', desc: 'Loving kindness meditation. 9 min.', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/05_Loving_Kindness_Meditation.mp3' },
+        { icon: '\ud83d\uddff', title: 'Earth \u2014 Grounding',          desc: 'Body scan and earth connection. 3 min.', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/Body-Scan-Meditation.mp3' },
+        { icon: '\ud83e\ude99', title: 'Metal \u2014 Release & Clarity',  desc: 'Working with difficulties. 7 min.', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/04_Meditation_for_Working_with_Difficulties.mp3' },
+        { icon: '\ud83d\udca7', title: 'Water \u2014 Flow & Surrender',   desc: 'Breath, sound & body. 12 min.', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/02_Breath_Sound_Body_Meditation.mp3' },
+        { icon: '\u25ce',  title: 'Before a Big Decision',      desc: 'Breathing meditation. 5 min.', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/01_Breathing_Meditation.mp3' },
       ],
       // Blueprint display strings
       dom_archetype_label:      'Dominant Archetype',
@@ -455,12 +455,12 @@
         { value: 'chinese', label: '\u6613\u7ecf' }, { value: 'saved', label: '\u5df2\u6536\u85cf' },
       ],
       MEDITATIONS: [
-        { icon: '\ud83e\udeb5', title: '\u6728\u2014\u2014\u751f\u957f\u4e0e\u613f\u666f',  desc: '\u6839\u7cfb\u4e0e\u5347\u817e\u80fd\u91cf\u7684\u610f\u8c61\u5f15\u5bfc\u30025\u201310 \u5206\u949f\u3002' },
-        { icon: '\ud83d\udd25', title: '\u706b\u2014\u2014\u6e29\u6696\u4e0e\u8fde\u7ed3',  desc: '\u4ee5\u5fc3\u4e3a\u4e2d\u5fc3\u7684\u6e29\u6696\u51a5\u60f3\uff0c\u9002\u5408\u611f\u5230\u758f\u79bb\u65f6\u3002' },
-        { icon: '\ud83d\uddff', title: '\u571f\u2014\u2014\u624e\u6839\u843d\u5730',    desc: '\u8eab\u4f53\u626b\u63cf\u4e0e\u5927\u5730\u8fde\u7ed3\uff0c\u9002\u5408\u7126\u8651\u65f6\u3002' },
-        { icon: '\ud83e\ude99', title: '\u91d1\u2014\u2014\u91ca\u653e\u4e0e\u6e05\u660e',  desc: '\u4ee5\u547c\u5438\u4e3a\u4e3b\u7684\u653e\u4e0b\u51a5\u60f3\uff0c\u9002\u5408\u6df7\u4e71\u6216\u96be\u4ee5\u51b3\u65ad\u65f6\u3002' },
-        { icon: '\ud83d\udca7', title: '\u6c34\u2014\u2014\u6d41\u52a8\u4e0e\u81e3\u670d',  desc: '\u6d41\u52a8\u610f\u8c61\u5f15\u5bfc\uff0c\u9002\u5408\u611f\u5230\u505c\u6ede\u65f6\u3002' },
-        { icon: '\u25ce',  title: '\u91cd\u5927\u6289\u62e9\u524d\u7684\u51c6\u5907', desc: '\u624e\u6839\uff0b\u6e05\u660e\u300210 \u5206\u949f\u3002' },
+        { icon: '\ud83e\udeb5', title: '\u6728\u2014\u2014\u751f\u957f\u4e0e\u613f\u666f',  desc: '\u5168\u9762\u6b63\u5ff5\u7ec3\u4e60\u300219\u5206\u949f\u3002', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/03_Complete_Meditation_Instructions.mp3' },
+        { icon: '\ud83d\udd25', title: '\u706b\u2014\u2014\u6e29\u6696\u4e0e\u8fde\u7ed3',  desc: '\u6148\u7231\u5584\u610f\u51a5\u60f3\u30029\u5206\u949f\u3002', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/05_Loving_Kindness_Meditation.mp3' },
+        { icon: '\ud83d\uddff', title: '\u571f\u2014\u2014\u624e\u6839\u843d\u5730',    desc: '\u8eab\u4f53\u626b\u63cf\u4e0e\u5927\u5730\u8fde\u7ed3\u30023\u5206\u949f\u3002', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/Body-Scan-Meditation.mp3' },
+        { icon: '\ud83e\ude99', title: '\u91d1\u2014\u2014\u91ca\u653e\u4e0e\u6e05\u660e',  desc: '\u5e94\u5bf9\u56f0\u96be\u7684\u51a5\u60f3\u30027\u5206\u949f\u3002', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/04_Meditation_for_Working_with_Difficulties.mp3' },
+        { icon: '\ud83d\udca7', title: '\u6c34\u2014\u2014\u6d41\u52a8\u4e0e\u81e3\u670d',  desc: '\u547c\u5438\u3001\u58f0\u97f3\u4e0e\u8eab\u4f53\u300212\u5206\u949f\u3002', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/02_Breath_Sound_Body_Meditation.mp3' },
+        { icon: '\u25ce',  title: '\u91cd\u5927\u6289\u62e9\u524d\u7684\u51c6\u5907', desc: '\u547c\u5438\u51a5\u60f3\u30025\u5206\u949f\u3002', audio: 'https://d1cy5zxxhbcbkk.cloudfront.net/guided-meditations/01_Breathing_Meditation.mp3' },
       ],
       // Blueprint display strings (Chinese)
       dom_archetype_label:      '\u547d\u4e3b\u539f\u578b',
@@ -4100,19 +4100,51 @@
   }
 
   // ─── Still Point ─────────────────────────────────────────────────
-  const MEDITATIONS = [
-    { icon:'🪵', title:'Wood — Growth & Vision',      desc:'Visualization of roots and rising energy. 5–10 min.' },
-    { icon:'🔥', title:'Fire — Warmth & Connection',   desc:'Heart-centered warmth. For when you feel disconnected.' },
-    { icon:'🗿', title:'Earth — Grounding',            desc:'Body scan and earth connection. For anxiety.' },
-    { icon:'🪙', title:'Metal — Release & Clarity',   desc:'Breath-focused, letting go. For clutter or indecision.' },
-    { icon:'💧', title:'Water — Flow & Surrender',    desc:'Fluid movement visualization. For when you feel stuck.' },
-    { icon:'◎',  title:'Before a Big Decision',       desc:'Grounding + clarity. 10 min.' }
-  ];
-
   function initStillPoint() {
-    document.getElementById('meditation-list').innerHTML = t('MEDITATIONS').map(m =>
-      `<div class="meditation-item"><span class="icon">${m.icon}</span><div><div class="title">${m.title}</div><p class="desc">${m.desc}</p></div></div>`
+    const list = document.getElementById('meditation-list');
+    if (!list) return;
+    const meds = t('MEDITATIONS');
+    list.innerHTML = meds.map((m, i) =>
+      `<div class="meditation-item" data-idx="${i}">
+         <span class="icon">${m.icon}</span>
+         <div class="meditation-info">
+           <div class="title">${m.title}</div>
+           <p class="desc">${m.desc}</p>
+         </div>
+       </div>`
     ).join('');
+
+    list.addEventListener('click', (e) => {
+      const item = e.target.closest('.meditation-item');
+      if (!item) return;
+      // Don't collapse if clicking inside the audio player
+      if (e.target.closest('.meditation-player')) return;
+      const idx = +item.dataset.idx;
+      const med = meds[idx];
+      if (!med || !med.audio) return;
+
+      const wasExpanded = item.classList.contains('meditation-expanded');
+
+      // Collapse all — pause any playing audio
+      list.querySelectorAll('.meditation-item').forEach(el => {
+        el.classList.remove('meditation-expanded');
+        const audio = el.querySelector('audio');
+        if (audio) { audio.pause(); audio.currentTime = 0; }
+        const player = el.querySelector('.meditation-player');
+        if (player) player.remove();
+      });
+
+      // Expand clicked (if it wasn't already open)
+      if (!wasExpanded) {
+        item.classList.add('meditation-expanded');
+        const playerDiv = document.createElement('div');
+        playerDiv.className = 'meditation-player';
+        playerDiv.innerHTML = `
+          <audio controls preload="none" src="${med.audio}"></audio>
+          <p class="meditation-credit">Guided by Diana Winston · UCLA Mindful (CC BY-NC-ND 4.0)</p>`;
+        item.appendChild(playerDiv);
+      }
+    });
   }
 
   // ─── Refresh narrative button ─────────────────────────────────────
@@ -4245,6 +4277,12 @@
   }
 
   function initProfileSwitcher() {
+    const appLogo = document.querySelector('.app-logo');
+    if (appLogo) {
+      appLogo.style.cursor = 'pointer';
+      appLogo.addEventListener('click', () => showView('view-landing'));
+    }
+
     const openBtn  = document.getElementById('btn-profile-switcher');
     const closeBtn = document.getElementById('btn-close-sheet');
     const backdrop = document.getElementById('profile-sheet-backdrop');
