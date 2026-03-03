@@ -4277,6 +4277,12 @@
   }
 
   function initProfileSwitcher() {
+    const appLogo = document.querySelector('.app-logo');
+    if (appLogo) {
+      appLogo.style.cursor = 'pointer';
+      appLogo.addEventListener('click', () => showView('view-landing'));
+    }
+
     const openBtn  = document.getElementById('btn-profile-switcher');
     const closeBtn = document.getElementById('btn-close-sheet');
     const backdrop = document.getElementById('profile-sheet-backdrop');
