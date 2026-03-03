@@ -2042,6 +2042,7 @@
     chart.daYun = calculateDaYun(chart, state.birthDate, state.gender);
     setState({ chart, soulTypeIndex: chart.dayMaster, narrativeFromAPI: null });
     saveCurrentProfile();
+    if (oracleApiReset) oracleApiReset(state.profileId);
     const nameEl = document.getElementById('profile-btn-name');
     if (nameEl) nameEl.textContent = state.profileName || 'My Chart';
     document.getElementById('app-user-type').textContent = (t('SOUL_TYPES')[state.soulTypeIndex] || {}).name || SOUL_TYPES[state.soulTypeIndex].name;
